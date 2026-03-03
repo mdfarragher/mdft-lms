@@ -1,0 +1,50 @@
+[
+  {
+    "label": "start",
+    "command": "deno",
+    "args": ["task", "start"],
+    "use_new_terminal": true,
+    "allow_concurrent_runs": true,
+    "reveal": "always"
+  },
+  {
+    "label": "build",
+    "command": "deno",
+    "args": ["task", "build"],
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "always"
+  },
+  {
+    "label": "preview",
+    "command": "deno",
+    "args": ["task", "preview"],
+    "use_new_terminal": true,
+    "allow_concurrent_runs": true,
+    "reveal": "always"
+  },
+  {
+    "label": "test",
+    "command": "deno",
+    "args": ["test"],
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "always"
+  },
+  {
+    "label": "lint",
+    "command": "deno",
+    "args": ["lint"],
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "always"
+  },
+  {
+    "label": "fmt",
+    "command": "deno",
+    "args": ["fmt"],
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "always"
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "build_id": "b4a145f4f153e6d9604926e6b34095717ce406e3",
+  "files": {
+    "main.js": [
+      "chunk-DD3V6ZYS.js"
+    ],
+    "deserializer.js": [],
+    "signals.js": [
+      "chunk-DD3V6ZYS.js"
+    ],
+    "chunk-DD3V6ZYS.js": [],
+    "metafile.json": []
+  }
+}
