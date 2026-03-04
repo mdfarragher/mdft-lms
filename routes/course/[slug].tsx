@@ -158,7 +158,7 @@ export default function CourseDetail({ data }: PageProps<Data>) {
                   class="border rounded p-4 hover:bg-gray-50 transition-colors"
                 >
                   <h3 class="text-lg font-semibold text-blue-800">
-                    <a href={`/play/${module.id}`} class="hover:underline">
+                    <a href={`/mod/${module.slug || module.id}`} class="hover:underline">
                       {module.title}
                     </a>
                   </h3>

@@ -2,29 +2,35 @@
 // This file SHOULD be checked into source version control.
 // This file is automatically updated during development when running `dev.ts`.
 
+import * as $_app from "./routes/_app.tsx";
 import * as $_middleware from "./routes/_middleware.ts";
+import * as $api_search from "./routes/api/search.ts";
 import * as $course_slug_ from "./routes/course/[slug].tsx";
 import * as $courses_index from "./routes/courses/index.tsx";
 import * as $index from "./routes/index.tsx";
 import * as $login from "./routes/login.tsx";
 import * as $logout from "./routes/logout.ts";
-import * as $play_moduleId_ from "./routes/play/[moduleId].tsx";
-import * as $play_moduleId_lessonId_ from "./routes/play/[moduleId]/[lessonId].tsx";
-
+import * as $mod_slug_ from "./routes/mod/[slug].tsx";
+import * as $play_moduleSlug_lessonSlug_ from "./routes/play/[moduleSlug]/[lessonSlug].tsx";
+import * as $Search from "./islands/Search.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {
+    "./routes/_app.tsx": $_app,
     "./routes/_middleware.ts": $_middleware,
+    "./routes/api/search.ts": $api_search,
     "./routes/course/[slug].tsx": $course_slug_,
     "./routes/courses/index.tsx": $courses_index,
     "./routes/index.tsx": $index,
     "./routes/login.tsx": $login,
     "./routes/logout.ts": $logout,
-    "./routes/play/[moduleId].tsx": $play_moduleId_,
-    "./routes/play/[moduleId]/[lessonId].tsx": $play_moduleId_lessonId_,
+    "./routes/mod/[slug].tsx": $mod_slug_,
+    "./routes/play/[moduleSlug]/[lessonSlug].tsx": $play_moduleSlug_lessonSlug_,
   },
-  islands: {},
+  islands: {
+    "./islands/Search.tsx": $Search,
+  },
   baseUrl: import.meta.url,
 } satisfies Manifest;
 

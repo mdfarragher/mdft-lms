@@ -1,6 +1,6 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { getDirectusClient } from "../../../utils/directus.ts";
-import { readItem } from "@directus/sdk";
+import { readItems, readItem } from "@directus/sdk";
 
 // Interfaces
 interface LessonDetail {
@@ -26,6 +26,7 @@ interface ModuleLessonJunction {
 interface Module {
   id: string;
   title: string;
+  slug: string;
   lessons: ModuleLessonJunction[];
 }
 
@@ -38,17 +39,20 @@ interface Data {
 
 export const handler: Handlers<Data> = {
   async GET(req, ctx) {
-    const { moduleId, lessonId } = ctx.params;
+    const { moduleSlug, lessonSlug } = ctx.params;
     const token = ctx.state.token as string;
     const client = getDirectusClient(token);
 
     try {
       // 1. Fetch Module to get the list of lessons (for sidebar)
-      const module = (await client.request(
-        readItem("modules", moduleId, {
+      const modules = (await client.request(
+        readItems("modules", {
+          filter: { slug: { _eq: moduleSlug } },
+          limit: 1,
           fields: [
             "id",
             "title",
+            "slug",
             "lessons.id",
             "lessons.collection",
             "lessons.item.id",
@@ -56,19 +60,26 @@ export const handler: Handlers<Data> = {
             "lessons.item.slug",
           ],
         }),
-      )) as Module;
+      )) as Module[];
+
+      if (!modules || modules.length === 0) {
+        return ctx.renderNotFound();
+      }
+
+      const module = modules[0];
 
       // 2. Find the current lesson in the module list to know its collection type
       const lessonJunction = module.lessons.find((l) => {
-        return typeof l.item === "object" && l.item.id === lessonId;
+        return typeof l.item === "object" && (l.item.slug === lessonSlug || l.item.id === lessonSlug);
       });
 
-      if (!lessonJunction) {
+      if (!lessonJunction || typeof lessonJunction.item !== 'object') {
         return ctx.renderNotFound();
       }
 
       const collection = lessonJunction.collection;
       const lessonType = collection.replace("_lessons", "").toUpperCase();
+      const lessonId = lessonJunction.item.id;
 
       // 3. Fetch the specific lesson details
       // We explicitly request fields likely to contain content
@@ -170,7 +181,7 @@ export default function LessonPage({ data }: PageProps<Data>) {
         <h3 class="text-sm font-bold text-gray-700 mb-3">Lessons</h3>
         <div class="space-y-2">
           {sidebarLessons.map((junction) => {
-            const item = junction.item as { id: string; title: string };
+            const item = junction.item as { id: string; title: string; slug?: string };
             const isActive = item.id === currentLesson.id;
             const type = junction.collection
               .replace("_lessons", "")
@@ -179,7 +190,7 @@ export default function LessonPage({ data }: PageProps<Data>) {
             return (
               <a
                 key={junction.id}
-                href={`/play/${module.id}/${item.id}`}
+                href={`/play/${module.slug || module.id}/${item.slug || item.id}`}
                 class={`block p-3 rounded-lg text-sm transition-colors ${
                   isActive
                     ? "bg-blue-50 border-blue-200 text-blue-700 border"
@@ -205,7 +216,7 @@ export default function LessonPage({ data }: PageProps<Data>) {
 
         <div class="mt-8 pt-4 border-t">
           <a
-            href={`/play/${module.id}`}
+            href={`/mod/${module.slug || module.id}`}
             class="text-sm text-gray-500 hover:text-gray-900 flex items-center gap-1"
           >
             &larr; Back to Module Overview
@@ -215,3 +226,4 @@ export default function LessonPage({ data }: PageProps<Data>) {
     </div>
   );
 }
+

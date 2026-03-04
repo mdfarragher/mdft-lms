@@ -72,7 +72,7 @@ export default function Courses({ data }: PageProps<Data>) {
       <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold">All Courses</h1>
         <a href="/" class="text-blue-600 hover:underline">
-          Back to Dashboard
+          Back to Search
         </a>
       </div>
 
@@ -82,12 +82,11 @@ export default function Courses({ data }: PageProps<Data>) {
             key={course.id}
             class="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
           >
-            <h2 class="text-xl font-semibold mb-2">{course.title}</h2>
             <a
               href={`/course/${course.slug || course.id}`}
               class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
             >
-              View Course
+              <h2 class="text-xl font-semibold mb-2">{course.title}</h2>
             </a>
           </div>
         ))}

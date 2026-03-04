@@ -22,5 +22,7 @@
     "lib": ["deno.window", "dom", "dom.iterable", "dom.asynciterable"],
     "jsx": "react-jsx",
     "jsxImportSource": "preact"
-  }
+  },
+  "lint": { "rules": { "tags": ["fresh", "recommended"] } },
+  "exclude": ["**/_fresh/*"]
 }

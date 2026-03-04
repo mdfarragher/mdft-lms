@@ -1,6 +1,7 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { getDirectusClient } from "../utils/directus.ts";
 import { readMe } from "@directus/sdk";
+import Search from "../islands/Search.tsx";
 
 interface Data {
   user: any;
@@ -55,30 +56,43 @@ export default function Home({ data }: PageProps<Data>) {
 
   return (
     <div style="padding: 2rem;">
-      <h1>
-        Welcome, {data.user.first_name || "User"} {data.user.last_name || ""}!
-      </h1>
-      <p>Email: {data.user.email}</p>
-      <p>ID: {data.user.id}</p>
-      <br />
-      <ul>
-        <li>
-          <a
-            href="/courses"
-            class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            View All Courses
-          </a>
-        </li>
-        <li>
-          <a
-            href="/logout"
-            style="color: blue; text-decoration: underline; align-self: center;"
-          >
-            Logout
-          </a>
-        </li>
-      </ul>
+      <div class="text-center mb-12 mt-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">
+          Search
+        </h1>
+        <p class="text-lg text-gray-600">
+          Welcome back, {data.user.first_name || "User"} {data.user.last_name || ""}!
+        </p>
+      </div>
+
+      <Search />
+
+      <div class="mt-12 text-center">
+        <h2 class="text-xl font-semibold mb-4">Quick Links</h2>
+        <ul class="flex justify-center gap-4">
+          <li>
+            <a
+              href="/courses"
+              class="inline-block bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-50 transition-colors"
+            >
+              View All Courses
+            </a>
+          </li>
+          <li>
+            <a
+              href="/logout"
+              class="inline-block text-gray-500 px-4 py-2 hover:text-gray-700 underline transition-colors"
+            >
+              Logout
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="mt-8 text-xs text-gray-400 text-center">
+        <p>Email: {data.user.email}</p>
+        <p>ID: {data.user.id}</p>
+      </div>
     </div>
   );
 }

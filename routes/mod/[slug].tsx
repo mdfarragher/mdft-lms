@@ -1,6 +1,6 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { getDirectusClient } from "../../utils/directus.ts";
-import { readItem } from "@directus/sdk";
+import { readItems } from "@directus/sdk";
 
 // Interfaces for different lesson types
 interface BaseLesson {
@@ -25,6 +25,8 @@ interface ModuleLessonJunction {
 interface Module {
   id: string;
   title: string;
+  slug: string;
+  content?: string;
   // This field name 'lessons' must match the field name in Directus on the 'modules' collection.
   // If it's a Many-to-Any field, it will return an array of junctions.
   lessons: ModuleLessonJunction[];
@@ -37,22 +39,26 @@ interface Data {
 
 export const handler: Handlers<Data> = {
   async GET(req, ctx) {
-    const moduleId = ctx.params.moduleId;
+    const slug = ctx.params.slug;
     const token = ctx.state.token as string;
     const client = getDirectusClient(token);
 
     try {
-      // Fetch module by ID.
+      // Fetch module by slug.
       // We need to carefully construct the fields query for Many-to-Any.
       // 'lessons' is the field on 'modules'.
       // 'lessons.item' is the link to the actual lesson (video/text/lab).
       // 'lessons.collection' tells us which type it is.
       // We use a wildcard on 'item' (lessons.item.*) to fetch fields from the related collection.
-      const module = (await client.request(
-        readItem("modules", moduleId, {
+      const modules = (await client.request(
+        readItems("modules", {
+          filter: { slug: { _eq: slug } },
+          limit: 1,
           fields: [
             "id",
             "title",
+            "slug",
+            "content",
             "lessons.id",
             "lessons.collection",
             // Directus REST API allows polymorphic expansion like this:
@@ -62,7 +68,13 @@ export const handler: Handlers<Data> = {
             "lessons.item.slug",
           ],
         }),
-      )) as Module;
+      )) as Module[];
+
+      if (!modules || modules.length === 0) {
+        return ctx.renderNotFound();
+      }
+
+      const module = modules[0];
 
       return ctx.render({ module });
     } catch (e: any) {
@@ -114,6 +126,12 @@ export default function ModulePlay({ data }: PageProps<Data>) {
       <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
         <div class="p-8">
           <h1 class="text-3xl font-bold text-gray-900 mb-4">{module.title}</h1>
+          {module.content && (
+            <div
+              class="prose max-w-none text-gray-700"
+              dangerouslySetInnerHTML={{ __html: module.content }}
+            />
+          )}
         </div>
       </div>
 
@@ -140,7 +158,7 @@ export default function ModulePlay({ data }: PageProps<Data>) {
                       <div class="flex items-center gap-3 mb-1">
                         <h3 class="text-lg font-semibold text-gray-900">
                           <a
-                            href={`/play/${module.id}/${lesson.id}`}
+                            href={`/play/${module.slug || module.id}/${lesson.slug || lesson.id}`}
                             class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
                           >
                             {lesson.title}
