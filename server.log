@@ -1,0 +1,215 @@
+[0m[32mTask[0m [0m[36mstart[0m deno run -A --watch=static/,routes/ dev.ts
+[0m[38;5;12mWatcher[0m Process started.
+The manifest has been generated for 10 routes and 1 islands.
+
+[48;5;121m[38;5;0m 🍋 Fresh ready [39m[49m
+    [1mLocal:[22m [36mhttp://localhost:8000/[39m
+
+[Search API] Searching for: "nlp"
+Lessons search failed: {
+  errors: [
+    {
+      message: `You don't have permission to access field "title" in collection "modules_lessons" or it does not exist. Queried in "lessons".`,
+      extensions: {
+        reason: `You don't have permission to access field "title" in collection "modules_lessons" or it does not exist. Queried in "lessons".`,
+        code: "FORBIDDEN"
+      }
+    }
+  ],
+  response: Response {
+    body: ReadableStream { locked: true },
+    bodyUsed: true,
+    headers: Headers {
+      connection: "keep-alive",
+      "content-length": "335",
+      "content-security-policy": "script-src 'self' 'unsafe-eval';worker-src 'self' blob:;child-src 'self' blob:;img-src 'self' data: blob: https://raw.githubusercontent.com https://avatars.githubusercontent.com;media-src 'self';connect-src 'self' https://* wss://*;default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'",
+      "content-type": "application/json; charset=utf-8",
+      date: "Wed, 04 Mar 2026 16:40:26 GMT",
+      etag: 'W/"14f-6Yoj6huVx0pvSMTeMKvZHav6Liw"',
+      "keep-alive": "timeout=5",
+      "x-powered-by": "Directus"
+    },
+    ok: false,
+    redirected: false,
+    status: 403,
+    statusText: "Forbidden",
+    url: "http://localhost:8055/items/modules?fields=id%2Ctitle%2Cslug%2Clessons.collection%2Clessons.item.id%2Clessons.item.title%2Clessons.item.slug&filter=%7B%22lessons%22%3A%7B%22item%22%3A%7B%22title%22%3A%7B%22_icontains%22%3A%22nlp%22%7D%7D%7D%7D"
+  }
+}
+Directus SDK Error: {
+  errors: [
+    {
+      message: "Invalid user credentials.",
+      extensions: { code: "INVALID_CREDENTIALS" }
+    }
+  ],
+  response: Response {
+    body: ReadableStream { locked: true },
+    bodyUsed: true,
+    headers: Headers {
+      connection: "keep-alive",
+      "content-length": "96",
+      "content-security-policy": "script-src 'self' 'unsafe-eval';worker-src 'self' blob:;child-src 'self' blob:;img-src 'self' data: blob: https://raw.githubusercontent.com https://avatars.githubusercontent.com;media-src 'self';connect-src 'self' https://* wss://*;default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'",
+      "content-type": "application/json; charset=utf-8",
+      date: "Wed, 04 Mar 2026 16:41:31 GMT",
+      etag: 'W/"60-SpvBqFAbsdy4SkXwsevzfPClFZA"',
+      "keep-alive": "timeout=5",
+      "x-powered-by": "Directus"
+    },
+    ok: false,
+    redirected: false,
+    status: 401,
+    statusText: "Unauthorized",
+    url: "http://localhost:8055/users/me"
+  }
+}
+Directus SDK Error: {
+  errors: [
+    {
+      message: "Invalid user credentials.",
+      extensions: { code: "INVALID_CREDENTIALS" }
+    }
+  ],
+  response: Response {
+    body: ReadableStream { locked: true },
+    bodyUsed: true,
+    headers: Headers {
+      connection: "keep-alive",
+      "content-length": "96",
+      "content-security-policy": "script-src 'self' 'unsafe-eval';worker-src 'self' blob:;child-src 'self' blob:;img-src 'self' data: blob: https://raw.githubusercontent.com https://avatars.githubusercontent.com;media-src 'self';connect-src 'self' https://* wss://*;default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'",
+      "content-type": "application/json; charset=utf-8",
+      date: "Wed, 04 Mar 2026 16:41:35 GMT",
+      etag: 'W/"60-SpvBqFAbsdy4SkXwsevzfPClFZA"',
+      "keep-alive": "timeout=5",
+      "x-powered-by": "Directus"
+    },
+    ok: false,
+    redirected: false,
+    status: 401,
+    statusText: "Unauthorized",
+    url: "http://localhost:8055/users/me"
+  }
+}
+Directus SDK Error: {
+  errors: [
+    {
+      message: "Invalid user credentials.",
+      extensions: { code: "INVALID_CREDENTIALS" }
+    }
+  ],
+  response: Response {
+    body: ReadableStream { locked: true },
+    bodyUsed: true,
+    headers: Headers {
+      connection: "keep-alive",
+      "content-length": "96",
+      "content-security-policy": "script-src 'self' 'unsafe-eval';worker-src 'self' blob:;child-src 'self' blob:;img-src 'self' data: blob: https://raw.githubusercontent.com https://avatars.githubusercontent.com;media-src 'self';connect-src 'self' https://* wss://*;default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'",
+      "content-type": "application/json; charset=utf-8",
+      date: "Wed, 04 Mar 2026 16:41:43 GMT",
+      etag: 'W/"60-SpvBqFAbsdy4SkXwsevzfPClFZA"',
+      "keep-alive": "timeout=5",
+      "x-powered-by": "Directus"
+    },
+    ok: false,
+    redirected: false,
+    status: 401,
+    statusText: "Unauthorized",
+    url: "http://localhost:8055/users/me"
+  }
+}
+Directus SDK Error: {
+  errors: [
+    {
+      message: "Invalid user credentials.",
+      extensions: { code: "INVALID_CREDENTIALS" }
+    }
+  ],
+  response: Response {
+    body: ReadableStream { locked: true },
+    bodyUsed: true,
+    headers: Headers {
+      connection: "keep-alive",
+      "content-length": "96",
+      "content-security-policy": "script-src 'self' 'unsafe-eval';worker-src 'self' blob:;child-src 'self' blob:;img-src 'self' data: blob: https://raw.githubusercontent.com https://avatars.githubusercontent.com;media-src 'self';connect-src 'self' https://* wss://*;default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'",
+      "content-type": "application/json; charset=utf-8",
+      date: "Wed, 04 Mar 2026 16:41:44 GMT",
+      etag: 'W/"60-SpvBqFAbsdy4SkXwsevzfPClFZA"',
+      "keep-alive": "timeout=5",
+      "x-powered-by": "Directus"
+    },
+    ok: false,
+    redirected: false,
+    status: 401,
+    statusText: "Unauthorized",
+    url: "http://localhost:8055/users/me"
+  }
+}
+[0m[38;5;12mWatcher[0m [0m[38;5;245mRestarting! File change detected: "/home/mdfarragher/Source/mdft-lms/fresh.gen.ts"[0m
+
+[48;5;121m[38;5;0m 🍋 Fresh ready [39m[49m
+    [1mLocal:[22m [36mhttp://localhost:8000/[39m
+
+Directus SDK Error: {
+  errors: [
+    {
+      message: "Invalid user credentials.",
+      extensions: { code: "INVALID_CREDENTIALS" }
+    }
+  ],
+  response: Response {
+    body: ReadableStream { locked: true },
+    bodyUsed: true,
+    headers: Headers {
+      connection: "keep-alive",
+      "content-length": "96",
+      "content-security-policy": "script-src 'self' 'unsafe-eval';worker-src 'self' blob:;child-src 'self' blob:;img-src 'self' data: blob: https://raw.githubusercontent.com https://avatars.githubusercontent.com;media-src 'self';connect-src 'self' https://* wss://*;default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'",
+      "content-type": "application/json; charset=utf-8",
+      date: "Wed, 04 Mar 2026 16:41:54 GMT",
+      etag: 'W/"60-SpvBqFAbsdy4SkXwsevzfPClFZA"',
+      "keep-alive": "timeout=5",
+      "x-powered-by": "Directus"
+    },
+    ok: false,
+    redirected: false,
+    status: 401,
+    statusText: "Unauthorized",
+    url: "http://localhost:8055/users/me"
+  }
+}
+[0m[38;5;12mWatcher[0m [0m[38;5;245mRestarting! File change detected: "/home/mdfarragher/Source/mdft-lms/fresh.gen.ts"[0m
+
+[48;5;121m[38;5;0m 🍋 Fresh ready [39m[49m
+    [1mLocal:[22m [36mhttp://localhost:8000/[39m
+
+Directus SDK Error: {
+  errors: [
+    {
+      message: "Invalid user credentials.",
+      extensions: { code: "INVALID_CREDENTIALS" }
+    }
+  ],
+  response: Response {
+    body: ReadableStream { locked: true },
+    bodyUsed: true,
+    headers: Headers {
+      connection: "keep-alive",
+      "content-length": "96",
+      "content-security-policy": "script-src 'self' 'unsafe-eval';worker-src 'self' blob:;child-src 'self' blob:;img-src 'self' data: blob: https://raw.githubusercontent.com https://avatars.githubusercontent.com;media-src 'self';connect-src 'self' https://* wss://*;default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'",
+      "content-type": "application/json; charset=utf-8",
+      date: "Wed, 04 Mar 2026 16:42:00 GMT",
+      etag: 'W/"60-SpvBqFAbsdy4SkXwsevzfPClFZA"',
+      "keep-alive": "timeout=5",
+      "x-powered-by": "Directus"
+    },
+    ok: false,
+    redirected: false,
+    status: 401,
+    statusText: "Unauthorized",
+    url: "http://localhost:8055/users/me"
+  }
+}
+[0m[38;5;12mWatcher[0m [0m[38;5;245mRestarting! File change detected: "/home/mdfarragher/Source/mdft-lms/fresh.gen.ts"[0m
+
+[48;5;121m[38;5;0m 🍋 Fresh ready [39m[49m
+    [1mLocal:[22m [36mhttp://localhost:8000/[39m
+

@@ -16,7 +16,8 @@
     "@apollo/client": "npm:@apollo/client@^3.10.4",
     "graphql": "npm:graphql@^16.8.1",
     "react": "npm:react@18.2.0",
-    "react-dom": "npm:react-dom@18.2.0"
+    "react-dom": "npm:react-dom@18.2.0",
+    "eta": "npm:eta@^3.4.0"
   },
   "compilerOptions": {
     "lib": ["deno.window", "dom", "dom.iterable", "dom.asynciterable"],

@@ -1,0 +1,93 @@
+<% layout("./layout.eta") %>
+
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">
+            What do you want to learn today?
+        </h1>
+    </div>
+
+    <form action="/" method="get" class="flex gap-2 mb-8 max-w-2xl mx-auto">
+        <input
+            type="text"
+            name="q"
+            value="<%= it.query || '' %>"
+            placeholder="Search for courses, modules, or lessons..."
+            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+        />
+        <button
+            type="submit"
+            class="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg shadow-sm hover:bg-blue-700 transition-colors"
+        >
+            Search
+        </button>
+    </form>
+
+    <% if (it.hasSearched) { %>
+    <div class="space-y-4 max-w-2xl mx-auto">
+        <% if (it.results && it.results.length > 0) { %>
+        <div class="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
+            <!-- Header Row -->
+            <div class="grid grid-cols-[1fr_auto_auto] gap-4 bg-gray-50 border-b border-gray-200 px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <div>Title</div>
+                <div class="w-24 text-center">Type</div>
+                <div class="w-6"></div>
+            </div>
+
+            <div class="divide-y divide-gray-100">
+                <% it.results.forEach(function(result) { %>
+                <a href="<%= result.link %>" class="block group hover:bg-gray-50 transition-colors">
+                    <div class="grid grid-cols-[1fr_auto_auto] gap-4 px-4 py-3 items-center">
+                        <div class="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
+                            <%= result.title %>
+                        </div>
+                        <div class="w-24 text-center">
+                            <span class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 uppercase tracking-wider">
+                                <%= result.type %>
+                            </span>
+                        </div>
+                        <div class="w-6 text-right text-gray-400 group-hover:text-blue-500">
+                            &rarr;
+                        </div>
+                    </div>
+                </a>
+                <% }) %>
+            </div>
+        </div>
+        <% } else { %>
+        <div
+            class="text-center py-8 text-gray-500 bg-gray-50 rounded-lg border border-gray-200"
+        >
+            No results found for "<%= it.query %>"
+        </div>
+        <% } %>
+    </div>
+    <% } %>
+
+    <div class="mt-16 text-center">
+        <h2 class="text-xl font-semibold mb-4">Quick Links</h2>
+        <ul class="flex justify-center gap-4">
+            <li>
+                <a
+                    href="/courses"
+                    class="inline-block bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-50 transition-colors"
+                >
+                    View All Courses
+                </a>
+            </li>
+            <li>
+                <a
+                    href="/logout"
+                    class="inline-block text-gray-500 px-4 py-2 hover:text-gray-700 underline transition-colors"
+                >
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="mt-8 text-xs text-gray-400 text-center">
+        <p>Email: <%= it.user.email %></p>
+        <p>ID: <%= it.user.id %></p>
+    </div>
+</div>

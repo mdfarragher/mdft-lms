@@ -1,98 +1,165 @@
-import { Handlers, PageProps } from "$fresh/server.ts";
+import { Handlers } from "$fresh/server.ts";
 import { getDirectusClient } from "../utils/directus.ts";
-import { readMe } from "@directus/sdk";
-import Search from "../islands/Search.tsx";
+import { readMe, readItems } from "@directus/sdk";
+import { Eta } from "eta";
+import { join } from "$std/path/mod.ts";
 
-interface Data {
-  user: any;
-  error?: string;
-}
+const eta = new Eta({ views: join(Deno.cwd(), "templates") });
 
-export const handler: Handlers<Data> = {
+export const handler: Handlers = {
   async GET(req, ctx) {
     const token = ctx.state.token as string;
-
-    // Create authenticated client using SDK
     const client = getDirectusClient(token);
+    const url = new URL(req.url);
+    const query = url.searchParams.get("q");
 
     try {
-      // Fetch user profile using SDK helper
-      // This automatically uses the /users/me endpoint
       const user = await client.request(readMe());
+      let results: any[] = [];
+      let hasSearched = false;
 
-      return ctx.render({ user });
-    } catch (e: any) {
-      console.error("Directus SDK Error:", e);
-      let errorMessage = e instanceof Error ? e.message : String(e);
+      if (query && query.trim().length > 0) {
+        hasSearched = true;
+        // Search logic (moved from api/search.ts)
+        const coursesPromise = client.request(
+          readItems("courses", {
+            filter: { title: { _icontains: query } } as any,
+            fields: ["id", "title", "slug"],
+          })
+        );
 
-      // Try to parse Directus error structure if available
-      if (e?.errors?.[0]?.message) {
-        errorMessage = e.errors[0].message;
+        const modulesTitlePromise = client.request(
+          readItems("modules", {
+            filter: { title: { _icontains: query } } as any,
+            fields: ["id", "title", "slug"],
+          })
+        );
+
+        const videoLessonsPromise = client.request(
+          readItems("video_lessons", {
+            filter: { title: { _icontains: query } } as any,
+            fields: ["id", "title", "slug"],
+          })
+        );
+
+        const [coursesResult, modulesTitleResult, videoLessonsResult] =
+          await Promise.allSettled([
+            coursesPromise,
+            modulesTitlePromise,
+            videoLessonsPromise,
+          ]);
+
+        // Process Courses
+        if (coursesResult.status === "fulfilled" && Array.isArray(coursesResult.value)) {
+          coursesResult.value.forEach((c: any) => {
+            results.push({
+              type: "course",
+              title: c.title,
+              link: `/course/${c.slug || c.id}`,
+            });
+          });
+        }
+
+        // Process Modules
+        if (modulesTitleResult.status === "fulfilled" && Array.isArray(modulesTitleResult.value)) {
+          modulesTitleResult.value.forEach((m: any) => {
+            results.push({
+              type: "module",
+              title: m.title,
+              link: `/mod/${m.slug || m.id}`,
+            });
+          });
+        }
+
+        // Process Lessons
+        if (
+          videoLessonsResult.status === "fulfilled" &&
+          Array.isArray(videoLessonsResult.value) &&
+          videoLessonsResult.value.length > 0
+        ) {
+          const videoLessons = videoLessonsResult.value;
+          const lessonIds = videoLessons.map((l: any) => l.id);
+          const lessonToModuleIdMap = new Map<string, number>();
+          const moduleIdToSlugMap = new Map<number, string>();
+
+          try {
+            const relations = await client.request(
+              readItems("modules_lessons", {
+                filter: {
+                  item: { _in: lessonIds },
+                  collection: { _eq: "video_lessons" },
+                } as any,
+                fields: ["item", "modules_id"],
+              })
+            );
+
+            const moduleIds = new Set<number>();
+            if (Array.isArray(relations)) {
+              relations.forEach((r: any) => {
+                if (r.item && r.modules_id) {
+                  lessonToModuleIdMap.set(r.item, r.modules_id);
+                  moduleIds.add(r.modules_id);
+                }
+              });
+            }
+
+            if (moduleIds.size > 0) {
+              const modules = await client.request(
+                readItems("modules", {
+                  filter: { id: { _in: Array.from(moduleIds) } } as any,
+                  fields: ["id", "slug"],
+                })
+              );
+
+              if (Array.isArray(modules)) {
+                modules.forEach((m: any) => {
+                  moduleIdToSlugMap.set(m.id, m.slug);
+                });
+              }
+            }
+          } catch (error) {
+            console.error("Error fetching module relations:", error);
+          }
+
+          videoLessons.forEach((l: any) => {
+            const moduleId = lessonToModuleIdMap.get(l.id);
+            let moduleIdentifier = null;
+            if (moduleId) {
+              moduleIdentifier = moduleIdToSlugMap.get(moduleId) || moduleId;
+            }
+            const lessonIdentifier = l.slug || l.id;
+            const link = moduleIdentifier
+              ? `/play/${moduleIdentifier}/${lessonIdentifier}`
+              : `/play/lesson/${lessonIdentifier}`;
+
+            results.push({
+              type: "lesson",
+              title: l.title,
+              link,
+            });
+          });
+        }
+        
+        // Deduplicate
+        results = Array.from(
+          new Map(results.map((item) => [item.link, item])).values()
+        );
       }
 
-      return ctx.render({ user: null, error: errorMessage });
+      const html = eta.render("index.eta", {
+        user,
+        query,
+        hasSearched,
+        results,
+        title: "Search - MDFT LMS",
+      });
+
+      return new Response(html, {
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+      });
+    } catch (e: any) {
+      console.error("Home Page Error:", e);
+      return new Response(`Error: ${e.message}`, { status: 500 });
     }
   },
 };
-
-export default function Home({ data }: PageProps<Data>) {
-  if (data.error) {
-    return (
-      <div style="padding: 2rem; color: red;">
-        <h1>Error</h1>
-        <p>{data.error}</p>
-        <p>
-          Ensure Directus is running at http://localhost:8055 and the schema is
-          correct.
-        </p>
-        <a href="/logout">Logout</a>
-      </div>
-    );
-  }
-
-  if (!data.user) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div style="padding: 2rem;">
-      <div class="text-center mb-12 mt-8">
-        <h1 class="text-4xl font-bold text-gray-900 mb-4">
-          Search
-        </h1>
-        <p class="text-lg text-gray-600">
-          Welcome back, {data.user.first_name || "User"} {data.user.last_name || ""}!
-        </p>
-      </div>
-
-      <Search />
-
-      <div class="mt-12 text-center">
-        <h2 class="text-xl font-semibold mb-4">Quick Links</h2>
-        <ul class="flex justify-center gap-4">
-          <li>
-            <a
-              href="/courses"
-              class="inline-block bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-50 transition-colors"
-            >
-              View All Courses
-            </a>
-          </li>
-          <li>
-            <a
-              href="/logout"
-              class="inline-block text-gray-500 px-4 py-2 hover:text-gray-700 underline transition-colors"
-            >
-              Logout
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="mt-8 text-xs text-gray-400 text-center">
-        <p>Email: {data.user.email}</p>
-        <p>ID: {data.user.id}</p>
-      </div>
-    </div>
-  );
-}
