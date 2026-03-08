@@ -32,6 +32,7 @@ export const handler: Handlers = {
             "certification.title",
             "certification.slug",
             "certification.code",
+            "certification.content_exam",
           ],
         }),
       )) as any[];
@@ -45,6 +46,10 @@ export const handler: Handlers = {
       // Flatten the M2M structure to a simple list of modules
       const modules =
         courseRaw.modules?.map((m: any) => m.modules_id).filter(Boolean) || [];
+
+      if (courseRaw.certification?.content_exam) {
+        courseRaw.certification.content_exam = await marked.parse(courseRaw.certification.content_exam);
+      }
 
       const course = {
         id: courseRaw.id,

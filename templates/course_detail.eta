@@ -69,4 +69,13 @@
       </div>
     <% } %>
   </div>
+
+  <% if (it.course.certification && it.course.certification.content_exam) { %>
+    <div class="container px-0 mb-5">
+      <h2 class="h3 fw-bold mb-4 border-bottom pb-2">About The Certification</h2>
+      <div class="markdown-content text-muted">
+        <%~ it.course.certification.content_exam %>
+      </div>
+    </div>
+  <% } %>
 </div>
