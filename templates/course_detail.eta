@@ -3,9 +3,13 @@
 <div class="container py-4">
     <div class="card shadow-lg mb-5 border-0 overflow-hidden">
         <% if (it.hasBanner) { %>
-          <div class="ratio ratio-21x9 bg-light">
-            <img src="/banner/<%= it.course.slug %>.jpg" class="card-img-top object-fit-cover" alt="<%= it.course.title %>">
-          </div>
+        <div class="ratio ratio-21x9 bg-light">
+            <img
+                src="/banner/<%= it.course.slug %>.jpg"
+                class="card-img-top object-fit-cover"
+                alt="<%= it.course.title %>"
+            />
+        </div>
         <% } %>
         <div class="card-body p-4 p-md-5">
             <div class="mb-4">
@@ -54,7 +58,7 @@
                 <!-- Icon / Thumbnail -->
                 <div class="flex-shrink-0" style="width: 40px; height: 27px">
                     <img
-                        src="/img/module.svg"
+                        src="/img/<%= module.module || 'module' %>.svg"
                         class="w-100 h-100 object-fit-cover rounded"
                         alt="<%= module.title %>"
                     />
@@ -94,11 +98,13 @@
         <div class="markdown-content text-muted">
             <%~ it.course.certification.content %>
         </div>
-    </div>
-    <div class="container px-0 mb-5">
-        <h2 class="h3 fw-bold mb-4 border-bottom pb-2">About The Exam</h2>
-        <div class="markdown-content text-muted">
-            <%~ it.course.certification.content_exam %>
+        <div class="mt-4">
+            <a
+                href="/certification/<%= it.course.certification.slug %>"
+                class="btn btn-outline-primary"
+            >
+                Learn More <i class="bi bi-arrow-right"></i>
+            </a>
         </div>
     </div>
     <% } %>
