@@ -4,11 +4,9 @@
   <div class="card shadow-lg mb-5 border-0">
     <div class="card-body p-4 p-md-5">
       <div class="mb-4">
-        <% if (it.certification.code) { %>
-          <span class="badge bg-info text-dark mb-2 fs-6">
-            <%= it.certification.code %>
-          </span>
-        <% } %>
+        <span class="badge mb-2 fs-6" style="background-color: #FA6915; color: white;">
+          Certification
+        </span>
         <h1 class="display-5 fw-bold text-dark"><%= it.certification.title %></h1>
       </div>
 
