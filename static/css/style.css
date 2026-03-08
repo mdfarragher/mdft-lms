@@ -8,7 +8,7 @@
 
 .btn-primary:hover {
     background-color: #9bd326 !important;
-    border-color: #9bd326 !important;
+    border-color: #008800 !important;
     color: #000000 !important;
 }
 
@@ -76,39 +76,23 @@ h6,
     height: 52px;
 }
 
-h1 {
-    font-family: "Inter", sans-serif;
-    font-size: 2.5rem !important;
-    font-weight: 400 !important;
-    line-height: 1.25;
+/* Search Result Item Styling */
+.search-result-item {
+    text-decoration: none !important;
 }
 
-p,
-li,
-a {
-    font-family: "Inter", sans-serif;
-    font-size: 1.2rem;
-    font-weight: 400 !important;
-    line-height: 1.75;
+.search-result-item .badge {
+    text-decoration: none !important;
 }
 
-/* Breadcrumb removed */
-
-/* Special orange-underlined link */
-a:not(.btn),
-a.warning-link:not(.btn),
-.mt-4 p a:not(.btn) {
-    color: black;
-    text-decoration: underline;
-    text-decoration-color: #fa6915;
+.search-result-item h6 {
+    color: #212529; /* Dark text by default */
+    text-decoration: none !important;
 }
 
-/* Special orange-underlined link hover */
-a:not(.btn):hover,
-a.warning-link:not(.btn):hover,
-.mt-4 p a:not(.btn):hover {
-    color: #007bff !important;
-    text-decoration-color: #007bff;
+.search-result-item:hover h6 {
+    color: #fa6915 !important; /* Orange on hover */
+    text-decoration: underline !important;
 }
 
 /* Layout helpers */
@@ -170,4 +154,10 @@ main {
 
 .lesson-list-scroll {
     max-height: calc(100vh - 200px);
+}
+
+@media (min-width: 768px) {
+    .w-md-50 {
+        width: 50% !important;
+    }
 }

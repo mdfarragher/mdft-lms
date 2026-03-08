@@ -1,81 +1,85 @@
 <% layout("./layout.eta") %>
 
 <div class="container py-4">
-  <div class="card shadow-lg mb-5 border-0">
-    <div class="card-body p-4 p-md-5">
-      <div class="mb-4">
-        <span class="badge mb-2 fs-6" style="background-color: #AFEB2B; color: black;">
-          Course
-        </span>
-        <h1 class="display-5 fw-bold text-dark"><%= it.course.title %></h1>
+  <div class="d-flex justify-content-center">
+    <div class="w-75 w-md-50">
+      <div class="card shadow-lg mb-5 border-0">
+        <div class="card-body p-4 p-md-5">
+          <div class="mb-4">
+            <span class="badge mb-2 fs-6" style="background-color: #AFEB2B; color: black;">
+              Course
+            </span>
+            <h1 class="display-5 fw-bold text-dark"><%= it.course.title %></h1>
+          </div>
+
+          <% if (it.course.content) { %>
+            <div class="mb-4 markdown-content text-muted">
+              <%~ it.course.content %>
+            </div>
+          <% } else if (it.course.description) { %>
+            <div class="mb-4 markdown-content text-muted">
+              <%~ it.course.description %>
+            </div>
+          <% } %>
+
+          <% if (it.modules && it.modules.length > 0) { %>
+            <div class="mt-4">
+                <a href="/mod/<%= it.modules[0].slug || it.modules[0].id %>" class="btn btn-primary btn-lg">
+                    <i class="bi bi-play-fill me-2"></i>Start Course
+                </a>
+            </div>
+          <% } %>
+        </div>
       </div>
 
-      <% if (it.course.content) { %>
-        <div class="mb-4 markdown-content text-muted">
-          <%~ it.course.content %>
-        </div>
-      <% } else if (it.course.description) { %>
-        <div class="mb-4 markdown-content text-muted">
-          <%~ it.course.description %>
-        </div>
-      <% } %>
+      <div class="container px-0 mb-5">
+        <h2 class="h3 fw-bold mb-4 border-bottom pb-2">Modules</h2>
+        
+        <% if (it.modules && it.modules.length > 0) { %>
+          <div class="list-group list-group-flush shadow-sm rounded">
+            <% it.modules.forEach(function(module) { %>
+              <a
+                href="/mod/<%= module.slug || module.id %>"
+                class="list-group-item list-group-item-action py-2 d-flex align-items-center gap-3 transition-bg search-result-item border-0 mb-1"
+              >
+                <!-- Icon / Thumbnail -->
+                <div class="flex-shrink-0" style="width: 40px; height: 27px">
+                  <img
+                    src="/img/module.svg"
+                    class="w-100 h-100 object-fit-cover rounded"
+                    alt="<%= module.title %>"
+                  />
+                </div>
 
-      <% if (it.modules && it.modules.length > 0) { %>
-        <div class="mt-4">
-            <a href="/mod/<%= it.modules[0].slug || it.modules[0].id %>" class="btn btn-primary btn-lg">
-                <i class="bi bi-play-fill me-2"></i>Start Course
-            </a>
+                <!-- Content -->
+                <div class="flex-grow-1 min-width-0 d-flex align-items-center">
+                  <h6 class="mb-0 fw-normal text-dark text-truncate">
+                    <%= module.title %>
+                  </h6>
+                </div>
+
+                <!-- Arrow -->
+                <div class="flex-shrink-0 text-muted">
+                  <i class="bi bi-chevron-right"></i>
+                </div>
+              </a>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="alert alert-warning text-center" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>No modules found for this course.
+          </div>
+        <% } %>
+      </div>
+
+      <% if (it.course.certification && it.course.certification.content_exam) { %>
+        <div class="container px-0 mb-5">
+          <h2 class="h3 fw-bold mb-4 border-bottom pb-2">About The Certification</h2>
+          <div class="markdown-content text-muted">
+            <%~ it.course.certification.content_exam %>
+          </div>
         </div>
       <% } %>
     </div>
   </div>
-
-  <div class="container px-0 mb-5">
-    <h2 class="h3 fw-bold mb-4 border-bottom pb-2">Modules</h2>
-    
-    <% if (it.modules && it.modules.length > 0) { %>
-      <div class="list-group list-group-flush shadow-sm rounded">
-        <% it.modules.forEach(function(module) { %>
-          <a
-            href="/mod/<%= module.slug || module.id %>"
-            class="list-group-item list-group-item-action py-2 d-flex align-items-center gap-3 transition-bg search-result-item border-0 mb-1"
-          >
-            <!-- Icon / Thumbnail -->
-            <div class="flex-shrink-0" style="width: 40px; height: 27px">
-              <img
-                src="/img/module.svg"
-                class="w-100 h-100 object-fit-cover rounded"
-                alt="<%= module.title %>"
-              />
-            </div>
-
-            <!-- Content -->
-            <div class="flex-grow-1 min-width-0 d-flex align-items-center">
-              <h6 class="mb-0 fw-normal text-dark text-truncate">
-                <%= module.title %>
-              </h6>
-            </div>
-
-            <!-- Arrow -->
-            <div class="flex-shrink-0 text-muted">
-              <i class="bi bi-chevron-right"></i>
-            </div>
-          </a>
-        <% }) %>
-      </div>
-    <% } else { %>
-      <div class="alert alert-warning text-center" role="alert">
-        <i class="bi bi-exclamation-triangle me-2"></i>No modules found for this course.
-      </div>
-    <% } %>
-  </div>
-
-  <% if (it.course.certification && it.course.certification.content_exam) { %>
-    <div class="container px-0 mb-5">
-      <h2 class="h3 fw-bold mb-4 border-bottom pb-2">About The Certification</h2>
-      <div class="markdown-content text-muted">
-        <%~ it.course.certification.content_exam %>
-      </div>
-    </div>
-  <% } %>
 </div>
