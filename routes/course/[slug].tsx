@@ -28,6 +28,7 @@ export const handler: Handlers = {
             "modules.modules_id.id",
             "modules.modules_id.title",
             "modules.modules_id.slug",
+            "modules.modules_id.lessons.id",
             "certification.id",
             "certification.title",
             "certification.slug",
