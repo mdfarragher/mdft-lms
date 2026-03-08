@@ -1,24 +1,23 @@
 <% layout("./layout.eta") %>
 
-<div class="p-5 mb-4 bg-light rounded-3 shadow-sm text-center">
+<div class="mb-3 bg-light rounded-3 text-center">
     <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold text-dark">
-            What do you want to learn today?
-        </h1>
+        <h2 class="display-5 text-dark">What do you want to learn today?</h2>
 
         <form
             action="/"
             method="get"
-            class="d-flex justify-content-center mt-4"
+            class="d-flex justify-content-center mt-4 mb-0"
         >
-            <div class="input-group mb-3 w-75 w-md-50">
+            <div class="input-group w-75 w-md-50">
                 <input
                     type="text"
                     name="q"
                     value="<%= it.query || '' %>"
                     class="form-control form-control-lg"
-                    placeholder="Search for courses, modules, lessons and certifications..."
+                    placeholder="Search for courses, modules, lessons, certifications..."
                     aria-label="Search"
+                    autofocus
                 />
                 <button class="btn btn-primary btn-lg" type="submit">
                     <i class="bi bi-search me-2"></i>Search
@@ -29,38 +28,85 @@
 </div>
 
 <% if (it.hasSearched) { %>
-<div class="container mt-4">
-    <% if (it.results && it.results.length > 0) { %>
-    <div class="card shadow-sm">
-        <div class="card-header bg-white">
-            <h5 class="mb-0">Search Results</h5>
-        </div>
-        <div class="list-group list-group-flush">
-            <% it.results.forEach(function(result) { %>
-            <a
-                href="<%= result.link %>"
-                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-            >
-                <div>
-                    <h6 class="mb-1 text-primary fw-bold">
-                        <%= result.title %>
-                    </h6>
-                    <small
-                        class="text-muted text-uppercase badge bg-light text-dark border"
-                        ><%= result.type %></small
-                    >
+<div class="container mt-2 pb-2">
+    <div class="d-flex justify-content-center">
+        <div class="w-75 w-md-50">
+            <% if (it.results && it.results.length > 0) { %>
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0">Search Results</h5>
                 </div>
-                <i class="bi bi-arrow-right text-secondary"></i>
-            </a>
-            <% }) %>
+                <div class="list-group list-group-flush">
+                    <% it.results.forEach(function(result) { %>
+                    <a
+                        href="<%= result.link %>"
+                        class="list-group-item list-group-item-action py-2 d-flex align-items-center gap-3 transition-bg search-result-item"
+                    >
+                        <!-- Icon / Thumbnail -->
+                        <div
+                            class="flex-shrink-0"
+                            style="width: 60px; height: 40px"
+                        >
+                            <% if (result.type === 'course' || result.type ===
+                            'certification') { %>
+                            <img
+                                src="/thumb/<%= result.slug %>.jpg"
+                                class="w-100 h-100 object-fit-cover rounded"
+                                alt="<%= result.title %>"
+                            />
+                            <% } else if (result.type === 'module') { %>
+                            <img
+                                src="/img/module.svg"
+                                class="w-100 h-100 object-fit-cover rounded"
+                                alt="<%= result.title %>"
+                            />
+                            <% } else if (result.type === 'lesson') { %>
+                            <img
+                                src="/img/lesson.svg"
+                                class="w-100 h-100 object-fit-cover rounded"
+                                alt="<%= result.title %>"
+                            />
+                            <% } else { %>
+                            <div
+                                class="w-100 h-100 bg-secondary bg-opacity-10 rounded d-flex align-items-center justify-content-center"
+                            >
+                                <i class="bi bi-search text-secondary fs-4"></i>
+                            </div>
+                            <% } %>
+                        </div>
+
+                        <!-- Content -->
+                        <div
+                            class="flex-grow-1 min-width-0 d-flex align-items-center"
+                        >
+                            <span
+                                class="badge rounded-pill border fw-normal text-capitalize fs-xs me-3 flex-shrink-0 d-flex align-items-center justify-content-center"
+                                style="width: 70px; height: 24px; color: <%= result.type === 'lesson' || result.type === 'certification' ? 'white' : 'black' %>; background-color: <%= result.type === 'course' ? '#AFEB2B' : (result.type === 'module' ? '#B8DAFF' : (result.type === 'certification' ? '#FA6915' : '#212529')) %>;"
+                            >
+                                <%= result.type === 'certification' ? 'Cert' :
+                                result.type %>
+                            </span>
+                            <h6 class="mb-0 fw-normal text-dark text-truncate">
+                                <%= result.title %>
+                            </h6>
+                        </div>
+
+                        <!-- Arrow -->
+                        <div class="flex-shrink-0 text-muted">
+                            <i class="bi bi-chevron-right"></i>
+                        </div>
+                    </a>
+                    <% }) %>
+                </div>
+            </div>
+            <% } else { %>
+            <div class="alert alert-warning text-center" role="alert">
+                <i class="bi bi-exclamation-circle me-2"></i>No results found
+                for "<strong><%= it.query %></strong>".
+            </div>
+            <% } %>
         </div>
     </div>
-    <% } else { %>
-    <div class="alert alert-warning text-center" role="alert">
-        <i class="bi bi-exclamation-circle me-2"></i>No results found for
-        "<strong><%= it.query %></strong>".
-    </div>
-    <% } %>
 </div>
 <% } %>
 

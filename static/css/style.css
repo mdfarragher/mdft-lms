@@ -155,9 +155,3 @@ main {
 .lesson-list-scroll {
     max-height: calc(100vh - 200px);
 }
-
-@media (min-width: 768px) {
-    .w-md-50 {
-        width: 50% !important;
-    }
-}

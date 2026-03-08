@@ -42,12 +42,40 @@ export const handler: Handlers = {
           })
         );
 
-        const [coursesResult, modulesTitleResult, videoLessonsResult] =
+        const certificationsPromise = client.request(
+          readItems("certifications", {
+            filter: { title: { _icontains: query } } as any,
+            fields: ["id", "title", "slug"],
+          })
+        );
+
+        const textLessonsPromise = client.request(
+          readItems("text_lessons", {
+            filter: { title: { _icontains: query } } as any,
+            fields: ["id", "title", "slug"],
+          })
+        );
+
+        const [coursesResult, modulesTitleResult, videoLessonsResult, certificationsResult, textLessonsResult] =
           await Promise.allSettled([
             coursesPromise,
             modulesTitlePromise,
             videoLessonsPromise,
+            certificationsPromise,
+            textLessonsPromise,
           ]);
+
+        // Process Certifications
+        if (certificationsResult.status === "fulfilled" && Array.isArray(certificationsResult.value)) {
+          certificationsResult.value.forEach((c: any) => {
+            results.push({
+              type: "certification",
+              title: c.title,
+              slug: c.slug,
+              link: `/certification/${c.slug || c.id}`,
+            });
+          });
+        }
 
         // Process Courses
         if (coursesResult.status === "fulfilled" && Array.isArray(coursesResult.value)) {
@@ -55,6 +83,7 @@ export const handler: Handlers = {
             results.push({
               type: "course",
               title: c.title,
+              slug: c.slug,
               link: `/course/${c.slug || c.id}`,
             });
           });
@@ -140,6 +169,75 @@ export const handler: Handlers = {
           });
         }
         
+        // Process Text Lessons
+        if (
+          textLessonsResult.status === "fulfilled" &&
+          Array.isArray(textLessonsResult.value) &&
+          textLessonsResult.value.length > 0
+        ) {
+          const textLessons = textLessonsResult.value;
+          const lessonIds = textLessons.map((l: any) => l.id);
+          const lessonToModuleIdMap = new Map<string, number>();
+          const moduleIdToSlugMap = new Map<number, string>();
+
+          try {
+            const relations = await client.request(
+              readItems("modules_lessons", {
+                filter: {
+                  item: { _in: lessonIds },
+                  collection: { _eq: "text_lessons" },
+                } as any,
+                fields: ["item", "modules_id"],
+              })
+            );
+
+            const moduleIds = new Set<number>();
+            if (Array.isArray(relations)) {
+              relations.forEach((r: any) => {
+                if (r.item && r.modules_id) {
+                  lessonToModuleIdMap.set(r.item, r.modules_id);
+                  moduleIds.add(r.modules_id);
+                }
+              });
+            }
+
+            if (moduleIds.size > 0) {
+              const modules = await client.request(
+                readItems("modules", {
+                  filter: { id: { _in: Array.from(moduleIds) } } as any,
+                  fields: ["id", "slug"],
+                })
+              );
+
+              if (Array.isArray(modules)) {
+                modules.forEach((m: any) => {
+                  moduleIdToSlugMap.set(m.id, m.slug);
+                });
+              }
+            }
+          } catch (error) {
+            console.error("Error fetching module relations for text lessons:", error);
+          }
+
+          textLessons.forEach((l: any) => {
+            const moduleId = lessonToModuleIdMap.get(l.id);
+            let moduleIdentifier = null;
+            if (moduleId) {
+              moduleIdentifier = moduleIdToSlugMap.get(moduleId) || moduleId;
+            }
+            const lessonIdentifier = l.slug || l.id;
+            const link = moduleIdentifier
+              ? `/play/${moduleIdentifier}/${lessonIdentifier}`
+              : `/play/lesson/${lessonIdentifier}`;
+
+            results.push({
+              type: "lesson",
+              title: l.title,
+              link,
+            });
+          });
+        }
+
         // Deduplicate
         results = Array.from(
           new Map(results.map((item) => [item.link, item])).values()

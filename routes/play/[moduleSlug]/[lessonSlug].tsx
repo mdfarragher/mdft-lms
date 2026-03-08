@@ -3,6 +3,7 @@ import { getDirectusClient } from "../../../utils/directus.ts";
 import { readItems, readItem } from "@directus/sdk";
 import { Eta } from "eta";
 import { join } from "$std/path/mod.ts";
+import { marked } from "marked";
 
 const eta = new Eta({ views: join(Deno.cwd(), "templates") });
 
@@ -13,6 +14,7 @@ interface LessonDetail {
   slug?: string;
   // Specific fields based on type
   video_url?: string;
+  content?: string;
 }
 
 interface ModuleLessonJunction {
@@ -85,11 +87,22 @@ export const handler: Handlers = {
 
       // 3. Fetch the specific lesson details
       // We explicitly request fields likely to contain content
+      const fields = ["*"];
+      if (collection === "video_lessons") {
+        fields.push("video_url");
+      } else if (collection === "text_lessons") {
+        fields.push("content");
+      }
+
       const lesson = (await client.request(
         readItem(collection, lessonId, {
-          fields: ["*", "video_url"],
+          fields: fields,
         }),
       )) as LessonDetail;
+
+      if (lesson.content) {
+        lesson.content = await marked.parse(lesson.content);
+      }
 
       // 4. Prepare data for template
       const sortedJunctions = (module.lessons || [])

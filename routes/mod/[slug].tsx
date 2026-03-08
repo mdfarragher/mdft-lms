@@ -24,6 +24,7 @@ interface Module {
   id: string;
   title: string;
   slug: string;
+  type?: string;
   content?: string;
   lessons: ModuleLessonJunction[];
 }
@@ -43,6 +44,7 @@ export const handler: Handlers = {
             "id",
             "title",
             "slug",
+            "type",
             "content",
             "lessons.id",
             "lessons.collection",
@@ -95,6 +97,7 @@ export const handler: Handlers = {
         module: {
           title: module.title,
           content: module.content,
+          type: module.type,
         },
         lessons,
         certifications,

@@ -58,7 +58,7 @@
                 <!-- Icon / Thumbnail -->
                 <div class="flex-shrink-0" style="width: 40px; height: 27px">
                     <img
-                        src="/img/<%= module.module || 'module' %>.svg"
+                        src="/img/<%= module.type %>.svg"
                         class="w-100 h-100 object-fit-cover rounded"
                         alt="<%= module.title %>"
                     />
@@ -93,7 +93,7 @@
     <% if (it.course.certification) { %>
     <div class="container px-0 mb-5">
         <h2 class="h3 fw-bold mb-4 border-bottom pb-2">
-            About The Certification
+            About The <%= it.course.certification.code %> Certification
         </h2>
         <div class="markdown-content text-muted">
             <%~ it.course.certification.content %>
@@ -105,6 +105,87 @@
             >
                 Learn More <i class="bi bi-arrow-right"></i>
             </a>
+        </div>
+    </div>
+    <% } %> <% const examModule = it.modules && it.modules.find(m => m.type ===
+    'exam'); if (examModule) { %>
+    <div class="container px-0 mb-5">
+        <h2 class="h3 fw-bold mb-4 border-bottom pb-2">
+            Try The Practice Exam
+        </h2>
+        <div class="markdown-content text-muted"><%~ examModule.content %></div>
+        <div class="mt-4">
+            <a
+                href="/mod/<%= examModule.slug || examModule.id %>"
+                class="btn btn-outline-primary"
+            >
+                Try The Exam <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+    <% } %> <% if (it.testimonials && it.testimonials.length > 0) { %>
+    <div class="container px-0 mb-5">
+        <h2 class="h3 fw-bold mb-4 border-bottom pb-2">
+            What My Students Are Saying
+        </h2>
+        <div class="row">
+            <% it.testimonials.forEach(function(testimonial) { %>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <div class="mb-3 text-warning">
+                            <% for(let i=0; i<5; i++) { %>
+                            <i class="bi bi-star-fill"></i>
+                            <% } %>
+                        </div>
+                        <p class="card-text text-muted mb-4">
+                            "<%= testimonial.text %>"
+                        </p>
+                        <h6 class="card-subtitle fw-bold text-dark">
+                            <%= testimonial.author %>
+                        </h6>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+    <% } %> <% if (it.course.preview_lesson &&
+    it.course.preview_lesson.video_url) { %>
+    <div class="container px-0 mb-5">
+        <h2 class="h3 fw-bold mb-2 border-bottom pb-2">Lesson Preview</h2>
+        <p class="text-muted mb-4">
+            Watch a sample lecture from the course <br />
+            <% if (it.course.preview_lesson.title) { %>
+            <strong><%= it.course.preview_lesson.title %></strong><% } %>
+        </p>
+        <div
+            class="ratio ratio-16x9 bg-black rounded overflow-hidden shadow-lg"
+        >
+            <iframe
+                src="<%= it.course.preview_lesson.video_url %>"
+                allowfullscreen
+                allow="
+                    accelerometer;
+                    autoplay;
+                    clipboard-write;
+                    encrypted-media;
+                    gyroscope;
+                    picture-in-picture;
+                "
+            >
+            </iframe>
+        </div>
+    </div>
+    <% } %>
+
+    <% if (it.course.content_setup) { %>
+    <div class="container px-0 mb-5">
+        <h2 class="h3 fw-bold mb-4 border-bottom pb-2">
+            What You'll Need To Get Started
+        </h2>
+        <div class="markdown-content text-muted">
+            <%~ it.course.content_setup %>
         </div>
     </div>
     <% } %>

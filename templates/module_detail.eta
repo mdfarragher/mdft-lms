@@ -5,7 +5,15 @@
         <div class="card-body p-4 p-md-5">
             <div class="mb-4">
                 <span class="badge mb-2 fs-6" style="background-color: #B8DAFF; color: black;">
-                    Module
+                    <% if (it.module.type === 'lab') { %>
+                        Lab Module
+                    <% } else if (it.module.type === 'quiz') { %>
+                        Quiz
+                    <% } else if (it.module.type === 'exam') { %>
+                        Practice Exam
+                    <% } else { %>
+                        Course Module
+                    <% } %>
                 </span>
                 <h1 class="display-6 fw-bold text-dark mb-0">
                     <%= it.module.title %>
