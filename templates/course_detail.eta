@@ -28,12 +28,30 @@
     <% if (it.modules && it.modules.length > 0) { %>
       <div class="list-group list-group-flush shadow-sm rounded">
         <% it.modules.forEach(function(module) { %>
-          <a href="/mod/<%= module.slug || module.id %>" class="list-group-item list-group-item-action p-4 d-flex justify-content-between align-items-center transition-bg border-0 mb-1">
-            <div class="d-flex align-items-center">
-              <img src="/img/module.svg" alt="Module" width="24" height="24" class="me-3 opacity-50">
-              <span class="fw-medium text-dark h6 mb-0"><%= module.title %></span>
+          <a
+            href="/mod/<%= module.slug || module.id %>"
+            class="list-group-item list-group-item-action py-2 d-flex align-items-center gap-3 transition-bg search-result-item border-0 mb-1"
+          >
+            <!-- Icon / Thumbnail -->
+            <div class="flex-shrink-0" style="width: 40px; height: 27px">
+              <img
+                src="/img/module.svg"
+                class="w-100 h-100 object-fit-cover rounded"
+                alt="<%= module.title %>"
+              />
             </div>
-            <i class="bi bi-chevron-right text-muted"></i>
+
+            <!-- Content -->
+            <div class="flex-grow-1 min-width-0 d-flex align-items-center">
+              <h6 class="mb-0 fw-normal text-dark text-truncate">
+                <%= module.title %>
+              </h6>
+            </div>
+
+            <!-- Arrow -->
+            <div class="flex-shrink-0 text-muted">
+              <i class="bi bi-chevron-right"></i>
+            </div>
           </a>
         <% }) %>
       </div>
