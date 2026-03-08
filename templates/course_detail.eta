@@ -19,6 +19,14 @@
           <%~ it.course.description %>
         </div>
       <% } %>
+
+      <% if (it.modules && it.modules.length > 0) { %>
+        <div class="mt-4">
+            <a href="/mod/<%= it.modules[0].slug || it.modules[0].id %>" class="btn btn-primary btn-lg">
+                <i class="bi bi-play-fill me-2"></i>Start Course
+            </a>
+        </div>
+      <% } %>
     </div>
   </div>
 
