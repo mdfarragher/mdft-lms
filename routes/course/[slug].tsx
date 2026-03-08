@@ -33,6 +33,7 @@ export const handler: Handlers = {
             "certification.title",
             "certification.slug",
             "certification.code",
+            "certification.content",
             "certification.content_exam",
           ],
         }),
@@ -44,12 +45,28 @@ export const handler: Handlers = {
 
       const courseRaw = courses[0];
 
+      // Check for banner image
+      let hasBanner = false;
+      try {
+        await Deno.stat(join(Deno.cwd(), "static", "banner", `${courseRaw.slug}.jpg`));
+        hasBanner = true;
+      } catch {
+        // Banner not found
+      }
+
       // Flatten the M2M structure to a simple list of modules
       const modules =
         courseRaw.modules?.map((m: any) => m.modules_id).filter(Boolean) || [];
 
+      if (courseRaw.certification?.content) {
+        courseRaw.certification.content = await marked.parse(
+          courseRaw.certification.content,
+        );
+      }
       if (courseRaw.certification?.content_exam) {
-        courseRaw.certification.content_exam = await marked.parse(courseRaw.certification.content_exam);
+        courseRaw.certification.content_exam = await marked.parse(
+          courseRaw.certification.content_exam,
+        );
       }
 
       const course = {
@@ -59,14 +76,19 @@ export const handler: Handlers = {
         status: courseRaw.status,
         date_created: courseRaw.date_created,
         certification: courseRaw.certification,
-        description: courseRaw.description ? await marked.parse(courseRaw.description) : null,
-        content: courseRaw.content ? await marked.parse(courseRaw.content) : null,
+        description: courseRaw.description
+          ? await marked.parse(courseRaw.description)
+          : null,
+        content: courseRaw.content
+          ? await marked.parse(courseRaw.content)
+          : null,
       };
 
       const html = eta.render("course_detail.eta", {
         course,
         modules,
         title: course.title,
+        hasBanner,
       });
 
       return new Response(html, {
@@ -80,4 +102,3 @@ export const handler: Handlers = {
     }
   },
 };
-
