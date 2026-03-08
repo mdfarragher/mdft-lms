@@ -39,6 +39,9 @@ export const handler: Handlers = {
       if (certification.content) {
         certification.content = await marked.parse(certification.content);
       }
+      if (certification.content_exam) {
+        certification.content_exam = await marked.parse(certification.content_exam);
+      }
 
       // 2. Fetch courses associated with this certification
       const courses = (await client.request(

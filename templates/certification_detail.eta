@@ -12,19 +12,19 @@
         <h1 class="display-5 fw-bold text-dark"><%= it.certification.title %></h1>
       </div>
 
-      <% if (it.certification.description) { %>
-        <div class="mb-4 markdown-content text-muted">
-          <%~ it.certification.description %>
-        </div>
-      <% } else if (it.certification.content) { %>
+      <% if (it.certification.content) { %>
         <div class="mb-4 markdown-content text-muted">
           <%~ it.certification.content %>
+        </div>
+      <% } else if (it.certification.description) { %>
+        <div class="mb-4 markdown-content text-muted">
+          <%~ it.certification.description %>
         </div>
       <% } %>
     </div>
   </div>
 
-  <div class="container px-0">
+  <div class="container px-0 mb-5">
     <h2 class="h3 fw-bold mb-4 border-bottom pb-2">Preparation Courses</h2>
     
     <% if (it.courses && it.courses.length > 0) { %>
@@ -50,4 +50,13 @@
       </div>
     <% } %>
   </div>
+
+  <% if (it.certification.content_exam) { %>
+    <div class="container px-0 mb-5">
+      <h2 class="h3 fw-bold mb-4 border-bottom pb-2">About The Exam</h2>
+      <div class="markdown-content text-muted">
+        <%~ it.certification.content_exam %>
+      </div>
+    </div>
+  <% } %>
 </div>
