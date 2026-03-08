@@ -3,6 +3,7 @@ import { getDirectusClient } from "../../utils/directus.ts";
 import { readItems } from "@directus/sdk";
 import { Eta } from "eta";
 import { join } from "$std/path/mod.ts";
+import { marked } from "marked";
 
 const eta = new Eta({ views: join(Deno.cwd(), "templates") });
 
@@ -49,6 +50,10 @@ export const handler: Handlers = {
             "lessons.item.id",
             "lessons.item.title",
             "lessons.item.slug",
+            "certifications.certifications_id.id",
+            "certifications.certifications_id.title",
+            "certifications.certifications_id.slug",
+            "certifications.certifications_id.code",
           ],
         }),
       )) as unknown as Module[];
@@ -58,6 +63,16 @@ export const handler: Handlers = {
       }
 
       const module = modules[0];
+
+      if (module.content) {
+        module.content = await marked.parse(module.content);
+      }
+
+      // Process certifications
+      // @ts-ignore: Complex M2M structure
+      const certifications = (module.certifications || [])
+        .map((c: any) => c.certifications_id)
+        .filter((c: any) => c);
 
       // Process lessons for the template
       const lessons = (module.lessons || [])
@@ -82,6 +97,7 @@ export const handler: Handlers = {
           content: module.content,
         },
         lessons,
+        certifications,
         title: module.title, // For the layout
       });
 

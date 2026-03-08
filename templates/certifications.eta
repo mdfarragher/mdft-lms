@@ -1,0 +1,32 @@
+<% layout("./layout.eta") %>
+
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 mb-0 text-dark border-bottom pb-2 border-primary d-inline-block">All Certifications</h1>
+  </div>
+
+  <% if (it.certifications && it.certifications.length > 0) { %>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <% it.certifications.forEach(function(certification) { %>
+        <div class="col">
+          <a href="/certification/<%= certification.slug || certification.id %>" class="text-decoration-none">
+            <div class="card h-100 shadow-sm border-0 transition-hover">
+              <div class="ratio ratio-16x9">
+                <img src="/thumb/<%= certification.slug %>.jpg" class="card-img-top object-fit-cover" alt="<%= certification.title %>" loading="lazy">
+              </div>
+              <div class="card-body text-center p-3">
+                <h5 class="card-title text-dark fw-bold mb-0 fs-6"><%= certification.title %></h5>
+              </div>
+            </div>
+          </a>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="text-center py-5">
+      <div class="alert alert-info d-inline-block">
+        <i class="bi bi-info-circle me-2"></i>No certifications found at the moment.
+      </div>
+    </div>
+  <% } %>
+</div>

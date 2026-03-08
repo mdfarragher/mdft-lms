@@ -3,6 +3,7 @@ import { getDirectusClient } from "../../utils/directus.ts";
 import { readItems } from "@directus/sdk";
 import { Eta } from "eta";
 import { join } from "$std/path/mod.ts";
+import { marked } from "marked";
 
 const eta = new Eta({ views: join(Deno.cwd(), "templates") });
 
@@ -27,6 +28,10 @@ export const handler: Handlers = {
             "modules.modules_id.id",
             "modules.modules_id.title",
             "modules.modules_id.slug",
+            "certification.id",
+            "certification.title",
+            "certification.slug",
+            "certification.code",
           ],
         }),
       )) as any[];
@@ -47,6 +52,8 @@ export const handler: Handlers = {
         slug: courseRaw.slug,
         status: courseRaw.status,
         date_created: courseRaw.date_created,
+        certification: courseRaw.certification,
+        description: courseRaw.description ? await marked.parse(courseRaw.description) : null,
       };
 
       const html = eta.render("course_detail.eta", {

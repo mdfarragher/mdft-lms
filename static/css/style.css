@@ -1,0 +1,173 @@
+/* Override Bootstrap primary button background color */
+.btn-primary {
+    background-color: #afeb2b !important;
+    border-color: #afeb2b !important;
+    color: #000000 !important; /* Optional: ensure readable text */
+    border-radius: 6px;
+}
+
+.btn-primary:hover {
+    background-color: #9bd326 !important;
+    border-color: #9bd326 !important;
+    color: #000000 !important;
+}
+
+.btn-outline-primary {
+    color: #000000 !important;
+    border-color: #000000 !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: #ddd !important; /* Light gray */
+    border-color: #000000 !important;
+    color: #000000 !important;
+}
+
+.btn-outline-primary:disabled,
+.btn-outline-primary.disabled {
+    color: #000000 !important;
+    border-color: #000000 !important;
+    opacity: 0.5 !important;
+}
+
+/* Override Bootstrap success button background color */
+.btn-success {
+    background-color: #fa6915 !important;
+    border-color: #fa6915 !important;
+    color: white !important; /* Optional: ensure readable text */
+    border-radius: 6px;
+}
+
+/* Use Google Font Inter */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.btn,
+.table,
+.section-header,
+.item-tile,
+.quiz-option,
+.score-bar-container,
+.score-bar,
+.navbar-brand,
+.nav-link {
+    font-family: "Inter", Arial, Helvetica, sans-serif !important;
+}
+
+/* Match text style with Podia */
+.navbar a {
+    font-size: 1.3rem;
+    font-weight: 400 !important;
+    line-height: 1.65;
+    color: black !important;
+    text-decoration: none !important;
+}
+
+.navbar a.nav-link:hover {
+    color: #fa6915 !important;
+    text-decoration: underline !important;
+}
+
+.navbar-brand img {
+    height: 52px;
+}
+
+h1 {
+    font-family: "Inter", sans-serif;
+    font-size: 2.5rem !important;
+    font-weight: 400 !important;
+    line-height: 1.25;
+}
+
+p,
+li,
+a {
+    font-family: "Inter", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 400 !important;
+    line-height: 1.75;
+}
+
+/* Breadcrumb removed */
+
+/* Special orange-underlined link */
+a:not(.btn),
+a.warning-link:not(.btn),
+.mt-4 p a:not(.btn) {
+    color: black;
+    text-decoration: underline;
+    text-decoration-color: #fa6915;
+}
+
+/* Special orange-underlined link hover */
+a:not(.btn):hover,
+a.warning-link:not(.btn):hover,
+.mt-4 p a:not(.btn):hover {
+    color: #007bff !important;
+    text-decoration-color: #007bff;
+}
+
+/* Layout helpers */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+main {
+    flex: 1;
+}
+.footer {
+    margin-top: auto;
+}
+
+/* Markdown content styling */
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    color: #212529;
+}
+.markdown-content h1 {
+    font-size: 1.75rem;
+    font-weight: bold;
+}
+.markdown-content h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.markdown-content h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+.markdown-content ul,
+.markdown-content ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+.markdown-content p {
+    margin-bottom: 1rem;
+}
+
+/* Custom utility classes */
+.fs-xs {
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.fs-xxs {
+    font-size: 0.7rem;
+}
+
+.sticky-top-custom {
+    top: 1rem;
+    z-index: 1020;
+}
+
+.lesson-list-scroll {
+    max-height: calc(100vh - 200px);
+}

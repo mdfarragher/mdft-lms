@@ -1,0 +1,53 @@
+<% layout("./layout.eta") %>
+
+<div class="container py-4">
+  <div class="card shadow-lg mb-5 border-0">
+    <div class="card-body p-4 p-md-5">
+      <div class="mb-4">
+        <% if (it.certification.code) { %>
+          <span class="badge bg-info text-dark mb-2 fs-6">
+            <%= it.certification.code %>
+          </span>
+        <% } %>
+        <h1 class="display-5 fw-bold text-dark"><%= it.certification.title %></h1>
+      </div>
+
+      <% if (it.certification.description) { %>
+        <div class="mb-4 markdown-content text-muted">
+          <%~ it.certification.description %>
+        </div>
+      <% } else if (it.certification.content) { %>
+        <div class="mb-4 markdown-content text-muted">
+          <%~ it.certification.content %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="container px-0">
+    <h2 class="h3 fw-bold mb-4 border-bottom pb-2">Preparation Courses</h2>
+    
+    <% if (it.courses && it.courses.length > 0) { %>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <% it.courses.forEach(function(course) { %>
+          <div class="col">
+            <a href="/course/<%= course.slug || course.id %>" class="text-decoration-none">
+              <div class="card h-100 shadow-sm border-0 transition-hover">
+                <div class="ratio ratio-16x9">
+                  <img src="/thumb/<%= course.slug %>.jpg" class="card-img-top object-fit-cover" alt="<%= course.title %>" loading="lazy">
+                </div>
+                <div class="card-body text-center p-3">
+                  <h5 class="card-title text-dark fw-bold mb-0 fs-6"><%= course.title %></h5>
+                </div>
+              </div>
+            </a>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="alert alert-warning text-center" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>No courses are currently associated with this certification.
+      </div>
+    <% } %>
+  </div>
+</div>

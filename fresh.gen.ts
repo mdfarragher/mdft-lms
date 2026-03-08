@@ -4,6 +4,8 @@
 
 import * as $_app from "./routes/_app.tsx";
 import * as $_middleware from "./routes/_middleware.ts";
+import * as $certification_slug_ from "./routes/certification/[slug].tsx";
+import * as $certifications_index from "./routes/certifications/index.tsx";
 import * as $course_slug_ from "./routes/course/[slug].tsx";
 import * as $courses_index from "./routes/courses/index.tsx";
 import * as $index from "./routes/index.tsx";
@@ -18,6 +20,8 @@ const manifest = {
   routes: {
     "./routes/_app.tsx": $_app,
     "./routes/_middleware.ts": $_middleware,
+    "./routes/certification/[slug].tsx": $certification_slug_,
+    "./routes/certifications/index.tsx": $certifications_index,
     "./routes/course/[slug].tsx": $course_slug_,
     "./routes/courses/index.tsx": $courses_index,
     "./routes/index.tsx": $index,

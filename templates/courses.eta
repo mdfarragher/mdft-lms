@@ -1,39 +1,32 @@
 <% layout("./layout.eta") %>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-  <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold text-gray-900">All Courses</h1>
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 mb-0 text-dark border-bottom pb-2 border-primary d-inline-block">All Courses</h1>
   </div>
 
   <% if (it.courses && it.courses.length > 0) { %>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
       <% it.courses.forEach(function(course) { %>
-        <a href="/course/<%= course.slug || course.id %>" class="group block bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden border border-gray-100">
-          <div class="aspect-w-16 aspect-h-9 bg-gray-200 overflow-hidden relative h-48">
-            <!-- Thumbnail Placeholder -->
-            <img 
-              src="https://placehold.co/600x400/2563eb/ffffff?text=<%= encodeURIComponent(course.title) %>" 
-              alt="<%= course.title %>" 
-              class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
-            />
-          </div>
-          <div class="p-6">
-            <h2 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
-              <%= course.title %>
-            </h2>
-            <div class="flex items-center text-sm text-gray-500">
-              <span>View Course</span>
-              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-              </svg>
+        <div class="col">
+          <a href="/course/<%= course.slug || course.id %>" class="text-decoration-none">
+            <div class="card h-100 shadow-sm border-0 transition-hover">
+              <div class="ratio ratio-16x9">
+                <img src="/thumb/<%= course.slug %>.jpg" class="card-img-top object-fit-cover" alt="<%= course.title %>" loading="lazy">
+              </div>
+              <div class="card-body text-center p-3">
+                <h5 class="card-title text-dark fw-bold mb-0 fs-6"><%= course.title %></h5>
+              </div>
             </div>
-          </div>
-        </a>
+          </a>
+        </div>
       <% }) %>
     </div>
   <% } else { %>
-    <div class="text-center py-12 bg-white rounded-lg border border-gray-200">
-      <p class="text-gray-500 text-lg">No courses found at the moment.</p>
+    <div class="text-center py-5">
+      <div class="alert alert-info d-inline-block">
+        <i class="bi bi-info-circle me-2"></i>No courses found at the moment.
+      </div>
     </div>
   <% } %>
 </div>
