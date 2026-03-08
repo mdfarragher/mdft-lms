@@ -3,75 +3,44 @@
 <div class="container py-4">
   <div class="card shadow-lg mb-5 border-0">
     <div class="card-body p-4 p-md-5">
-      <div class="d-flex justify-content-between align-items-start mb-3">
-        <h1 class="display-6 fw-bold text-dark mb-0"><%= it.course.title %></h1>
-        <% if (it.course.status) { %>
-          <span class="badge rounded-pill <%= it.course.status === 'published' ? 'bg-success' : 'bg-secondary' %>">
-            <%= it.course.status %>
-          </span>
-        <% } %>
+      <div class="mb-4">
+        <span class="badge mb-2 fs-6" style="background-color: #AFEB2B; color: black;">
+          Course
+        </span>
+        <h1 class="display-5 fw-bold text-dark"><%= it.course.title %></h1>
       </div>
 
-      <% if (it.course.certification) { %>
-        <div class="alert alert-info d-flex align-items-center" role="alert">
-          <i class="bi bi-info-circle-fill me-2 fs-5"></i>
-          <div>
-            This course will prepare you for the 
-            <a href="/certification/<%= it.course.certification.slug || it.course.certification.id %>" class="alert-link">
-              <%= it.course.certification.code || it.course.certification.title %>
-            </a>
-            certification.
-          </div>
+      <% if (it.course.content) { %>
+        <div class="mb-4 markdown-content text-muted">
+          <%~ it.course.content %>
         </div>
-      <% } %>
-
-      <% if (it.course.description) { %>
-        <div class="mt-4 markdown-content">
+      <% } else if (it.course.description) { %>
+        <div class="mb-4 markdown-content text-muted">
           <%~ it.course.description %>
         </div>
       <% } %>
-
-
-      <hr class="my-4">
-
-      <div class="row g-3 text-muted">
-        <div class="col-sm-6 col-md-4">
-          <small class="text-uppercase fw-bold d-block mb-1 fs-xs">Course ID</small>
-          <span><%= it.course.id %></span>
-        </div>
-        <div class="col-sm-6 col-md-4">
-          <small class="text-uppercase fw-bold d-block mb-1 fs-xs">Slug</small>
-          <span><%= it.course.slug %></span>
-        </div>
-        <% if (it.course.date_created) { %>
-          <div class="col-sm-6 col-md-4">
-            <small class="text-uppercase fw-bold d-block mb-1 fs-xs">Created On</small>
-            <span><%= new Date(it.course.date_created).toLocaleDateString() %></span>
-          </div>
-        <% } %>
-      </div>
     </div>
   </div>
 
-  <div class="card shadow-sm border-0">
-    <div class="card-header bg-white py-3">
-      <h2 class="h4 mb-0 fw-bold">Modules</h2>
-    </div>
-    <div class="card-body p-0">
-      <% if (it.modules && it.modules.length > 0) { %>
-        <div class="list-group list-group-flush">
-          <% it.modules.forEach(function(module) { %>
-            <a href="/mod/<%= module.slug || module.id %>" class="list-group-item list-group-item-action p-4 d-flex justify-content-between align-items-center transition-bg">
+  <div class="container px-0 mb-5">
+    <h2 class="h3 fw-bold mb-4 border-bottom pb-2">Modules</h2>
+    
+    <% if (it.modules && it.modules.length > 0) { %>
+      <div class="list-group list-group-flush shadow-sm rounded">
+        <% it.modules.forEach(function(module) { %>
+          <a href="/mod/<%= module.slug || module.id %>" class="list-group-item list-group-item-action p-4 d-flex justify-content-between align-items-center transition-bg border-0 mb-1">
+            <div class="d-flex align-items-center">
+              <img src="/img/module.svg" alt="Module" width="24" height="24" class="me-3 opacity-50">
               <span class="fw-medium text-dark h6 mb-0"><%= module.title %></span>
-              <i class="bi bi-chevron-right text-muted"></i>
-            </a>
-          <% }) %>
-        </div>
-      <% } else { %>
-        <div class="p-5 text-center text-muted fst-italic">
-          No modules found for this course.
-        </div>
-      <% } %>
-    </div>
+            </div>
+            <i class="bi bi-chevron-right text-muted"></i>
+          </a>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="alert alert-warning text-center" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>No modules found for this course.
+      </div>
+    <% } %>
   </div>
 </div>

@@ -54,6 +54,7 @@ export const handler: Handlers = {
         date_created: courseRaw.date_created,
         certification: courseRaw.certification,
         description: courseRaw.description ? await marked.parse(courseRaw.description) : null,
+        content: courseRaw.content ? await marked.parse(courseRaw.content) : null,
       };
 
       const html = eta.render("course_detail.eta", {
