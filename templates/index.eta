@@ -56,7 +56,7 @@
                             />
                             <% } else if (result.type === 'module') { %>
                             <img
-                                src="/img/module.svg"
+                                src="/img/<%= result.subtype || 'module' %>.svg"
                                 class="w-100 h-100 object-fit-cover rounded"
                                 alt="<%= result.title %>"
                             />
@@ -79,12 +79,42 @@
                         <div
                             class="flex-grow-1 min-width-0 d-flex align-items-center"
                         >
+                            <% 
+                                let badgeColor = '#212529'; // Default (Lesson)
+                                let textColor = 'white';
+                                let badgeText = result.type;
+
+                                if (result.type === 'course') {
+                                    badgeColor = '#AFEB2B';
+                                    textColor = 'black';
+                                } else if (result.type === 'certification') {
+                                    badgeColor = '#FA6915';
+                                    badgeText = 'Cert';
+                                } else if (result.type === 'module') {
+                                    textColor = 'black';
+                                    if (result.subtype === 'course') {
+                                        badgeColor = '#B8DAFF';
+                                        badgeText = 'module';
+                                    } else if (result.subtype === 'lab') {
+                                        badgeColor = '#A0C4FF';
+                                        badgeText = 'lab';
+                                    } else if (result.subtype === 'quiz') {
+                                        badgeColor = '#FDFFB6'; 
+                                        badgeText = 'quiz';
+                                    } else if (result.subtype === 'exam') {
+                                        badgeColor = '#FFADAD';
+                                        badgeText = 'exam';
+                                    } else {
+                                        badgeColor = '#B8DAFF'; // Default module
+                                        badgeText = result.subtype || 'module';
+                                    }
+                                }
+                            %>
                             <span
                                 class="badge rounded-pill border fw-normal text-capitalize fs-xs me-3 flex-shrink-0 d-flex align-items-center justify-content-center"
-                                style="width: 70px; height: 24px; color: <%= result.type === 'lesson' || result.type === 'certification' ? 'white' : 'black' %>; background-color: <%= result.type === 'course' ? '#AFEB2B' : (result.type === 'module' ? '#B8DAFF' : (result.type === 'certification' ? '#FA6915' : '#212529')) %>;"
+                                style="width: 70px; height: 24px; color: <%= textColor %>; background-color: <%= badgeColor %>;"
                             >
-                                <%= result.type === 'certification' ? 'Cert' :
-                                result.type %>
+                                <%= badgeText %>
                             </span>
                             <h6 class="mb-0 fw-normal text-dark text-truncate">
                                 <%= result.title %>

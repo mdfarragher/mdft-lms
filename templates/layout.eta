@@ -27,7 +27,7 @@
     </head>
     <body class="bg-white">
         <!-- Header / Main Menu -->
-        <div class="container p-0">
+        <div class="container container-narrow">
             <nav class="navbar navbar-expand-lg navbar-white bg-white">
                 <a class="navbar-brand d-flex align-items-center" href="/">
                     <img
@@ -74,7 +74,7 @@
         </div>
 
         <!-- Main Content -->
-        <main class="container pb-4"><%~ it.body %></main>
+        <main class="container container-narrow pb-4"><%~ it.body %></main>
 
         <!-- Footer -->
         <footer class="footer bg-dark text-light py-4 mt-5">

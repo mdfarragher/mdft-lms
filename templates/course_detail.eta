@@ -1,6 +1,6 @@
 <% layout("./layout.eta") %>
 
-<div class="container py-4">
+<div>
     <div class="card shadow-lg mb-5 border-0 overflow-hidden">
         <% if (it.hasBanner) { %>
         <div class="ratio ratio-21x9 bg-light">
@@ -123,6 +123,74 @@
             </a>
         </div>
     </div>
+    <% } %> <% if (it.course.preview_lesson &&
+    it.course.preview_lesson.video_url) { %>
+    <div class="container px-0 mb-5">
+        <h2 class="h3 fw-bold mb-2 border-bottom pb-2">Lesson Preview</h2>
+        <% if (it.course.preview_lesson.title) { %>
+        <h4 class="mt-4 mb-3"><%= it.course.preview_lesson.title %></h4>
+        <% } %>
+        <% if (it.course.preview_lesson.content) { %>
+        <div class="markdown-content text-muted mb-4">
+            <%~ it.course.preview_lesson.content %>
+        </div>
+        <% } %>
+        <div
+            class="ratio ratio-16x9 bg-black rounded overflow-hidden shadow-lg"
+        >
+            <iframe
+                src="<%= it.course.preview_lesson.video_url %>"
+                allowfullscreen
+                allow="
+                    accelerometer;
+                    autoplay;
+                    clipboard-write;
+                    encrypted-media;
+                    gyroscope;
+                    picture-in-picture;
+                "
+            >
+            </iframe>
+        </div>
+    </div>
+    <% } %> <% if (it.course.content_setup) { %>
+    <div class="container px-0 mb-5">
+        <h2 class="h3 fw-bold mb-4 border-bottom pb-2">
+            What You'll Need To Get Started
+        </h2>
+        <div class="markdown-content text-muted">
+            <%~ it.course.content_setup %>
+        </div>
+    </div>
+    <% } %> <% if (it.course.business_case && it.course.business_case.content) {
+    %>
+    <div class="container px-0 mb-5">
+        <div class="card shadow-lg mb-5 border-0 overflow-hidden">
+            <div class="card-body p-4 p-md-5">
+                <h2 class="h3 fw-bold mb-4 border-bottom pb-2">
+                    See Me Deliver This Training
+                </h2>
+                <% if (it.course.business_case.title) { %>
+                <h4 class="mb-3 card-title">
+                    <%= it.course.business_case.title %>
+                </h4>
+                <% } %>
+                <div class="markdown-content text-muted card-text">
+                    <%~ it.course.business_case.content %>
+                </div>
+            </div>
+            <% if (it.hasBusinessCaseBanner && it.course.business_case.slug) {
+            %>
+            <div class="ratio ratio-21x9 bg-light">
+                <img
+                    src="/banner/<%= it.course.business_case.slug %>.jpg"
+                    class="card-img-bottom object-fit-cover"
+                    alt="<%= it.course.business_case.title %>"
+                />
+            </div>
+            <% } %>
+        </div>
+    </div>
     <% } %> <% if (it.testimonials && it.testimonials.length > 0) { %>
     <div class="container px-0 mb-5">
         <h2 class="h3 fw-bold mb-4 border-bottom pb-2">
@@ -148,44 +216,6 @@
                 </div>
             </div>
             <% }) %>
-        </div>
-    </div>
-    <% } %> <% if (it.course.preview_lesson &&
-    it.course.preview_lesson.video_url) { %>
-    <div class="container px-0 mb-5">
-        <h2 class="h3 fw-bold mb-2 border-bottom pb-2">Lesson Preview</h2>
-        <p class="text-muted mb-4">
-            Watch a sample lecture from the course <br />
-            <% if (it.course.preview_lesson.title) { %>
-            <strong><%= it.course.preview_lesson.title %></strong><% } %>
-        </p>
-        <div
-            class="ratio ratio-16x9 bg-black rounded overflow-hidden shadow-lg"
-        >
-            <iframe
-                src="<%= it.course.preview_lesson.video_url %>"
-                allowfullscreen
-                allow="
-                    accelerometer;
-                    autoplay;
-                    clipboard-write;
-                    encrypted-media;
-                    gyroscope;
-                    picture-in-picture;
-                "
-            >
-            </iframe>
-        </div>
-    </div>
-    <% } %>
-
-    <% if (it.course.content_setup) { %>
-    <div class="container px-0 mb-5">
-        <h2 class="h3 fw-bold mb-4 border-bottom pb-2">
-            What You'll Need To Get Started
-        </h2>
-        <div class="markdown-content text-muted">
-            <%~ it.course.content_setup %>
         </div>
     </div>
     <% } %>

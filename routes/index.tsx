@@ -31,7 +31,7 @@ export const handler: Handlers = {
         const modulesTitlePromise = client.request(
           readItems("modules", {
             filter: { title: { _icontains: query } } as any,
-            fields: ["id", "title", "slug"],
+            fields: ["id", "title", "slug", "type"],
           })
         );
 
@@ -94,6 +94,7 @@ export const handler: Handlers = {
           modulesTitleResult.value.forEach((m: any) => {
             results.push({
               type: "module",
+              subtype: m.type,
               title: m.title,
               link: `/mod/${m.slug || m.id}`,
             });

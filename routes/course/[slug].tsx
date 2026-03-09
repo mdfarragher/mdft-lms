@@ -5,6 +5,34 @@ import { Eta } from "eta";
 import { join } from "$std/path/mod.ts";
 import { marked } from "marked";
 
+// Define custom extension for images with classes
+const imageWithClassExtension = {
+  name: "imageWithClass",
+  level: "inline" as const,
+  start(src: string) {
+    return src.match(/!\[/)?.index;
+  },
+  tokenizer(src: string, _tokens: any) {
+    const rule = /^!\[(.*?)\]\((.*?)\)\s*\{\s*\.([a-zA-Z0-9_-]+)\s*\}/;
+    const match = rule.exec(src);
+    if (match) {
+      return {
+        type: "imageWithClass",
+        raw: match[0],
+        text: match[1],
+        href: match[2],
+        className: match[3],
+        tokens: [],
+      };
+    }
+  },
+  renderer(token: any) {
+    return `<img src="${token.href}" alt="${token.text}" class="${token.className}">`;
+  },
+};
+
+marked.use({ extensions: [imageWithClassExtension] });
+
 const eta = new Eta({ views: join(Deno.cwd(), "templates") });
 
 export const handler: Handlers = {
@@ -39,6 +67,10 @@ export const handler: Handlers = {
             "certification.content_exam",
             "preview_lesson.title",
             "preview_lesson.video_url",
+            "preview_lesson.content",
+            "business_case.title",
+            "business_case.slug",
+            "business_case.content",
           ],
         }),
       )) as any[];
@@ -82,6 +114,36 @@ export const handler: Handlers = {
         );
       }
 
+      if (courseRaw.preview_lesson?.content) {
+        courseRaw.preview_lesson.content = await marked.parse(
+          courseRaw.preview_lesson.content,
+        );
+      }
+
+      if (courseRaw.business_case?.content) {
+        courseRaw.business_case.content = await marked.parse(
+          courseRaw.business_case.content,
+        );
+      }
+
+      // Check for business case banner
+      let hasBusinessCaseBanner = false;
+      if (courseRaw.business_case?.slug) {
+        try {
+          await Deno.stat(
+            join(
+              Deno.cwd(),
+              "static",
+              "banner",
+              `${courseRaw.business_case.slug}.jpg`,
+            ),
+          );
+          hasBusinessCaseBanner = true;
+        } catch {
+          // Banner not found
+        }
+      }
+
       const course = {
         id: courseRaw.id,
         title: courseRaw.title,
@@ -90,6 +152,7 @@ export const handler: Handlers = {
         date_created: courseRaw.date_created,
         certification: courseRaw.certification,
         preview_lesson: courseRaw.preview_lesson,
+        business_case: courseRaw.business_case,
         content: courseRaw.content
           ? await marked.parse(courseRaw.content)
           : null,
@@ -109,7 +172,9 @@ export const handler: Handlers = {
         )) as any[];
 
         if (allTestimonials && allTestimonials.length > 0) {
-          testimonials = allTestimonials.sort(() => 0.5 - Math.random()).slice(0, 2);
+          testimonials = allTestimonials
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 2);
         }
       } catch (e) {
         console.error("Error fetching testimonials:", e);
@@ -121,6 +186,7 @@ export const handler: Handlers = {
         modules,
         title: course.title,
         hasBanner,
+        hasBusinessCaseBanner,
         testimonials,
       });
 

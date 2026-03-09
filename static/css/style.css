@@ -137,6 +137,12 @@ main {
     margin-bottom: 1rem;
 }
 
+.markdown-content img {
+    border-radius: 0.375rem; /* Bootstrap's .rounded value */
+    max-width: 100%;
+    height: auto;
+}
+
 /* Custom utility classes */
 .fs-xs {
     font-size: 0.75rem;
@@ -154,4 +160,9 @@ main {
 
 .lesson-list-scroll {
     max-height: calc(100vh - 200px);
+}
+
+/* Narrower container for main layout */
+.container-narrow {
+    max-width: 960px;
 }
