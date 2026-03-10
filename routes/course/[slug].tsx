@@ -59,6 +59,9 @@ export const handler: Handlers = {
             "modules.modules_id.type",
             "modules.modules_id.content",
             "modules.modules_id.lessons.id",
+            "modules.modules_id.dataset.title",
+            "modules.modules_id.dataset.slug",
+            "modules.modules_id.dataset.description",
             "certification.id",
             "certification.title",
             "certification.slug",
@@ -71,7 +74,15 @@ export const handler: Handlers = {
             "business_case.title",
             "business_case.slug",
             "business_case.content",
-          ],
+            "faq.questions.faq_questions_id.title",
+            "faq.questions.faq_questions_id.answer",
+            "faq.questions.title",
+            "faq.questions.answer",
+            "technologies.technologies_id.title",
+            "technologies.technologies_id.content",
+            "technologies.technologies_id.content_summary",
+            "technologies.technologies_id.slug",
+          ] as any,
         }),
       )) as any[];
 
@@ -96,12 +107,52 @@ export const handler: Handlers = {
       const modules =
         courseRaw.modules?.map((m: any) => m.modules_id).filter(Boolean) || [];
 
+      // Flatten the M2M structure to a simple list of technologies
+      const technologies =
+        courseRaw.technologies?.map((t: any) => t.technologies_id).filter(Boolean) || [];
+
       // Parse markdown content for exam modules
       for (const module of modules) {
         if (module.type === "exam" && module.content) {
           module.content = await marked.parse(module.content);
         }
       }
+
+      // Parse markdown content for technologies
+      for (const technology of technologies) {
+        if (technology.content_summary) {
+          technology.content_summary = await marked.parse(technology.content_summary);
+        }
+        if (technology.content) {
+          technology.content = await marked.parse(technology.content);
+        }
+      }
+
+      // Process datasets
+      const datasetMap = new Map();
+      
+      modules.forEach((module: any) => {
+        if (module.type === "lab" && module.dataset) {
+          // Handle both single object and array cases for safety
+          const datasets = Array.isArray(module.dataset) ? module.dataset : [module.dataset];
+          
+          datasets.forEach((ds: any) => {
+            if (ds && ds.title) {
+              // Create a unique key based on slug or title
+              const key = ds.slug || ds.title;
+              if (!datasetMap.has(key)) {
+                datasetMap.set(key, {
+                  title: ds.title,
+                  description: ds.description,
+                  slug: ds.slug
+                });
+              }
+            }
+          });
+        }
+      });
+      
+      const datasets = Array.from(datasetMap.values());
 
       if (courseRaw.certification?.content) {
         courseRaw.certification.content = await marked.parse(
@@ -144,6 +195,28 @@ export const handler: Handlers = {
         }
       }
 
+      // Process FAQs
+      let faqs: any[] = [];
+      if (courseRaw.faq && courseRaw.faq.questions) {
+        if (Array.isArray(courseRaw.faq.questions)) {
+           // Check if M2M (junction object with faq_questions_id) or O2M (direct object)
+           if (courseRaw.faq.questions.length > 0 && courseRaw.faq.questions[0].faq_questions_id) {
+               faqs = courseRaw.faq.questions.map((q: any) => q.faq_questions_id).filter(Boolean);
+           } else {
+               faqs = courseRaw.faq.questions;
+           }
+        }
+
+        // Filter out any potential null/undefined entries before processing
+        faqs = faqs.filter(Boolean);
+
+        for (const faq of faqs) {
+          if (faq.answer) {
+            faq.answer = await marked.parse(faq.answer);
+          }
+        }
+      }
+
       const course = {
         id: courseRaw.id,
         title: courseRaw.title,
@@ -153,6 +226,9 @@ export const handler: Handlers = {
         certification: courseRaw.certification,
         preview_lesson: courseRaw.preview_lesson,
         business_case: courseRaw.business_case,
+        faqs,
+        technologies,
+        datasets,
         content: courseRaw.content
           ? await marked.parse(courseRaw.content)
           : null,
@@ -188,6 +264,7 @@ export const handler: Handlers = {
         hasBanner,
         hasBusinessCaseBanner,
         testimonials,
+        isAuthenticated: !!token,
       });
 
       return new Response(html, {

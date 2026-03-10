@@ -19,32 +19,24 @@ export async function handler(req: Request, ctx: FreshContext) {
   const cookies = getCookies(req.headers);
   const token = cookies.auth_token;
 
-  if (!token) {
-    // Redirect to login
-    return new Response("", {
-      status: 303,
-      headers: { Location: "/login" },
-    });
+  if (token) {
+    // Validate token by making a lightweight request to Directus
+    try {
+      const client = getDirectusClient(token);
+      await client.request(readMe());
+      // Pass token to state for downstream handlers
+      ctx.state.token = token;
+    } catch (error) {
+      console.error("Token validation failed:", error);
+      // Clear invalid token but allow request to proceed as anonymous
+      const response = await ctx.next();
+      response.headers.append(
+        "Set-Cookie",
+        "auth_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+      );
+      return response;
+    }
   }
-
-  // Validate token by making a lightweight request to Directus
-  try {
-    const client = getDirectusClient(token);
-    await client.request(readMe());
-  } catch (error) {
-    console.error("Token validation failed:", error);
-    // Redirect to login if token is invalid/expired
-    return new Response("", {
-      status: 303,
-      headers: {
-        Location: "/login",
-        "Set-Cookie": "auth_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT", // Clear the invalid cookie
-      },
-    });
-  }
-
-  // Pass token to state for downstream handlers
-  ctx.state.token = token;
 
   return await ctx.next();
 }

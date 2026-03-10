@@ -63,11 +63,19 @@
                                 >Certifications</a
                             >
                         </li>
+                        <% if (it.isAuthenticated || it.user) { %>
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="/logout"
                                 >Logout</a
                             >
                         </li>
+                        <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/login"
+                                >Login</a
+                            >
+                        </li>
+                        <% } %>
                     </ul>
                 </div>
             </nav>
@@ -79,6 +87,40 @@
         <!-- Footer -->
         <footer class="footer bg-dark text-light py-4 mt-5">
             <div class="container">
+                <div class="row mb-4">
+                    <div class="col">
+                        <a
+                            href="https://www.linkedin.com/in/markfarragher/"
+                            target="_blank"
+                            class="text-light me-4 text-decoration-none fs-4"
+                            ><i class="bi bi-linkedin"></i
+                        ></a>
+                        <a
+                            href="https://mdft.social/@mark"
+                            target="_blank"
+                            class="text-light me-4 text-decoration-none fs-4"
+                            ><i class="bi bi-mastodon"></i
+                        ></a>
+                        <a
+                            href="https://bsky.app/profile/mark.mdft.social"
+                            target="_blank"
+                            class="text-light text-decoration-none fs-4"
+                        >
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                            >
+                                <title>Bluesky</title>
+                                <path
+                                    d="M12 10.5845C10.913 8.44406 7.954 4.45578 5.202 2.48948C2.566 0.605195 1.561 0.931224 0.902 1.23397C0.139 1.58126 0 2.76792 0 3.46453C0 4.16316 0.378 9.18522 0.624 10.0246C1.439 12.7948 4.337 13.7304 7.007 13.4307C7.143 13.4104 7.282 13.3912 7.422 13.374C7.284 13.3963 7.146 13.4145 7.007 13.4307C3.095 14.0179 -0.38 15.4608 4.177 20.5972C9.19 25.8522 11.047 19.4703 12 16.2353C12.953 19.4703 14.05 25.6223 19.733 20.5972C24 16.2353 20.905 14.0179 16.993 13.4307C16.8542 13.4151 16.7159 13.3962 16.578 13.374C16.718 13.3912 16.857 13.4104 16.993 13.4307C19.663 13.7314 22.561 12.7948 23.376 10.0246C23.622 9.18623 24 4.16215 24 3.46554C24 2.76691 23.861 1.58126 23.098 1.23194C22.439 0.930212 21.434 0.604183 18.798 2.48746C16.046 4.45679 13.087 8.44508 12 10.5845Z"
+                                ></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
                 <div class="row align-items-center">
                     <div
                         class="col-md-6 text-center text-md-start mb-3 mb-md-0"

@@ -14,7 +14,15 @@ export const handler: Handlers = {
     const query = url.searchParams.get("q");
 
     try {
-      const user = await client.request(readMe());
+      let user = null;
+      if (token) {
+        try {
+            user = await client.request(readMe());
+        } catch (e) {
+            console.error("Error fetching user:", e);
+        }
+      }
+      
       let results: any[] = [];
       let hasSearched = false;
 
@@ -247,6 +255,7 @@ export const handler: Handlers = {
 
       const html = eta.render("index.eta", {
         user,
+        isAuthenticated: !!token,
         query,
         hasSearched,
         results,

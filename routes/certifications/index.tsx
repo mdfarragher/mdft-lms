@@ -30,6 +30,7 @@ export const handler: Handlers = {
       const html = eta.render("certifications.eta", {
         certifications,
         title: "All Certifications",
+        isAuthenticated: !!token,
       });
 
       return new Response(html, {

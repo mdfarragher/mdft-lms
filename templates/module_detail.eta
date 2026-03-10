@@ -4,16 +4,11 @@
     <div class="card shadow-lg mb-5 border-0">
         <div class="card-body p-4 p-md-5">
             <div class="mb-4">
-                <span class="badge mb-2 fs-6" style="background-color: #B8DAFF; color: black;">
-                    <% if (it.module.type === 'lab') { %>
-                        Lab Module
-                    <% } else if (it.module.type === 'quiz') { %>
-                        Quiz
-                    <% } else if (it.module.type === 'exam') { %>
-                        Practice Exam
-                    <% } else { %>
-                        Course Module
-                    <% } %>
+                <span class="mb-2 fs-6">
+                    <% if (it.module.type === 'lab') { %> Lab Module <% } else
+                    if (it.module.type === 'quiz') { %> Quiz <% } else if
+                    (it.module.type === 'exam') { %> Practice Exam <% } else {
+                    %> Course Module <% } %>
                 </span>
                 <h1 class="display-6 fw-bold text-dark mb-0">
                     <%= it.module.title %>
@@ -22,12 +17,13 @@
 
             <% if (it.module.content) { %>
             <div class="mt-4 markdown-content"><%~ it.module.content %></div>
-            <% } %>
-
-            <% if (it.lessons && it.lessons.length > 0) { %>
+            <% } %> <% if (it.lessons && it.lessons.length > 0) { %>
             <div class="mt-4">
-                <a href="<%= it.lessons[0].link %>" class="btn btn-primary btn-lg">
-                    <i class="bi bi-play-fill me-2"></i>Start Module
+                <a
+                    href="<%= it.lessons[0].link %>"
+                    class="btn btn-primary btn-lg"
+                >
+                    Start Module
                 </a>
             </div>
             <% } %>
@@ -47,7 +43,10 @@
                     class="list-group-item list-group-item-action py-2 d-flex align-items-center gap-3 transition-bg search-result-item"
                 >
                     <!-- Icon / Thumbnail -->
-                    <div class="flex-shrink-0" style="width: 40px; height: 27px">
+                    <div
+                        class="flex-shrink-0"
+                        style="width: 40px; height: 27px"
+                    >
                         <img
                             src="/img/lesson.svg"
                             class="w-100 h-100 object-fit-cover rounded"
@@ -56,7 +55,9 @@
                     </div>
 
                     <!-- Content -->
-                    <div class="flex-grow-1 min-width-0 d-flex align-items-center">
+                    <div
+                        class="flex-grow-1 min-width-0 d-flex align-items-center"
+                    >
                         <h6 class="mb-0 fw-normal text-dark text-truncate">
                             <%= lesson.title %>
                         </h6>

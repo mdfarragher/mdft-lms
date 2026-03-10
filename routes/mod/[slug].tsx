@@ -102,6 +102,7 @@ export const handler: Handlers = {
         lessons,
         certifications,
         title: module.title, // For the layout
+        isAuthenticated: !!token,
       });
 
       return new Response(html, {

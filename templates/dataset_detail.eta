@@ -1,0 +1,62 @@
+<% layout("./layout.eta") %>
+
+<div class="container container-narrow py-5">
+    <div class="card shadow-lg mb-5 border-0 overflow-hidden">
+        <div class="card-body p-4 p-md-5">
+            <h1 class="display-5 fw-bold text-dark mb-4">
+                <%= it.dataset.title %>
+            </h1>
+
+            <% if (it.dataset.content) { %>
+            <div class="markdown-content text-muted">
+                <%~ it.dataset.content %>
+            </div>
+            <% } %> <% if (it.courses && it.courses.length > 0) { %>
+            <div class="mt-5 pt-3 border-top">
+                <h2 class="h3 fw-bold mb-4">
+                    Courses That Explore This Dataset
+                </h2>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    <% it.courses.forEach(function(course) { %>
+                    <div class="col">
+                        <a
+                            href="/course/<%= course.slug || course.id %>"
+                            class="text-decoration-none"
+                        >
+                            <div
+                                class="card h-100 shadow-sm border-0 transition-hover"
+                            >
+                                <div class="ratio ratio-16x9">
+                                    <img
+                                        src="/thumb/<%= course.slug %>.jpg"
+                                        class="card-img-top object-fit-cover"
+                                        alt="<%= course.title %>"
+                                        loading="lazy"
+                                    />
+                                </div>
+                                <div class="card-body text-center p-3">
+                                    <h5
+                                        class="card-title text-dark fw-bold mb-0 fs-6"
+                                    >
+                                        <%= course.title %>
+                                    </h5>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <% }) %>
+                </div>
+            </div>
+            <% } %>
+
+            <div class="mt-5 pt-3 border-top">
+                <a
+                    href="javascript:history.back()"
+                    class="btn btn-outline-primary"
+                >
+                    <i class="bi bi-arrow-left me-2"></i>Back to Course
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

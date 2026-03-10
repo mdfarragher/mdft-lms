@@ -95,6 +95,17 @@ h6,
     text-decoration: underline !important;
 }
 
+/* Branded link */
+.branded-link {
+    color: #fa6915 !important; /* Orange */
+    text-decoration: none !important;
+}
+
+.branded-link:hover {
+    color: #fa6915 !important; /* Orange on hover */
+    text-decoration: underline !important;
+}
+
 /* Layout helpers */
 body {
     display: flex;
@@ -165,4 +176,53 @@ main {
 /* Narrower container for main layout */
 .container-narrow {
     max-width: 960px;
+}
+
+/* Styles for the faq section */
+.faq-section details {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+    background-color: #fff;
+}
+.faq-section summary {
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: #212529;
+    background-color: #fff;
+    position: relative;
+    list-style: none; /* Hide default marker */
+    border-radius: 0.25rem;
+}
+/* Hide default marker for webkit */
+.faq-section summary::-webkit-details-marker {
+    display: none;
+}
+/* Custom chevron */
+.faq-section summary::after {
+    content: "";
+    position: absolute;
+    right: 1.25rem;
+    top: 1.25rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-right: 2px solid #212529;
+    border-bottom: 2px solid #212529;
+    transform: rotate(45deg);
+    transition: transform 0.2s ease;
+}
+.faq-section details[open] summary::after {
+    transform: rotate(-135deg);
+}
+.faq-section details[open] summary {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    color: #000;
+    background-color: #e2fcc2; /* Light shade of #afeb2b */
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.125);
+}
+.faq-section .faq-body {
+    padding: 1rem 1.25rem;
 }

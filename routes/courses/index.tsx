@@ -28,6 +28,7 @@ export const handler: Handlers = {
       const html = eta.render("courses.eta", {
         courses,
         title: "All Courses",
+        isAuthenticated: !!token,
       });
 
       return new Response(html, {

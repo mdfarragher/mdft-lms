@@ -40,7 +40,9 @@ interface Module {
 export const handler: Handlers = {
   async GET(req, ctx) {
     const { moduleSlug, lessonSlug } = ctx.params;
-    const token = ctx.state.token as string;
+    const token = ctx.state.token as string | undefined;
+    const isAuthenticated = !!token;
+    // We use a generic client if no token is present, but usually getDirectusClient handles the null token case gracefully by returning a public client
     const client = getDirectusClient(token);
 
     try {
@@ -128,6 +130,7 @@ export const handler: Handlers = {
       const nextLesson = currentIndex < sidebarLessons.length - 1 ? sidebarLessons[currentIndex + 1] : null;
 
       const html = eta.render("lesson_detail.eta", {
+        isAuthenticated,
         module: {
           id: module.id,
           title: module.title,
