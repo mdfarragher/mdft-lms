@@ -30,7 +30,7 @@
             <% } %> <% if (it.modules && it.modules.length > 0) { %>
             <div class="mt-4">
                 <a
-                    href="/mod/<%= it.modules[0].slug || it.modules[0].id %>"
+                    href="/course/<%= it.course.slug %>/<%= it.modules[0].slug || it.modules[0].id %>"
                     class="btn btn-primary btn-lg"
                 >
                     Start Course
@@ -47,7 +47,7 @@
         <div class="list-group list-group-flush shadow-sm rounded">
             <% it.modules.forEach(function(module) { %>
             <a
-                href="/mod/<%= module.slug || module.id %>"
+                href="/course/<%= it.course.slug %>/<%= module.slug || module.id %>"
                 class="list-group-item list-group-item-action py-2 d-flex align-items-center gap-3 transition-bg search-result-item border-0 mb-1"
             >
                 <!-- Icon / Thumbnail -->
@@ -136,7 +136,7 @@
                 </div>
                 <div class="mt-4">
                     <a
-                        href="/mod/<%= examModule.slug || examModule.id %>"
+                        href="/course/<%= it.course.slug %>/<%= examModule.slug || examModule.id %>"
                         class="btn btn-primary"
                     >
                         Try The Exam

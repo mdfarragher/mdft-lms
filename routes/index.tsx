@@ -99,13 +99,61 @@ export const handler: Handlers = {
 
         // Process Modules
         if (modulesTitleResult.status === "fulfilled" && Array.isArray(modulesTitleResult.value)) {
-          modulesTitleResult.value.forEach((m: any) => {
-            results.push({
-              type: "module",
-              subtype: m.type,
-              title: m.title,
-              link: `/mod/${m.slug || m.id}`,
-            });
+          const modules = modulesTitleResult.value;
+          const moduleIds = modules.map((m: any) => m.id);
+          const moduleIdToCourseSlugMap = new Map<number, string>();
+
+          if (moduleIds.length > 0) {
+            try {
+              // Fetch courses related to these modules
+              // We use the junction table directly if possible, or filter courses
+              // Assuming courses_modules junction table based on naming conventions
+              // But let's try a safer filter on courses
+              const courses = await client.request(
+                // @ts-ignore: Directus SDK typing issue
+                readItems("courses", {
+                  // Filter courses that contain any of the found modules
+                  filter: {
+                    modules: {
+                      modules_id: {
+                        id: { _in: moduleIds }
+                      }
+                    }
+                  } as any,
+                  // We need the course slug and the module IDs associated with it
+                  // We only care about the modules we found
+                  fields: ["slug", "modules.modules_id.id"],
+                })
+              );
+
+              if (Array.isArray(courses)) {
+                courses.forEach((c: any) => {
+                  if (c.slug && Array.isArray(c.modules)) {
+                    c.modules.forEach((junction: any) => {
+                      if (junction.modules_id && junction.modules_id.id) {
+                         const modId = junction.modules_id.id;
+                         moduleIdToCourseSlugMap.set(modId, c.slug);
+                      }
+                    });
+                  }
+                });
+              }
+            } catch (error) {
+              console.error("Error fetching course relations for modules:", error);
+            }
+          }
+
+          modules.forEach((m: any) => {
+            const courseSlug = moduleIdToCourseSlugMap.get(m.id);
+            // Only show module if we can link it properly
+            if (courseSlug) {
+              results.push({
+                type: "module",
+                subtype: m.type,
+                title: m.title,
+                link: `/course/${courseSlug}/${m.slug || m.id}`,
+              });
+            }
           });
         }
 

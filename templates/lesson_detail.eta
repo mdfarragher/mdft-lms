@@ -142,7 +142,7 @@
                         >Module</small
                     >
                     <a
-                        href="/mod/<%= it.module.slug || it.module.id %>"
+                        href="<%= it.courseSlug ? `/course/${it.courseSlug}/${it.module.slug || it.module.id}` : '#' %>"
                         class="text-decoration-none text-dark fw-bold text-truncate d-block"
                     >
                         <%= it.module.title %>

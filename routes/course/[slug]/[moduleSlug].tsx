@@ -1,5 +1,5 @@
 import { Handlers } from "$fresh/server.ts";
-import { getDirectusClient } from "../../utils/directus.ts";
+import { getDirectusClient } from "../../../utils/directus.ts";
 import { readItems } from "@directus/sdk";
 import { Eta } from "eta";
 import { join } from "$std/path/mod.ts";
@@ -27,18 +27,22 @@ interface Module {
   type?: string;
   content?: string;
   lessons: ModuleLessonJunction[];
+  certifications?: any[];
 }
 
 export const handler: Handlers = {
   async GET(req, ctx) {
-    const slug = ctx.params.slug;
+    const courseSlug = ctx.params.slug;
+    const moduleSlug = ctx.params.moduleSlug;
     const token = ctx.state.token as string;
     const client = getDirectusClient(token);
 
     try {
-      const modules = (await client.request(
+      // @ts-ignore: Directus SDK typing issue
+      const modulePromise = client.request(
+        // @ts-ignore: Directus SDK typing issue
         readItems("modules", {
-          filter: { slug: { _eq: slug } },
+          filter: { slug: { _eq: moduleSlug } },
           limit: 1,
           fields: [
             "id",
@@ -58,13 +62,60 @@ export const handler: Handlers = {
             "certifications.certifications_id.code",
           ],
         }),
-      )) as unknown as Module[];
+      );
+
+      // @ts-ignore: Directus SDK typing issue
+      const coursePromise = client.request(
+        // @ts-ignore: Directus SDK typing issue
+        readItems("courses", {
+          filter: { slug: { _eq: courseSlug } },
+          limit: 1,
+          fields: [
+            "title",
+            "slug",
+            "category",
+            "category.slug",
+            "certification.title",
+            "certification.slug",
+            "modules.modules_id.slug",
+            "modules.modules_id.title",
+          ],
+        }),
+      );
+
+      const [modules, courses] = (await Promise.all([
+        modulePromise,
+        coursePromise,
+      ])) as unknown as [Module[], any[]];
 
       if (!modules || modules.length === 0) {
         return ctx.renderNotFound();
       }
 
       const module = modules[0];
+      const course = courses && courses.length > 0 ? courses[0] : null;
+
+      // Calculate prev/next
+      let prevModule = null;
+      let nextModule = null;
+
+      if (course && course.modules) {
+        const courseModules = course.modules
+          .map((m: any) => m.modules_id)
+          .filter((m: any) => m);
+        const currentIndex = courseModules.findIndex(
+          (m: any) => m.slug === moduleSlug,
+        );
+
+        if (currentIndex !== -1) {
+          if (currentIndex > 0) {
+            prevModule = courseModules[currentIndex - 1];
+          }
+          if (currentIndex < courseModules.length - 1) {
+            nextModule = courseModules[currentIndex + 1];
+          }
+        }
+      }
 
       if (module.content) {
         module.content = await marked.parse(module.content);
@@ -82,14 +133,12 @@ export const handler: Handlers = {
         .sort((a, b) => (a.sort || 0) - (b.sort || 0))
         .map((j) => {
           const item = j.item as BaseLesson;
-          const typeLabel = j.collection
-            .replace("_lessons", "")
-            .toUpperCase();
-          
+          const typeLabel = j.collection.replace("_lessons", "").toUpperCase();
+
           return {
             ...item,
             typeLabel,
-            link: `/play/${module.slug || module.id}/${item.slug || item.id}`
+            link: `/play/${module.slug || module.id}/${item.slug || item.id}`,
           };
         });
 
@@ -103,6 +152,16 @@ export const handler: Handlers = {
         certifications,
         title: module.title, // For the layout
         isAuthenticated: !!token,
+        course: course
+          ? {
+              title: course.title,
+              slug: course.slug,
+              category: course.category,
+              certification: course.certification,
+            }
+          : null,
+        prevModule,
+        nextModule,
       });
 
       return new Response(html, {
@@ -116,4 +175,3 @@ export const handler: Handlers = {
     }
   },
 };
-

@@ -6,13 +6,13 @@ import * as $_app from "./routes/_app.tsx";
 import * as $_middleware from "./routes/_middleware.ts";
 import * as $certification_slug_ from "./routes/certification/[slug].tsx";
 import * as $certifications_index from "./routes/certifications/index.tsx";
-import * as $course_slug_ from "./routes/course/[slug].tsx";
+import * as $course_slug_moduleSlug_ from "./routes/course/[slug]/[moduleSlug].tsx";
+import * as $course_slug_index from "./routes/course/[slug]/index.tsx";
 import * as $courses_index from "./routes/courses/index.tsx";
 import * as $dataset_slug_ from "./routes/dataset/[slug].tsx";
 import * as $index from "./routes/index.tsx";
 import * as $login from "./routes/login.tsx";
 import * as $logout from "./routes/logout.ts";
-import * as $mod_slug_ from "./routes/mod/[slug].tsx";
 import * as $play_moduleSlug_lessonSlug_ from "./routes/play/[moduleSlug]/[lessonSlug].tsx";
 import * as $tech_slug_ from "./routes/tech/[slug].tsx";
 
@@ -24,13 +24,13 @@ const manifest = {
     "./routes/_middleware.ts": $_middleware,
     "./routes/certification/[slug].tsx": $certification_slug_,
     "./routes/certifications/index.tsx": $certifications_index,
-    "./routes/course/[slug].tsx": $course_slug_,
+    "./routes/course/[slug]/[moduleSlug].tsx": $course_slug_moduleSlug_,
+    "./routes/course/[slug]/index.tsx": $course_slug_index,
     "./routes/courses/index.tsx": $courses_index,
     "./routes/dataset/[slug].tsx": $dataset_slug_,
     "./routes/index.tsx": $index,
     "./routes/login.tsx": $login,
     "./routes/logout.ts": $logout,
-    "./routes/mod/[slug].tsx": $mod_slug_,
     "./routes/play/[moduleSlug]/[lessonSlug].tsx": $play_moduleSlug_lessonSlug_,
     "./routes/tech/[slug].tsx": $tech_slug_,
   },

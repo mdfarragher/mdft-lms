@@ -35,6 +35,7 @@ interface Module {
   title: string;
   slug: string;
   lessons: ModuleLessonJunction[];
+  courses?: any[];
 }
 
 export const handler: Handlers = {
@@ -47,7 +48,9 @@ export const handler: Handlers = {
 
     try {
       // 1. Fetch Module to get the list of lessons (for sidebar)
+      // @ts-ignore: Directus SDK typing issue
       const modules = (await client.request(
+        // @ts-ignore: Directus SDK typing issue
         readItems("modules", {
           filter: { slug: { _eq: moduleSlug } },
           limit: 1,
@@ -55,6 +58,7 @@ export const handler: Handlers = {
             "id",
             "title",
             "slug",
+            "courses.courses_id.slug",
             "lessons.id",
             "lessons.collection",
             "lessons.sort",
@@ -96,7 +100,9 @@ export const handler: Handlers = {
         fields.push("content");
       }
 
+      // @ts-ignore: Directus SDK typing issue
       const lesson = (await client.request(
+        // @ts-ignore: Directus SDK typing issue
         readItem(collection, lessonId, {
           fields: fields,
         }),
@@ -129,6 +135,9 @@ export const handler: Handlers = {
       const prevLesson = currentIndex > 0 ? sidebarLessons[currentIndex - 1] : null;
       const nextLesson = currentIndex < sidebarLessons.length - 1 ? sidebarLessons[currentIndex + 1] : null;
 
+      // Extract course slug if available
+      const courseSlug = module.courses?.[0]?.courses_id?.slug;
+
       const html = eta.render("lesson_detail.eta", {
         isAuthenticated,
         module: {
@@ -136,6 +145,7 @@ export const handler: Handlers = {
           title: module.title,
           slug: module.slug,
         },
+        courseSlug,
         currentLesson: lesson,
         lessonType,
         lessons: sidebarLessons,

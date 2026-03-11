@@ -1,5 +1,5 @@
 import { Handlers } from "$fresh/server.ts";
-import { getDirectusClient } from "../../utils/directus.ts";
+import { getDirectusClient } from "../../../utils/directus.ts";
 import { readItems } from "@directus/sdk";
 import { Eta } from "eta";
 import { join } from "$std/path/mod.ts";
@@ -43,7 +43,9 @@ export const handler: Handlers = {
 
     try {
       // Fetch course by slug with modules
+      // @ts-ignore: Directus SDK typing issue
       const courses = (await client.request(
+        // @ts-ignore: Directus SDK typing issue
         readItems("courses", {
           filter: {
             slug: {
@@ -241,6 +243,7 @@ export const handler: Handlers = {
       let testimonials: any[] = [];
       try {
         const allTestimonials = (await client.request(
+          // @ts-ignore: Directus SDK typing issue
           readItems("testimonials", {
             limit: 10,
             fields: ["text", "author"],
