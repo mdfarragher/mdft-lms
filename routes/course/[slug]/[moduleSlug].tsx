@@ -79,6 +79,7 @@ export const handler: Handlers = {
             "certification.slug",
             "modules.modules_id.slug",
             "modules.modules_id.title",
+            "modules.modules_id.type",
           ],
         }),
       );
