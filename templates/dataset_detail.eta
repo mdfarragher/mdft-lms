@@ -48,15 +48,6 @@
                 </div>
             </div>
             <% } %>
-
-            <div class="mt-5 pt-3 border-top">
-                <a
-                    href="javascript:history.back()"
-                    class="btn btn-outline-primary"
-                >
-                    <i class="bi bi-arrow-left me-2"></i>Back to Course
-                </a>
-            </div>
         </div>
     </div>
 </div>

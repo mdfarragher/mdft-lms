@@ -3,6 +3,12 @@
 <div class="container container-narrow py-5">
     <div class="card shadow-lg mb-5 border-0 overflow-hidden">
         <div class="card-body p-4 p-md-5">
+            <span
+                class="badge rounded-pill mb-2 fs-6"
+                style="background-color: #000; color: white"
+            >
+                Technology
+            </span>
             <h1 class="display-5 fw-bold text-dark mb-4">
                 <%= it.technology.title %>
             </h1>
@@ -11,43 +17,51 @@
             <div class="markdown-content text-muted">
                 <%~ it.technology.content %>
             </div>
-            <% } %> <% if (it.courses && it.courses.length > 0) { %>
-            <div class="mt-5 pt-3 border-top">
-                <h2 class="h3 fw-bold mb-4">
-                    Courses Covering This Technology
-                </h2>
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                    <% it.courses.forEach(function(course) { %>
-                    <div class="col">
-                        <a
-                            href="/course/<%= course.slug || course.id %>"
-                            class="text-decoration-none"
-                        >
-                            <div
-                                class="card h-100 shadow-sm border-0 transition-hover"
-                            >
-                                <div class="ratio ratio-16x9">
-                                    <img
-                                        src="/thumb/<%= course.slug %>.jpg"
-                                        class="card-img-top object-fit-cover"
-                                        alt="<%= course.title %>"
-                                        loading="lazy"
-                                    />
-                                </div>
-                                <div class="card-body text-center p-3">
-                                    <h5
-                                        class="card-title text-dark fw-bold mb-0 fs-6"
-                                    >
-                                        <%= course.title %>
-                                    </h5>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <% }) %>
-                </div>
-            </div>
             <% } %>
+            <hr class="my-4" />
+            <div>
+                More info: <br />
+                <a
+                    href="<%= it.technology.info_url %>"
+                    class="branded-link"
+                    target="_blank"
+                >
+                    <%= it.technology.info_url %>
+                    <i class="bi bi-box-arrow-up-right ms-1"></i>
+                </a>
+            </div>
         </div>
     </div>
+
+    <% if (it.courses && it.courses.length > 0) { %>
+    <div class="mt-5">
+        <h2 class="h3 fw-bold mb-4">Related Courses</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <% it.courses.forEach(function(course) { %>
+            <div class="col">
+                <a
+                    href="/course/<%= course.slug || course.id %>"
+                    class="text-decoration-none"
+                >
+                    <div class="card h-100 shadow-sm border-0 transition-hover">
+                        <div class="ratio ratio-16x9">
+                            <img
+                                src="/thumb/<%= course.slug %>.jpg"
+                                class="card-img-top object-fit-cover"
+                                alt="<%= course.title %>"
+                                loading="lazy"
+                            />
+                        </div>
+                        <div class="card-body text-center p-3">
+                            <h5 class="card-title text-dark fw-bold mb-0 fs-6">
+                                <%= course.title %>
+                            </h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+    <% } %>
 </div>

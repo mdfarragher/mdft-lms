@@ -147,11 +147,18 @@ main {
 .markdown-content p {
     margin-bottom: 1rem;
 }
-
 .markdown-content img {
     border-radius: 0.375rem; /* Bootstrap's .rounded value */
     max-width: 100%;
     height: auto;
+}
+.markdown-content a {
+    color: #fa6915 !important; /* Orange */
+    text-decoration: none !important;
+}
+.markdown-content a:hover {
+    color: #fa6915 !important; /* Orange on hover */
+    text-decoration: underline !important;
 }
 
 /* Custom utility classes */

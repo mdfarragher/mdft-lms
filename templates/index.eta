@@ -83,7 +83,7 @@
                         <div
                             class="flex-grow-1 min-width-0 d-flex align-items-center"
                         >
-                            <% 
+                            <%
                                 let badgeColor = '#212529'; // Default (Lesson)
                                 let textColor = 'white';
                                 let badgeText = result.type;
@@ -97,16 +97,16 @@
                                 } else if (result.type === 'module') {
                                     textColor = 'black';
                                     if (result.subtype === 'course') {
-                                        badgeColor = '#B8DAFF';
+                                        badgeColor = '#CCCCCC';
                                         badgeText = 'module';
                                     } else if (result.subtype === 'lab') {
-                                        badgeColor = '#A0C4FF';
+                                        badgeColor = '#CCCCCC';
                                         badgeText = 'lab';
                                     } else if (result.subtype === 'quiz') {
-                                        badgeColor = '#FDFFB6'; 
+                                        badgeColor = '#CCCCCC';
                                         badgeText = 'quiz';
                                     } else if (result.subtype === 'exam') {
-                                        badgeColor = '#FFADAD';
+                                        badgeColor = '#CCCCCC';
                                         badgeText = 'exam';
                                     } else {
                                         badgeColor = '#B8DAFF'; // Default module

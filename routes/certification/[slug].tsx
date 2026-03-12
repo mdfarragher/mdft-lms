@@ -52,13 +52,48 @@ export const handler: Handlers = {
               _eq: certification.id,
             },
           } as any,
-          fields: ["id", "title", "slug"],
+          fields: [
+            "id",
+            "title",
+            "slug",
+            "modules.modules_id.id",
+            "modules.modules_id.title",
+            "modules.modules_id.slug",
+            "modules.modules_id.type",
+            "modules.modules_id.content",
+          ],
         }),
       )) as any[];
+
+      // Find the first exam module among the courses
+      let examModule = null;
+      let examCourseSlug = null;
+
+      if (courses && courses.length > 0) {
+        for (const course of courses) {
+          if (course.modules && Array.isArray(course.modules)) {
+            // Access the actual module object from the junction
+            const modules = course.modules.map((m: any) => m.modules_id).filter((m: any) => m != null);
+            const exam = modules.find((m: any) => m.type === 'exam');
+            if (exam) {
+              examModule = exam;
+              examCourseSlug = course.slug;
+              
+              // Parse markdown content for the exam
+              if (examModule.content) {
+                examModule.content = await marked.parse(examModule.content);
+              }
+              break; // Stop after finding the first exam
+            }
+          }
+        }
+      }
 
       const html = eta.render("certification_detail.eta", {
         certification,
         courses,
+        examModule,
+        examCourseSlug,
         title: certification.title,
       });
 

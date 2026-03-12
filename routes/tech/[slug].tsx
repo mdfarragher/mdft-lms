@@ -22,7 +22,7 @@ export const handler: Handlers = {
             },
           } as any,
           limit: 1,
-          fields: ["id", "title", "content"],
+          fields: ["id", "title", "content", "info_url"],
         }),
       )) as any[];
 

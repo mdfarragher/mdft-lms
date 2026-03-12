@@ -61,22 +61,19 @@
                     <div class="text-center p-5 bg-light m-3 rounded">
                         <i
                             class="bi bi-lock-fill fs-1 mb-3 d-block"
-                            style="color: #FA6915;"
+                            style="color: #fa6915"
                         ></i>
                         <h2 class="h4 fw-bold mb-3">Premium Content</h2>
                         <p class="lead mb-4 mx-auto" style="max-width: 600px">
-                            Subscribe for €30 per month to access premium
-                            content. Cancel anytime and keep access to all
-                            watched lessons after the subscription ends.
+                            Sign in with your student account or subscribe to
+                            access premium content.
                         </p>
                         <div class="d-flex justify-content-center gap-3">
-                            <a
-                                href="/subscribe"
-                                class="btn btn-primary btn-lg px-4"
-                                >Subscribe</a
+                            <a href="/login" class="btn btn-primary btn-lg px-4"
+                                >Sign In</a
                             >
                             <a
-                                href="/pricing"
+                                href="/subscribe"
                                 class="btn btn-outline-secondary btn-lg px-4"
                                 >Learn More</a
                             >
@@ -172,10 +169,7 @@
                         </div>
 
                         <!-- Content -->
-                        <div
-                            class="flex-grow-1"
-                            style="min-width: 0;"
-                        >
+                        <div class="flex-grow-1" style="min-width: 0">
                             <h6
                                 class="mb-0 fw-normal text-dark text-truncate small <%= lesson.isActive ? 'fw-bold' : '' %>"
                             >

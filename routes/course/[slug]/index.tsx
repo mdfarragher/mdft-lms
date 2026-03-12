@@ -69,6 +69,7 @@ export const handler: Handlers = {
             "certification.slug",
             "certification.code",
             "certification.content",
+            "certification.content_summary",
             "certification.content_exam",
             "preview_lesson.title",
             "preview_lesson.video_url",
@@ -111,7 +112,9 @@ export const handler: Handlers = {
 
       // Flatten the M2M structure to a simple list of technologies
       const technologies =
-        courseRaw.technologies?.map((t: any) => t.technologies_id).filter(Boolean) || [];
+        courseRaw.technologies
+          ?.map((t: any) => t.technologies_id)
+          .filter(Boolean) || [];
 
       // Parse markdown content for exam modules
       for (const module of modules) {
@@ -123,7 +126,9 @@ export const handler: Handlers = {
       // Parse markdown content for technologies
       for (const technology of technologies) {
         if (technology.content_summary) {
-          technology.content_summary = await marked.parse(technology.content_summary);
+          technology.content_summary = await marked.parse(
+            technology.content_summary,
+          );
         }
         if (technology.content) {
           technology.content = await marked.parse(technology.content);
@@ -132,12 +137,14 @@ export const handler: Handlers = {
 
       // Process datasets
       const datasetMap = new Map();
-      
+
       modules.forEach((module: any) => {
         if (module.type === "lab" && module.dataset) {
           // Handle both single object and array cases for safety
-          const datasets = Array.isArray(module.dataset) ? module.dataset : [module.dataset];
-          
+          const datasets = Array.isArray(module.dataset)
+            ? module.dataset
+            : [module.dataset];
+
           datasets.forEach((ds: any) => {
             if (ds && ds.title) {
               // Create a unique key based on slug or title
@@ -146,19 +153,24 @@ export const handler: Handlers = {
                 datasetMap.set(key, {
                   title: ds.title,
                   description: ds.description,
-                  slug: ds.slug
+                  slug: ds.slug,
                 });
               }
             }
           });
         }
       });
-      
+
       const datasets = Array.from(datasetMap.values());
 
       if (courseRaw.certification?.content) {
         courseRaw.certification.content = await marked.parse(
           courseRaw.certification.content,
+        );
+      }
+      if (courseRaw.certification?.content_summary) {
+        courseRaw.certification.content_summary = await marked.parse(
+          courseRaw.certification.content_summary,
         );
       }
       if (courseRaw.certification?.content_exam) {
@@ -201,12 +213,17 @@ export const handler: Handlers = {
       let faqs: any[] = [];
       if (courseRaw.faq && courseRaw.faq.questions) {
         if (Array.isArray(courseRaw.faq.questions)) {
-           // Check if M2M (junction object with faq_questions_id) or O2M (direct object)
-           if (courseRaw.faq.questions.length > 0 && courseRaw.faq.questions[0].faq_questions_id) {
-               faqs = courseRaw.faq.questions.map((q: any) => q.faq_questions_id).filter(Boolean);
-           } else {
-               faqs = courseRaw.faq.questions;
-           }
+          // Check if M2M (junction object with faq_questions_id) or O2M (direct object)
+          if (
+            courseRaw.faq.questions.length > 0 &&
+            courseRaw.faq.questions[0].faq_questions_id
+          ) {
+            faqs = courseRaw.faq.questions
+              .map((q: any) => q.faq_questions_id)
+              .filter(Boolean);
+          } else {
+            faqs = courseRaw.faq.questions;
+          }
         }
 
         // Filter out any potential null/undefined entries before processing
