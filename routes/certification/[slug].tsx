@@ -95,6 +95,7 @@ export const handler: Handlers = {
         examModule,
         examCourseSlug,
         title: certification.title,
+        isAuthenticated: !!token,
       });
 
       return new Response(html, {

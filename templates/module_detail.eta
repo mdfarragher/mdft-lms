@@ -69,7 +69,7 @@
             </div>
             <div class="progress" style="height: 8px">
                 <div
-                    class="progress-bar"
+                    class="progress-bar progress-bar-striped progress-bar-animated"
                     role="progressbar"
                     style="width: 45%; background-color: #fa6915"
                     aria-valuenow="45"

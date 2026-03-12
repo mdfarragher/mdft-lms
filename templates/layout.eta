@@ -64,16 +64,48 @@
                             >
                         </li>
                         <% if (it.isAuthenticated || it.user) { %>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/logout"
-                                >Logout</a
+                        <li class="nav-item dropdown">
+                            <a
+                                class="nav-link dropdown-toggle d-flex align-items-center"
+                                href="#"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
                             >
+                                <i class="bi bi-person-circle fs-4"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="/profile"
+                                        >My Profile</a
+                                    >
+                                </li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li>
+                                    <a class="dropdown-item" href="/logout"
+                                        >Logout</a
+                                    >
+                                </li>
+                            </ul>
                         </li>
                         <% } else { %>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/login"
-                                >Login</a
+                        <li class="nav-item dropdown">
+                            <a
+                                class="nav-link dropdown-toggle d-flex align-items-center"
+                                href="#"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
                             >
+                                <i class="bi bi-person-circle fs-4"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="/login"
+                                        >Login</a
+                                    >
+                                </li>
+                            </ul>
                         </li>
                         <% } %>
                     </ul>
@@ -150,5 +182,11 @@
                 </div>
             </div>
         </footer>
+        <!-- Bootstrap JS Bundle with Popper -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"
+        ></script>
     </body>
 </html>

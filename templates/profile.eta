@@ -1,0 +1,144 @@
+<% layout("./layout.eta") %>
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 mb-0 text-dark border-bottom pb-2 border-primary d-inline-block">My Profile</h1>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4 mb-5">
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body d-flex align-items-center p-4">
+                    <div class="rounded-circle me-3 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; background-color: #fde8d8;">
+                        <i class="bi bi-mortarboard fs-3 text-black"></i>
+                    </div>
+                    <div>
+                        <h6 class="card-subtitle mb-1 text-muted">Courses Completed</h6>
+                        <h2 class="card-title mb-0 fw-bold"><%= it.stats.coursesCompleted %></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body d-flex align-items-center p-4">
+                    <div class="rounded-circle me-3 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; background-color: #fde8d8;">
+                        <i class="bi bi-layers fs-3 text-black"></i>
+                    </div>
+                    <div>
+                        <h6 class="card-subtitle mb-1 text-muted">Modules Completed</h6>
+                        <h2 class="card-title mb-0 fw-bold"><%= it.stats.modulesCompleted %></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body d-flex align-items-center p-4">
+                    <div class="rounded-circle me-3 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; background-color: #fde8d8;">
+                        <i class="bi bi-play-btn fs-3 text-black"></i>
+                    </div>
+                    <div>
+                        <h6 class="card-subtitle mb-1 text-muted">Lessons Viewed</h6>
+                        <h2 class="card-title mb-0 fw-bold"><%= it.stats.lessonsViewed %></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body d-flex align-items-center p-4">
+                    <div class="rounded-circle me-3 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; background-color: #fde8d8;">
+                        <i class="bi bi-laptop fs-3 text-black"></i>
+                    </div>
+                    <div>
+                        <h6 class="card-subtitle mb-1 text-muted">Labs Completed</h6>
+                        <h2 class="card-title mb-0 fw-bold"><%= it.stats.labsCompleted %></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body d-flex align-items-center p-4">
+                    <div class="rounded-circle me-3 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; background-color: #fde8d8;">
+                        <i class="bi bi-check-circle fs-3 text-black"></i>
+                    </div>
+                    <div>
+                        <h6 class="card-subtitle mb-1 text-muted">Quizzes Completed</h6>
+                        <h2 class="card-title mb-0 fw-bold"><%= it.stats.quizzesCompleted %></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body d-flex align-items-center p-4">
+                    <div class="rounded-circle me-3 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; background-color: #fde8d8;">
+                        <i class="bi bi-file-earmark-text fs-3 text-black"></i>
+                    </div>
+                    <div>
+                        <h6 class="card-subtitle mb-1 text-muted">Exams Completed</h6>
+                        <h2 class="card-title mb-0 fw-bold"><%= it.stats.examsCompleted %></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Certification Goal Section -->
+    <div class="card shadow-lg border-0 mb-5 overflow-hidden">
+        <div class="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
+            <h3 class="h4 fw-bold mb-0 text-dark">My Certification Goal</h3>
+            <a href="/certifications" class="btn btn-outline-primary btn-sm">Change Goal</a>
+        </div>
+        <div class="card-body p-4 p-md-5">
+            <div class="row align-items-center">
+                <div class="col-md-8 mb-4 mb-md-0">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="me-4 flex-shrink-0">
+                             <!-- Using a placeholder/badge if available, otherwise icon -->
+                             <img src="/img/ai-900-badge.svg" alt="<%= it.goal.title %>" style="width: 80px; height: 80px;" onerror="this.onerror=null; this.src='/img/exam.svg'">
+                        </div>
+                        <div>
+                            <h4 class="mb-2 fw-bold display-6" style="font-size: 1.75rem;"><%= it.goal.title %></h4>
+                            <p class="text-muted mb-0 lead fs-6">Master artificial intelligence concepts and related Microsoft Azure services.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted fw-bold text-uppercase small ls-1">Your Progress</span>
+                            <span class="fw-bold fs-5" style="color: #fa6915"><%= it.goal.progress %>%</span>
+                        </div>
+                        <div class="progress" style="height: 12px; background-color: #e9ecef; border-radius: 6px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                 role="progressbar" 
+                                 style="width: <%= it.goal.progress %>%; border-radius: 6px; background-color: #fa6915" 
+                                 aria-valuenow="<%= it.goal.progress %>" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                            </div>
+                        </div>
+                        <div class="mt-2 text-end">
+                            <small class="text-muted fst-italic">You're making great progress! Keep going!</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 border-start-md ps-md-5">
+                    <h5 class="fw-bold mb-3 text-secondary text-uppercase small ls-1">Next Steps</h5>
+                    <div class="d-grid gap-3">
+                        <a href="/certification/azure-ai-fundamentals" class="btn btn-primary btn-lg shadow-sm fs-6">
+                            <i class="bi bi-play-circle-fill me-2"></i>Continue Learning
+                        </a>
+                        <button class="btn btn-outline-secondary btn-lg shadow-sm fs-6" disabled>
+                            <i class="bi bi-calendar-event me-2"></i>Schedule Exam
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -14,6 +14,7 @@ import * as $index from "./routes/index.tsx";
 import * as $login from "./routes/login.tsx";
 import * as $logout from "./routes/logout.ts";
 import * as $play_moduleSlug_lessonSlug_ from "./routes/play/[moduleSlug]/[lessonSlug].tsx";
+import * as $profile from "./routes/profile.tsx";
 import * as $tech_slug_ from "./routes/tech/[slug].tsx";
 
 import type { Manifest } from "$fresh/server.ts";
@@ -32,6 +33,7 @@ const manifest = {
     "./routes/login.tsx": $login,
     "./routes/logout.ts": $logout,
     "./routes/play/[moduleSlug]/[lessonSlug].tsx": $play_moduleSlug_lessonSlug_,
+    "./routes/profile.tsx": $profile,
     "./routes/tech/[slug].tsx": $tech_slug_,
   },
   islands: {},
