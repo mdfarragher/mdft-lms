@@ -1,15 +1,29 @@
-/* Override Bootstrap primary button background color */
+/* Override Bootstrap buttons */
 .btn-primary {
     background-color: #afeb2b !important;
     border-color: #afeb2b !important;
     color: #000000 !important; /* Optional: ensure readable text */
     border-radius: 6px;
 }
-
 .btn-primary:hover {
     background-color: #9bd326 !important;
     border-color: #008800 !important;
     color: #000000 !important;
+    text-decoration: underline !important;
+}
+
+.btn-secondary {
+    background-color: #fa6915 !important;
+    border-color: #fa6915 !important;
+    color: #fff !important; /* Optional: ensure readable text */
+    border-radius: 6px;
+}
+
+.btn-secondary:hover {
+    background-color: darkorange !important;
+    border-color: #000000 !important;
+    color: #fff !important;
+    text-decoration: underline !important;
 }
 
 .btn-outline-primary {
@@ -21,6 +35,7 @@
     background-color: #ddd !important; /* Light gray */
     border-color: #000000 !important;
     color: #000000 !important;
+    text-decoration: underline !important;
 }
 
 .btn-outline-primary:disabled,
