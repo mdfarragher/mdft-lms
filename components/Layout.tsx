@@ -130,6 +130,9 @@ export default function Layout({ title, isAuthenticated, children }: LayoutProps
                 <p className="mb-0 small">
                   &copy; {new Date().getFullYear()} MDFT LMS. All rights reserved.
                 </p>
+                <p className="mb-0 small mt-1">
+                  <span className="me-1">🇪🇺</span> Hosted in the EU. This site complies with GDPR.
+                </p>
               </div>
               <div className="col-md-6 text-center text-md-end">
                 <a href="#" className="text-light text-decoration-none me-3 small">Privacy</a>

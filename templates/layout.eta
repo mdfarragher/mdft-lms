@@ -161,6 +161,9 @@
                             &copy; <%= new Date().getFullYear() %> MDFT LMS. All
                             rights reserved.
                         </p>
+                        <p class="mb-0 small mt-1">
+                            <span class="me-1">🇪🇺</span> Hosted in the EU. This site complies with GDPR.
+                        </p>
                     </div>
                     <div class="col-md-6 text-center text-md-end">
                         <a
