@@ -1,0 +1,2 @@
+/static/video/*
+!/static/video/.gitkeep
