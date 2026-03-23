@@ -147,32 +147,54 @@
         <h2 class="h3 fw-bold mb-4 border-bottom pb-2">
             <%= technology.title %>
         </h2>
-        <div class="markdown-content text-muted">
-            <%~ technology.content_summary %>
-        </div>
-        <div class="mt-2">
-            <a href="/tech/<%= technology.slug %>" class="branded-link">
-                Read more about <%= technology.title %>
-                <i class="bi bi-arrow-right"></i>
-            </a>
+        <div class="d-flex justify-content-between align-items-start">
+            <div class="flex-grow-1">
+                <div class="markdown-content text-muted">
+                    <%~ technology.content_summary %>
+                </div>
+                <div class="mt-2">
+                    <a href="/tech/<%= technology.slug %>" class="branded-link">
+                        Read more about <%= technology.title %>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="d-none d-md-block ms-5 flex-shrink-0">
+                <img
+                    src="/img/<%= technology.slug %>-badge.png"
+                    alt="<%= technology.title %>"
+                    style="height: 140px; width: auto;"
+                />
+            </div>
         </div>
     </div>
-    <% }) %> <% } %> <% if (it.course.certification) { %>
+    <% }) %> <% } %>     <% if (it.course.certification) { %>
     <div class="container px-0 mb-5">
         <h2 class="h3 fw-bold mb-4 border-bottom pb-2">
             The <%= it.course.certification.code %> Certification
         </h2>
-        <div class="markdown-content text-muted">
-            <%~ it.course.certification.content_summary %>
-        </div>
-        <div class="mt-2">
-            <a
-                href="/certification/<%= it.course.certification.slug %>"
-                class="branded-link"
-            >
-                Learn more about the certification
-                <i class="bi bi-arrow-right"></i>
-            </a>
+        <div class="d-flex justify-content-between align-items-start">
+            <div class="flex-grow-1">
+                <div class="markdown-content text-muted">
+                    <%~ it.course.certification.content_summary %>
+                </div>
+                <div class="mt-2">
+                    <a
+                        href="/certification/<%= it.course.certification.slug %>"
+                        class="branded-link"
+                    >
+                        Learn more about the certification
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="d-none d-md-block ms-5 flex-shrink-0">
+                <img
+                    src="/img/<%= it.course.certification.slug %>-badge.svg"
+                    alt="<%= it.course.certification.title %>"
+                    style="height: 140px; width: auto;"
+                />
+            </div>
         </div>
     </div>
     <% } %> <% if (it.course.preview_lesson &&
@@ -187,19 +209,22 @@
         <div
             class="ratio ratio-16x9 bg-black rounded overflow-hidden shadow-lg"
         >
-            <iframe
-                src="<%= it.course.preview_lesson.video_url %>"
-                allowfullscreen
-                allow="
-                    accelerometer;
-                    autoplay;
-                    clipboard-write;
-                    encrypted-media;
-                    gyroscope;
-                    picture-in-picture;
-                "
+            <video
+                src="/video/<%= it.course.preview_lesson.video_url %>"
+                controls
+                class="w-100 h-100"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             >
-            </iframe>
+                Your browser does not support the video tag.
+            </video>
+            <div
+                class="flex-column justify-content-center align-items-center h-100 w-100 bg-dark text-white"
+                style="display: none;"
+            >
+                <i class="bi bi-exclamation-triangle fs-1 text-warning mb-3"></i>
+                <p class="mb-0">Video content not available.</p>
+                <small class="text-white-50">File not found</small>
+            </div>
         </div>
     </div>
     <% } %> <% if (it.course.datasets && it.course.datasets.length > 0) { %>

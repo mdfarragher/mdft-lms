@@ -30,35 +30,35 @@ export const handler: Handlers = {
         hasSearched = true;
         // Search logic (moved from api/search.ts)
         const coursesPromise = client.request(
-          readItems("courses", {
+          readItems("courses" as any, {
             filter: { title: { _icontains: query } } as any,
             fields: ["id", "title", "slug"],
           })
         );
 
         const modulesTitlePromise = client.request(
-          readItems("modules", {
+          readItems("modules" as any, {
             filter: { title: { _icontains: query } } as any,
             fields: ["id", "title", "slug", "type"],
           })
         );
 
         const videoLessonsPromise = client.request(
-          readItems("video_lessons", {
+          readItems("video_lessons" as any, {
             filter: { title: { _icontains: query } } as any,
             fields: ["id", "title", "slug"],
           })
         );
 
         const certificationsPromise = client.request(
-          readItems("certifications", {
+          readItems("certifications" as any, {
             filter: { title: { _icontains: query } } as any,
             fields: ["id", "title", "slug"],
           })
         );
 
         const textLessonsPromise = client.request(
-          readItems("text_lessons", {
+          readItems("text_lessons" as any, {
             filter: { title: { _icontains: query } } as any,
             fields: ["id", "title", "slug"],
           })
@@ -111,7 +111,7 @@ export const handler: Handlers = {
               // But let's try a safer filter on courses
               const courses = await client.request(
                 // @ts-ignore: Directus SDK typing issue
-                readItems("courses", {
+                readItems("courses" as any, {
                   // Filter courses that contain any of the found modules
                   filter: {
                     modules: {
@@ -169,58 +169,100 @@ export const handler: Handlers = {
           const moduleIdToSlugMap = new Map<number, string>();
           const moduleIdToCourseSlugMap = new Map<number, string>();
 
-          try {
-            const relations = await client.request(
-              readItems("modules_lessons", {
-                filter: {
-                  item: { _in: lessonIds },
-                  collection: { _eq: "video_lessons" },
-                } as any,
-                fields: ["item", "modules_id"],
-              })
-            );
-
-            const moduleIds = new Set<number>();
-            if (Array.isArray(relations)) {
-              relations.forEach((r: any) => {
-                if (r.item && r.modules_id) {
-                  lessonToModuleIdMap.set(r.item, r.modules_id);
-                  moduleIds.add(r.modules_id);
-                }
-              });
-            }
-
-            if (moduleIds.size > 0) {
+            try {
+              // Updated logic to fetch module lesson relationships using Scoped Filters for M2A
+              
+              // 1. Fetch modules containing these lessons
               const modules = await client.request(
-                // @ts-ignore: Directus SDK typing issue
-                readItems("modules", {
-                  filter: { id: { _in: Array.from(moduleIds) } } as any,
-                  fields: ["id", "slug", "courses.courses_id.slug"],
+                readItems("modules" as any, {
+                  filter: {
+                    lessons: {
+                      "item:video_lessons": {
+                        id: { _in: lessonIds }
+                      }
+                    }
+                  } as any,
+                  fields: [
+                    "id", 
+                    "slug", 
+                    "lessons.item", 
+                    "lessons.collection"
+                  ]
                 })
               );
-
+              
+              const foundModuleIds = new Set<number>();
+  
               if (Array.isArray(modules)) {
                 modules.forEach((m: any) => {
-                  moduleIdToSlugMap.set(m.id, m.slug);
-                   if (m.courses && m.courses.length > 0 && m.courses[0]?.courses_id?.slug) {
-                      moduleIdToCourseSlugMap.set(m.id, m.courses[0].courses_id.slug);
-                  }
+                   if (m.lessons && Array.isArray(m.lessons)) {
+                     m.lessons.forEach((l: any) => {
+                       // Check if this lesson is one of the video lessons we found
+                       if (l.collection === 'video_lessons' && l.item) {
+                         const itemId = (typeof l.item === 'object' && l.item !== null) ? l.item.id : l.item;
+                         
+                         // Store mapping if it's one of our searched lessons
+                         if (lessonIds.includes(itemId)) {
+                             if (!lessonToModuleIdMap.has(itemId)) {
+                                lessonToModuleIdMap.set(itemId, m.id);
+                                moduleIdToSlugMap.set(m.id, m.slug);
+                                foundModuleIds.add(m.id);
+                             }
+                         }
+                       }
+                     });
+                   }
                 });
               }
+
+              // 2. Fetch courses containing these modules (separate query to avoid deep nesting issues)
+              if (foundModuleIds.size > 0) {
+                  const courses = await client.request(
+                    readItems("courses" as any, {
+                      filter: {
+                        modules: {
+                          modules_id: {
+                            id: { _in: Array.from(foundModuleIds) }
+                          }
+                        }
+                      } as any,
+                      fields: ["slug", "modules.modules_id.id"]
+                    })
+                  );
+
+                  if (Array.isArray(courses)) {
+                    courses.forEach((c: any) => {
+                      if (c.slug && Array.isArray(c.modules)) {
+                        c.modules.forEach((junction: any) => {
+                          if (junction.modules_id && junction.modules_id.id) {
+                             const modId = junction.modules_id.id;
+                             if (foundModuleIds.has(modId)) {
+                                moduleIdToCourseSlugMap.set(modId, c.slug);
+                             }
+                          }
+                        });
+                      }
+                    });
+                  }
+              }
+
+            } catch (error) {
+              console.error("Error fetching module relations for video lessons:", error);
             }
-          } catch (error) {
-            console.error("Error fetching module relations:", error);
-          }
+
 
           videoLessons.forEach((l: any) => {
             const moduleId = lessonToModuleIdMap.get(l.id);
-            let moduleIdentifier = null;
-            let courseIdentifier = null;
+            let moduleIdentifier: string | number | null = null;
+            let courseIdentifier: string | null = null;
+            
             if (moduleId) {
               moduleIdentifier = moduleIdToSlugMap.get(moduleId) || moduleId;
-              courseIdentifier = moduleIdToCourseSlugMap.get(moduleId);
+              courseIdentifier = moduleIdToCourseSlugMap.get(moduleId) || null;
             }
+            
             const lessonIdentifier = l.slug || l.id;
+            // Ensure we have all parts of the path
             const link = (moduleIdentifier && courseIdentifier)
               ? `/play/${courseIdentifier}/${moduleIdentifier}/${lessonIdentifier}`
               : `#`;
@@ -246,61 +288,97 @@ export const handler: Handlers = {
           const moduleIdToCourseSlugMap = new Map<number, string>();
 
           try {
-            const relations = await client.request(
-              readItems("modules_lessons", {
+             // 1. Fetch modules containing these text lessons
+             const modules = await client.request(
+              readItems("modules" as any, {
                 filter: {
-                  item: { _in: lessonIds },
-                  collection: { _eq: "text_lessons" },
+                  lessons: {
+                    "item:text_lessons": {
+                      id: { _in: lessonIds }
+                    }
+                  }
                 } as any,
-                fields: ["item", "modules_id"],
+                fields: [
+                  "id", 
+                  "slug", 
+                  "lessons.item", 
+                  "lessons.collection"
+                ]
               })
             );
 
-            const moduleIds = new Set<number>();
-            if (Array.isArray(relations)) {
-              relations.forEach((r: any) => {
-                if (r.item && r.modules_id) {
-                  lessonToModuleIdMap.set(r.item, r.modules_id);
-                  moduleIds.add(r.modules_id);
-                }
+            const foundModuleIds = new Set<number>();
+
+            if (Array.isArray(modules)) {
+              modules.forEach((m: any) => {
+                 if (m.lessons && Array.isArray(m.lessons)) {
+                   m.lessons.forEach((l: any) => {
+                     if (l.collection === 'text_lessons' && l.item) {
+                       const itemId = (typeof l.item === 'object' && l.item !== null) ? l.item.id : l.item;
+                       
+                       if (lessonIds.includes(itemId)) {
+                           if (!lessonToModuleIdMap.has(itemId)) {
+                              lessonToModuleIdMap.set(itemId, m.id);
+                              moduleIdToSlugMap.set(m.id, m.slug);
+                              foundModuleIds.add(m.id);
+                           }
+                       }
+                     }
+                   });
+                 }
               });
             }
 
-            if (moduleIds.size > 0) {
-              const modules = await client.request(
-                // @ts-ignore: Directus SDK typing issue
-                readItems("modules", {
-                  filter: { id: { _in: Array.from(moduleIds) } } as any,
-                  fields: ["id", "slug", "courses.courses_id.slug"],
+            // 2. Fetch courses containing these modules
+            if (foundModuleIds.size > 0) {
+              const courses = await client.request(
+                readItems("courses" as any, {
+                  filter: {
+                    modules: {
+                      modules_id: {
+                        id: { _in: Array.from(foundModuleIds) }
+                      }
+                    }
+                  } as any,
+                  fields: ["slug", "modules.modules_id.id"]
                 })
               );
 
-              if (Array.isArray(modules)) {
-                modules.forEach((m: any) => {
-                  moduleIdToSlugMap.set(m.id, m.slug);
-                  if (m.courses && m.courses.length > 0 && m.courses[0]?.courses_id?.slug) {
-                      moduleIdToCourseSlugMap.set(m.id, m.courses[0].courses_id.slug);
+              if (Array.isArray(courses)) {
+                courses.forEach((c: any) => {
+                  if (c.slug && Array.isArray(c.modules)) {
+                    c.modules.forEach((junction: any) => {
+                      if (junction.modules_id && junction.modules_id.id) {
+                         const modId = junction.modules_id.id;
+                         if (foundModuleIds.has(modId)) {
+                            moduleIdToCourseSlugMap.set(modId, c.slug);
+                         }
+                      }
+                    });
                   }
                 });
               }
             }
+
           } catch (error) {
             console.error("Error fetching module relations for text lessons:", error);
           }
 
           textLessons.forEach((l: any) => {
             const moduleId = lessonToModuleIdMap.get(l.id);
-            let moduleIdentifier = null;
-            let courseIdentifier = null;
+            let moduleIdentifier: string | number | null = null;
+            let courseIdentifier: string | null = null;
+            
             if (moduleId) {
               moduleIdentifier = moduleIdToSlugMap.get(moduleId) || moduleId;
-              courseIdentifier = moduleIdToCourseSlugMap.get(moduleId);
+              courseIdentifier = moduleIdToCourseSlugMap.get(moduleId) || null;
             }
+            
             const lessonIdentifier = l.slug || l.id;
             const link = (moduleIdentifier && courseIdentifier)
               ? `/play/${courseIdentifier}/${moduleIdentifier}/${lessonIdentifier}`
               : `#`;
-
+            
             results.push({
               type: "lesson",
               title: l.title,

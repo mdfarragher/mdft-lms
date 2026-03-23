@@ -34,27 +34,27 @@
 <% if (it.hasSearched) { %>
 <div class="container mt-2 pb-2">
     <div class="d-flex justify-content-center">
-        <div class="w-75 w-md-50">
+        <div class="w-100">
             <% if (it.results && it.results.length > 0) { %>
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white border-bottom">
+            <div class="card border-0">
+                <div class="card-header bg-white border-bottom mb-3">
                     <h5 class="mb-0">Search Results</h5>
                 </div>
                 <div class="list-group list-group-flush">
                     <% it.results.forEach(function(result) { %>
                     <a
                         href="<%= result.link %>"
-                        class="list-group-item list-group-item-action py-2 d-flex align-items-center gap-3 transition-bg search-result-item"
+                        class="list-group-item list-group-item-action py-2 d-flex align-items-center gap-3 transition-bg search-result-item border-0 mb-1"
                     >
                         <!-- Icon / Thumbnail -->
                         <div
                             class="flex-shrink-0"
-                            style="width: 60px; height: 40px"
+                            style="width: 40px; height: 27px"
                         >
                             <% if (result.type === 'course' || result.type ===
                             'certification') { %>
                             <img
-                                src="/thumb/<%= result.slug %>.jpg"
+                                src="/img/course.svg"
                                 class="w-100 h-100 object-fit-cover rounded"
                                 alt="<%= result.title %>"
                             />
@@ -84,33 +84,14 @@
                             class="flex-grow-1 min-width-0 d-flex align-items-center"
                         >
                             <%
-                                let badgeColor = '#212529'; // Default (Lesson)
-                                let textColor = 'white';
                                 let badgeText = result.type;
-
-                                if (result.type === 'course') {
-                                    badgeColor = '#AFEB2B';
-                                    textColor = 'black';
-                                } else if (result.type === 'certification') {
-                                    badgeColor = '#FA6915';
+                                if (result.type === 'certification') {
                                     badgeText = 'Cert';
                                 } else if (result.type === 'module') {
-                                    textColor = 'black';
                                     if (result.subtype === 'course') {
-                                        badgeColor = '#CCCCCC';
-                                        badgeText = 'module';
-                                    } else if (result.subtype === 'lab') {
-                                        badgeColor = '#CCCCCC';
-                                        badgeText = 'lab';
-                                    } else if (result.subtype === 'quiz') {
-                                        badgeColor = '#CCCCCC';
-                                        badgeText = 'quiz';
-                                    } else if (result.subtype === 'exam') {
-                                        badgeColor = '#CCCCCC';
-                                        badgeText = 'exam';
-                                    } else {
-                                        badgeColor = '#B8DAFF'; // Default module
-                                        badgeText = result.subtype || 'module';
+                                        badgeText = 'Module';
+                                    } else if (result.subtype) {
+                                        badgeText = result.subtype;
                                     }
                                 }
                             %>
@@ -119,8 +100,9 @@
                                 style="
                                     width: 70px;
                                     height: 24px;
-                                    color: <%= textColor %>;
-                                    background-color: <%= badgeColor %>;
+                                    color: black;
+                                    background-color: white;
+                                    border-color: black !important;
                                 "
                             >
                                 <%= badgeText %>
