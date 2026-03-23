@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title><%= it.title || "MDFT LMS" %></title>
+        <title><%= it.title || "MDFT LMS" %> - MDFT Pro</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <!-- Bootstrap 5 CSS -->
         <link
@@ -89,23 +89,10 @@
                             </ul>
                         </li>
                         <% } else { %>
-                        <li class="nav-item dropdown">
-                            <a
-                                class="nav-link dropdown-toggle d-flex align-items-center"
-                                href="#"
-                                role="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/login"
+                                >Login</a
                             >
-                                <i class="bi bi-person-circle fs-4"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <a class="dropdown-item" href="/login"
-                                        >Login</a
-                                    >
-                                </li>
-                            </ul>
                         </li>
                         <% } %>
                     </ul>
@@ -158,11 +145,11 @@
                         class="col-md-6 text-center text-md-start mb-3 mb-md-0"
                     >
                         <p class="mb-0 small">
-                            &copy; <%= new Date().getFullYear() %> MDFT LMS. All
+                            &copy; <%= new Date().getFullYear() %> MDFT Pro. All
                             rights reserved.
                         </p>
                         <p class="mb-0 small mt-1">
-                            <span class="me-1">🇪🇺</span> Hosted in the EU. We are GDPR compliant.
+                            Hosted in the EU <span class="me-1">🇪🇺</span> We are GDPR compliant.
                         </p>
                     </div>
                     <div class="col-md-6 text-center text-md-end">

@@ -1,0 +1,13 @@
+<div class="p-4">
+    <div class="mb-0">
+        <% if (it.currentLesson.content) { %>
+        <div class="markdown-content">
+             <%~ it.currentLesson.content %>
+        </div>
+        <% } else { %>
+        <p class="text-muted fst-italic">
+            <i class="bi bi-question-circle me-2"></i>Quiz content will be displayed here.
+        </p>
+        <% } %>
+    </div>
+</div>

@@ -139,7 +139,7 @@ export const handler: Handlers = {
           return {
             ...item,
             typeLabel,
-            link: `/play/${module.slug || module.id}/${item.slug || item.id}`,
+            link: `/play/${courseSlug}/${module.slug || module.id}/${item.slug || item.id}`,
           };
         });
 

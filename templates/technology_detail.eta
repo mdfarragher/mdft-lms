@@ -35,7 +35,7 @@
 
     <% if (it.courses && it.courses.length > 0) { %>
     <div class="mt-5">
-        <h2 class="h3 fw-bold mb-4">Related Courses</h2>
+        <h2 class="h3 fw-bold mb-4">Courses That Cover This Technology</h2>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             <% it.courses.forEach(function(course) { %>
             <div class="col">

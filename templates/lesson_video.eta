@@ -1,0 +1,31 @@
+<% if (it.currentLesson.video_url) { %>
+<div class="ratio ratio-16x9 bg-black">
+    <video
+        src="/video/<%= it.currentLesson.video_url %>"
+        controls
+        class="w-100 h-100"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+    >
+        Your browser does not support the video tag.
+    </video>
+    <div
+        class="flex-column justify-content-center align-items-center h-100 w-100 bg-dark text-white"
+        style="display: none;"
+    >
+        <i class="bi bi-exclamation-triangle fs-1 text-warning mb-3"></i>
+        <p class="mb-0">Video content not available.</p>
+        <small class="text-white-50">File not found</small>
+    </div>
+</div>
+<% } else { %>
+<div
+    class="p-5 text-center bg-light border border-dashed m-3 rounded"
+>
+    <i
+        class="bi bi-camera-video-off fs-1 text-muted mb-3 d-block"
+    ></i>
+    <p class="text-muted mb-0">
+        Video content not available.
+    </p>
+</div>
+<% } %>

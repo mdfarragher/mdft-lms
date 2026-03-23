@@ -167,6 +167,7 @@ export const handler: Handlers = {
           const lessonIds = videoLessons.map((l: any) => l.id);
           const lessonToModuleIdMap = new Map<string, number>();
           const moduleIdToSlugMap = new Map<number, string>();
+          const moduleIdToCourseSlugMap = new Map<number, string>();
 
           try {
             const relations = await client.request(
@@ -191,15 +192,19 @@ export const handler: Handlers = {
 
             if (moduleIds.size > 0) {
               const modules = await client.request(
+                // @ts-ignore: Directus SDK typing issue
                 readItems("modules", {
                   filter: { id: { _in: Array.from(moduleIds) } } as any,
-                  fields: ["id", "slug"],
+                  fields: ["id", "slug", "courses.courses_id.slug"],
                 })
               );
 
               if (Array.isArray(modules)) {
                 modules.forEach((m: any) => {
                   moduleIdToSlugMap.set(m.id, m.slug);
+                   if (m.courses && m.courses.length > 0 && m.courses[0]?.courses_id?.slug) {
+                      moduleIdToCourseSlugMap.set(m.id, m.courses[0].courses_id.slug);
+                  }
                 });
               }
             }
@@ -210,13 +215,15 @@ export const handler: Handlers = {
           videoLessons.forEach((l: any) => {
             const moduleId = lessonToModuleIdMap.get(l.id);
             let moduleIdentifier = null;
+            let courseIdentifier = null;
             if (moduleId) {
               moduleIdentifier = moduleIdToSlugMap.get(moduleId) || moduleId;
+              courseIdentifier = moduleIdToCourseSlugMap.get(moduleId);
             }
             const lessonIdentifier = l.slug || l.id;
-            const link = moduleIdentifier
-              ? `/play/${moduleIdentifier}/${lessonIdentifier}`
-              : `/play/lesson/${lessonIdentifier}`;
+            const link = (moduleIdentifier && courseIdentifier)
+              ? `/play/${courseIdentifier}/${moduleIdentifier}/${lessonIdentifier}`
+              : `#`;
 
             results.push({
               type: "lesson",
@@ -236,6 +243,7 @@ export const handler: Handlers = {
           const lessonIds = textLessons.map((l: any) => l.id);
           const lessonToModuleIdMap = new Map<string, number>();
           const moduleIdToSlugMap = new Map<number, string>();
+          const moduleIdToCourseSlugMap = new Map<number, string>();
 
           try {
             const relations = await client.request(
@@ -260,15 +268,19 @@ export const handler: Handlers = {
 
             if (moduleIds.size > 0) {
               const modules = await client.request(
+                // @ts-ignore: Directus SDK typing issue
                 readItems("modules", {
                   filter: { id: { _in: Array.from(moduleIds) } } as any,
-                  fields: ["id", "slug"],
+                  fields: ["id", "slug", "courses.courses_id.slug"],
                 })
               );
 
               if (Array.isArray(modules)) {
                 modules.forEach((m: any) => {
                   moduleIdToSlugMap.set(m.id, m.slug);
+                  if (m.courses && m.courses.length > 0 && m.courses[0]?.courses_id?.slug) {
+                      moduleIdToCourseSlugMap.set(m.id, m.courses[0].courses_id.slug);
+                  }
                 });
               }
             }
@@ -279,13 +291,15 @@ export const handler: Handlers = {
           textLessons.forEach((l: any) => {
             const moduleId = lessonToModuleIdMap.get(l.id);
             let moduleIdentifier = null;
+            let courseIdentifier = null;
             if (moduleId) {
               moduleIdentifier = moduleIdToSlugMap.get(moduleId) || moduleId;
+              courseIdentifier = moduleIdToCourseSlugMap.get(moduleId);
             }
             const lessonIdentifier = l.slug || l.id;
-            const link = moduleIdentifier
-              ? `/play/${moduleIdentifier}/${lessonIdentifier}`
-              : `/play/lesson/${lessonIdentifier}`;
+            const link = (moduleIdentifier && courseIdentifier)
+              ? `/play/${courseIdentifier}/${moduleIdentifier}/${lessonIdentifier}`
+              : `#`;
 
             results.push({
               type: "lesson",
