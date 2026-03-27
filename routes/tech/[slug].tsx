@@ -22,7 +22,7 @@ export const handler: Handlers = {
             },
           } as any,
           limit: 1,
-          fields: ["id", "title", "content", "info_url"],
+          fields: ["id", "title", "slug", "content", "content_summary", "info_url"],
         }),
       )) as any[];
 
@@ -46,6 +46,9 @@ export const handler: Handlers = {
         }),
       )) as any[];
 
+      if (technology.content_summary) {
+        technology.content_summary = await marked.parse(technology.content_summary);
+      }
       if (technology.content) {
         technology.content = await marked.parse(technology.content);
       }

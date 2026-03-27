@@ -23,7 +23,7 @@ export const handler: Handlers = {
             },
           } as any,
           limit: 1,
-          fields: ["id", "title", "content", "slug"],
+          fields: ["id", "title", "slug", "description", "content"],
         }),
       )) as any[];
 
@@ -33,6 +33,9 @@ export const handler: Handlers = {
 
       const dataset = datasets[0];
 
+      if (dataset.description) {
+        dataset.description = await marked.parse(dataset.description);
+      }
       if (dataset.content) {
         dataset.content = await marked.parse(dataset.content);
       }

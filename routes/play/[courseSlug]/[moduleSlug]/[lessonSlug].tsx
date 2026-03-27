@@ -119,14 +119,7 @@ export const handler: Handlers = {
       const lessonId = lessonJunction.item.id;
 
       // 3. Fetch the specific lesson details
-      // We explicitly request fields likely to contain content
       const fields = ["*"];
-      if (collection === "video_lessons") {
-        fields.push("video_url");
-      } else {
-        // Fetch content for text_lessons, lab_lessons, quiz_lessons etc.
-        fields.push("content");
-      }
 
       // @ts-ignore: Directus SDK typing issue
       const lesson = (await client.request(

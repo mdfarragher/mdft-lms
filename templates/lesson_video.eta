@@ -1,7 +1,7 @@
-<% if (it.currentLesson.video_url) { %>
+<% if (it.currentLesson.id) { %>
 <div class="ratio ratio-16x9 bg-black">
     <video
-        src="/video/<%= it.currentLesson.video_url %>"
+        src="/video/<%= it.currentLesson.id %>"
         controls
         class="w-100 h-100"
         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
@@ -14,7 +14,7 @@
     >
         <i class="bi bi-exclamation-triangle fs-1 text-warning mb-3"></i>
         <p class="mb-0">Video content not available.</p>
-        <small class="text-white-50">File not found</small>
+        <small class="text-white-50">The file could not be loaded</small>
     </div>
 </div>
 <% } else { %>

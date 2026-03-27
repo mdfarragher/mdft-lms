@@ -2,6 +2,14 @@
 
 <div class="container py-4">
     <div class="card shadow-lg mb-5 border-0">
+        <% if (it.certification.vendor && it.certification.vendor.toLowerCase() === "microsoft") { %>
+        <div class="bg-light">
+            <img
+                src="/banner/microsoft-category.png"
+                class="card-img-top object-fit-cover"
+            />
+        </div>
+        <% } %>
         <div class="card-body p-4 p-md-5">
             <div class="mb-4">
                 <span
@@ -15,9 +23,9 @@
                 </h1>
             </div>
 
-            <% if (it.certification.content) { %>
+            <% if (it.certification.content_summary) { %>
             <div class="mb-4 markdown-content text-muted">
-                <%~ it.certification.content %>
+                <%~ it.certification.content_summary %>
             </div>
             <% } else if (it.certification.description) { %>
             <div class="mb-4 markdown-content text-muted">
@@ -25,8 +33,22 @@
             </div>
             <% } %>
             <hr class="my-4" />
+            <div class="row row-cols-1 row-cols-sm-2 g-3 mb-4">
+                <% if (it.certification.vendor) { %>
+                <div class="col">
+                    Vendor: <br />
+                    <%= it.certification.vendor %>
+                </div>
+                <% } %>
+                <% if (it.certification.level) { %>
+                <div class="col">
+                    Level: <br />
+                    <span style="text-transform: capitalize"><%= it.certification.level %></span>
+                </div>
+                <% } %>
+            </div>
             <div>
-                More info: <br />
+                More information: <br />
                 <a
                     href="<%= it.certification.info_url %>"
                     class="branded-link"
@@ -38,6 +60,15 @@
             </div>
         </div>
     </div>
+
+    <% if (it.certification.content) { %>
+    <div class="container px-0 mb-5">
+        <h2 class="h3 fw-bold mb-4 border-bottom pb-2">Details</h2>
+        <div class="markdown-content text-muted">
+            <%~ it.certification.content %>
+        </div>
+    </div>
+    <% } %>
 
     <% if (it.isAuthenticated) { %>
     <div class="container px-0 mb-5">
@@ -76,7 +107,7 @@
     <% } %>
 
     <div class="container px-0 mb-5">
-        <h2 class="h3 fw-bold mb-4 border-bottom pb-2">Preparation Materials</h2>
+        <h2 class="h3 fw-bold mb-4 border-bottom pb-2">Preparation Courses</h2>
 
         <% if (it.courses && it.courses.length > 0) { %>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">

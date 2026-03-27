@@ -4,6 +4,7 @@
 
 import * as $_app from "./routes/_app.tsx";
 import * as $_middleware from "./routes/_middleware.ts";
+import * as $api_video_auth from "./routes/api/video-auth.ts";
 import * as $certification_slug_ from "./routes/certification/[slug].tsx";
 import * as $certifications_index from "./routes/certifications/index.tsx";
 import * as $course_slug_moduleSlug_ from "./routes/course/[slug]/[moduleSlug].tsx";
@@ -23,6 +24,7 @@ const manifest = {
   routes: {
     "./routes/_app.tsx": $_app,
     "./routes/_middleware.ts": $_middleware,
+    "./routes/api/video-auth.ts": $api_video_auth,
     "./routes/certification/[slug].tsx": $certification_slug_,
     "./routes/certifications/index.tsx": $certifications_index,
     "./routes/course/[slug]/[moduleSlug].tsx": $course_slug_moduleSlug_,

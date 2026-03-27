@@ -1,6 +1,12 @@
 <% layout("./layout.eta") %>
 
 <div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-3 small">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/courses" class="breadcrumb-link">Courses</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="#" class="breadcrumb-link"><%= it.course.title %></a></li>
+        </ol>
+    </nav>
     <div class="card shadow-lg mb-5 border-0 overflow-hidden">
         <% if (it.hasBanner) { %>
         <div class="ratio ratio-21x9 bg-light">
@@ -24,9 +30,9 @@
                 </h1>
             </div>
 
-            <% if (it.course.content) { %>
+            <% if (it.course.description) { %>
             <div class="mb-4 markdown-content text-muted">
-                <%~ it.course.content %>
+                <%~ it.course.description %>
             </div>
             <% } %> <% if (it.modules && it.modules.length > 0 && !it.isAuthenticated) { %>
             <div class="mt-4">
@@ -92,6 +98,15 @@
                 </div>
                 <% } %>
             </div>
+        </div>
+    </div>
+    <% } %>
+
+    <% if (it.course.content) { %>
+    <div class="container px-0 mb-5">
+        <h2 class="h3 fw-bold mb-4 border-bottom pb-2">Details</h2>
+        <div class="markdown-content text-muted">
+            <%~ it.course.content %>
         </div>
     </div>
     <% } %>
@@ -210,7 +225,7 @@
             class="ratio ratio-16x9 bg-black rounded overflow-hidden shadow-lg"
         >
             <video
-                src="/video/<%= it.course.preview_lesson.video_url %>"
+                src="/video/<%= it.course.preview_lesson.id %>"
                 controls
                 class="w-100 h-100"
                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
@@ -223,7 +238,7 @@
             >
                 <i class="bi bi-exclamation-triangle fs-1 text-warning mb-3"></i>
                 <p class="mb-0">Video content not available.</p>
-                <small class="text-white-50">File not found</small>
+                <small class="text-white-50">The file could not be loaded</small>
             </div>
         </div>
     </div>

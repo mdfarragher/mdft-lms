@@ -1,32 +1,80 @@
 <% layout("./layout.eta") %>
 
-<div class="container-fluid py-4">
-    <% if (it.isAuthenticated) { %>
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
+<div class="container py-4 pb-0">
+    <nav aria-label="breadcrumb" class="mb-3 small">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/courses" class="breadcrumb-link">Courses</a></li>
+            <% if (it.course) { %>
+            <li class="breadcrumb-item"><a href="/course/<%= it.courseSlug %>" class="breadcrumb-link"><%= it.course.title %></a></li>
+            <% } %>
+            <% if (it.module) { %>
+            <li class="breadcrumb-item"><a href="/course/<%= it.courseSlug %>/<%= it.module.slug %>" class="breadcrumb-link"><%= it.module.title %></a></li>
+            <% } %>
+            <li class="breadcrumb-item active" aria-current="page"><a href="#" class="breadcrumb-link"><%= it.currentLesson.title %></a></li>
+        </ol>
+    </nav>
+    <div class="card border-0 mb-3" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+        <div class="card-body px-4 py-3">
+            <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
+
+                <!-- Lesson position label + progress bar -->
+                <div class="flex-grow-1">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="text-muted">
-                            You are on lesson <%= it.currentIndex %> of <%= it.totalLessons %> in this module
+                        <span class="text-white-50 small">
+                            This is lesson <span class="text-white fw-bold"><%= it.currentIndex %></span> of <span class="text-white fw-bold"><%= it.totalLessons %></span> in this module
                         </span>
-                        <span class="fw-bold" style="color: #fa6915"><%= it.progress %>%</span>
+                        <span class="fw-bold small" style="color: #fa6915"><%= it.progress %>%</span>
                     </div>
-                    <div class="progress" style="height: 8px">
+                    <div class="progress" style="height: 6px; background-color: rgba(255,255,255,0.15);">
                         <div
                             class="progress-bar progress-bar-striped progress-bar-animated"
                             role="progressbar"
-                            style="width: <%= it.progress %>%; background-color: #fa6915"
+                            style="width: <%= it.progress %>%; background-color: #fa6915;"
                             aria-valuenow="<%= it.progress %>"
                             aria-valuemin="0"
                             aria-valuemax="100"
                         ></div>
                     </div>
                 </div>
-            </div>
+
+                <!-- Prev / Next buttons -->
+                <div class="flex-shrink-0 d-flex gap-2 align-self-end align-self-md-center">
+                    <% if (it.prevLesson) { %>
+                    <a href="<%= it.prevLesson.link %>"
+                       class="btn btn-sm d-flex align-items-center gap-2"
+                       style="background-color: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+                        <i class="bi bi-chevron-left"></i>
+                        <span>Prev</span>
+                    </a>
+                    <% } else { %>
+                    <button class="btn btn-sm disabled d-flex align-items-center gap-2"
+                            style="background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.3);">
+                        <i class="bi bi-chevron-left"></i>
+                        <span class="d-none d-sm-inline">First lesson</span>
+                    </button>
+                    <% } %>
+
+                    <% if (it.nextLesson) { %>
+                    <a href="<%= it.nextLesson.link %>"
+                       class="btn btn-sm d-flex align-items-center gap-2"
+                       style="background-color: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+                        <span>Next</span>
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                    <% } else { %>
+                    <button class="btn btn-sm disabled d-flex align-items-center gap-2"
+                            style="background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.3);">
+                        <span class="d-none d-sm-inline">Last lesson</span>
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                     <% } %>
+                </div>
+
         </div>
     </div>
-    <% } %>
+</div>
+
+<div class="container-fluid py-4 pt-3">
     <div class="row g-4">
         <!-- Main Content Area (Video/Lesson) -->
         <div class="col-lg-8 order-lg-1">
@@ -68,18 +116,18 @@
                         <h2 class="h4 fw-bold mb-3">Premium Content</h2>
                         <p class="lead mb-4 mx-auto" style="max-width: 600px">
                             Sign in with your student account or subscribe to
-                            access premium content.
+                            access lesson content.
                         </p>
-                        <div class="d-flex justify-content-center gap-3">
-                            <a href="/login" class="btn btn-primary btn-lg px-4"
-                                >Sign In</a
-                            >
-                            <a
-                                href="/subscribe"
-                                class="btn btn-outline-secondary btn-lg px-4"
-                                >Learn More</a
-                            >
-                        </div>
+                         <div class="d-flex justify-content-center gap-3">
+                             <a href="/login" class="btn btn-primary btn-lg px-4"
+                                 >Sign In</a
+                             >
+                             <a
+                                 href="/subscribe"
+                                 class="btn btn-outline-secondary btn-lg px-4"
+                                 >Learn More</a
+                             >
+                         </div>
                     </div>
                     <% } %>
                 </div>

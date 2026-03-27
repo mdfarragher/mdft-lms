@@ -36,6 +36,9 @@ export const handler: Handlers = {
       if (certification.description) {
         certification.description = await marked.parse(certification.description);
       }
+      if (certification.content_summary) {
+        certification.content_summary = await marked.parse(certification.content_summary);
+      }
       if (certification.content) {
         certification.content = await marked.parse(certification.content);
       }

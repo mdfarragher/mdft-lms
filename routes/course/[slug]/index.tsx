@@ -71,6 +71,7 @@ export const handler: Handlers = {
             "certification.content",
             "certification.content_summary",
             "certification.content_exam",
+            "preview_lesson.id",
             "preview_lesson.title",
             "preview_lesson.video_url",
             "preview_lesson.content",
@@ -248,6 +249,9 @@ export const handler: Handlers = {
         faqs,
         technologies,
         datasets,
+        description: courseRaw.description
+          ? await marked.parse(courseRaw.description)
+          : null,
         content: courseRaw.content
           ? await marked.parse(courseRaw.content)
           : null,

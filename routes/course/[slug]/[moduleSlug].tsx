@@ -118,6 +118,19 @@ export const handler: Handlers = {
         }
       }
 
+      const moduleIndex = (() => {
+        if (!course || !course.modules) return null;
+        const courseModules = course.modules
+          .map((m: any) => m.modules_id)
+          .filter((m: any) => m);
+        const idx = courseModules.findIndex((m: any) => m.slug === moduleSlug);
+        return idx !== -1 ? idx + 1 : null;
+      })();
+
+      const totalModules = course?.modules
+        ? course.modules.map((m: any) => m.modules_id).filter((m: any) => m).length
+        : null;
+
       if (module.content) {
         module.content = await marked.parse(module.content);
       }
@@ -163,6 +176,8 @@ export const handler: Handlers = {
           : null,
         prevModule,
         nextModule,
+        moduleIndex,
+        totalModules,
       });
 
       return new Response(html, {

@@ -13,14 +13,14 @@
                 <%= it.technology.title %>
             </h1>
 
-            <% if (it.technology.content) { %>
+            <% if (it.technology.content_summary) { %>
             <div class="markdown-content text-muted">
-                <%~ it.technology.content %>
+                <%~ it.technology.content_summary %>
             </div>
             <% } %>
             <hr class="my-4" />
             <div>
-                More info: <br />
+                More information: <br />
                 <a
                     href="<%= it.technology.info_url %>"
                     class="branded-link"
@@ -33,9 +33,18 @@
         </div>
     </div>
 
+    <% if (it.technology.content) { %>
+    <div class="container px-0 mb-5">
+        <h2 class="h3 fw-bold mb-4 border-bottom pb-2">Details</h2>
+        <div class="markdown-content text-muted">
+            <%~ it.technology.content %>
+        </div>
+    </div>
+    <% } %>
+
     <% if (it.courses && it.courses.length > 0) { %>
     <div class="mt-5">
-        <h2 class="h3 fw-bold mb-4">Courses That Cover This Technology</h2>
+        <h2 class="h3 fw-bold mb-4">Courses</h2>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             <% it.courses.forEach(function(course) { %>
             <div class="col">

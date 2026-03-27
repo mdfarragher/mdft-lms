@@ -1,2 +1,6 @@
-/static/video/*
-!/static/video/.gitkeep
+/nginx/videos/*
+/nginx/logs
+/backups/*
+
+# Fresh build directory
+_fresh/

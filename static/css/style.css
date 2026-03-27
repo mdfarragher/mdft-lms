@@ -121,6 +121,27 @@ h6,
     text-decoration: underline !important;
 }
 
+/* Breadcrumb link */
+.breadcrumb-item a.breadcrumb-link,
+.breadcrumb-item a.breadcrumb-link:link,
+.breadcrumb-item a.breadcrumb-link:visited,
+a.breadcrumb-link,
+a.breadcrumb-link:link,
+a.breadcrumb-link:visited {
+    --bs-link-color: #000;
+    --bs-link-color-rgb: 0, 0, 0;
+    color: #000 !important;
+    text-decoration: none !important;
+}
+
+.breadcrumb-item a.breadcrumb-link:hover,
+a.breadcrumb-link:hover {
+    --bs-link-color: #fa6915;
+    --bs-link-color-rgb: 250, 105, 21;
+    color: #fa6915 !important;
+    text-decoration: underline !important;
+}
+
 /* Layout helpers */
 body {
     display: flex;
