@@ -1,7 +1,7 @@
 /* Override Bootstrap buttons */
 .btn-primary {
     background-color: #afeb2b !important;
-    border-color: #afeb2b !important;
+    border-color: #8bc220 !important;
     color: #000000 !important; /* Optional: ensure readable text */
     border-radius: 6px;
 }
@@ -36,6 +36,14 @@
     border-color: #000000 !important;
     color: #000000 !important;
     text-decoration: underline !important;
+}
+
+.btn-outline-primary:focus,
+.btn-outline-primary:focus-visible {
+    background-color: transparent !important;
+    border-color: #fa6915 !important;
+    color: #000000 !important;
+    box-shadow: 0 0 0 0.25rem rgba(250, 105, 21, 0.25) !important;
 }
 
 .btn-outline-primary:disabled,
@@ -268,4 +276,74 @@ main {
 }
 .faq-section .faq-body {
     padding: 1rem 1.25rem;
+}
+
+/* Module/lesson navigation bar */
+.module-nav {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #3d3d3d 100%) !important;
+}
+
+.module-nav-pct {
+    color: #fa6915 !important;
+    font-size: 0.7rem !important;
+    font-weight: bold !important;
+    white-space: nowrap !important;
+    align-self: flex-end !important;
+}
+
+.module-nav-track {
+    height: 6px !important;
+    background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.module-nav-track .progress-bar {
+    background-color: #fa6915 !important;
+}
+
+.module-nav-btn {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+}
+
+.module-nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    color: #fff !important;
+}
+
+.module-nav-btn-disabled {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Override Bootstrap focus ring on form inputs */
+.form-control:focus {
+    border-color: #fa6915 !important;
+    box-shadow: 0 0 0 0.25rem rgba(250, 105, 21, 0.25) !important;
+}
+
+/* Override Bootstrap focus ring color globally */
+:root {
+    --bs-focus-ring-color: rgba(250, 105, 21, 0.25) !important;
+    --bs-focus-ring-box-shadow: 0 0 0 0.25rem rgba(250, 105, 21, 0.25) !important;
+}
+
+/* Override Bootstrap blue focus ring on ALL focusable elements */
+:focus-visible,
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+.btn:focus,
+[type="button"]:focus-visible,
+[type="submit"]:focus-visible,
+[type="reset"]:focus-visible,
+.form-select:focus,
+.form-check-input:focus,
+.nav-link:focus-visible,
+.dropdown-item:focus-visible,
+.page-link:focus-visible {
+    outline: none !important;
+    box-shadow: 0 0 0 0.25rem rgba(250, 105, 21, 0.25) !important;
 }

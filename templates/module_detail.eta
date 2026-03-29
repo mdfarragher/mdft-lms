@@ -10,13 +10,12 @@
             <li class="breadcrumb-item active" aria-current="page"><a href="#" class="breadcrumb-link"><%= it.module.title %></a></li>
         </ol>
     </nav>
-    <div class="card border-0 mb-3" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+    <div class="card border-0 mb-3 module-nav">
         <div class="card-body px-4 py-3">
             <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
 
                 <!-- Module position label + progress bar -->
                 <div class="flex-grow-1">
-                    <% var pct = (it.moduleIndex && it.totalModules) ? Math.round((it.moduleIndex / it.totalModules) * 100) : 0; %>
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="text-white-50 small">
                             <% if (it.moduleIndex && it.totalModules) { %>
@@ -25,14 +24,14 @@
                             Module progress
                             <% } %>
                         </span>
-                        <span class="fw-bold small" style="color: #fa6915"><%= pct %>%</span>
+                        <span class="text-white-50 small" style="font-size:0.7rem!important;align-self:flex-end">Course <span class="module-nav-pct"><%= it.moduleProgress %>%</span> complete</span>
                     </div>
-                    <div class="progress" style="height: 6px; background-color: rgba(255,255,255,0.15);">
+                    <div class="progress module-nav-track">
                         <div
                             class="progress-bar progress-bar-striped progress-bar-animated"
                             role="progressbar"
-                            style="width: <%= pct %>%; background-color: #fa6915;"
-                            aria-valuenow="<%= pct %>"
+                            style="width: <%= it.moduleProgress %>%;"
+                            aria-valuenow="<%= it.moduleProgress %>"
                             aria-valuemin="0"
                             aria-valuemax="100"
                         ></div>
@@ -43,32 +42,24 @@
                 <div class="flex-shrink-0 d-flex gap-2 align-self-end align-self-md-center">
                     <% if (it.prevModule) { %>
                     <a href="/course/<%= it.course.slug %>/<%= it.prevModule.slug %>"
-                       class="btn btn-sm d-flex align-items-center gap-2"
-                       style="background-color: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+                       class="btn btn-sm d-flex align-items-center gap-2 module-nav-btn">
                         <i class="bi bi-chevron-left"></i>
-                        <span>Prev</span>
+                        <span>Prev Module</span>
                     </a>
-                    <% } else { %>
-                    <button class="btn btn-sm disabled d-flex align-items-center gap-2"
-                            style="background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.3);">
-                        <i class="bi bi-chevron-left"></i>
-                        <span class="d-none d-sm-inline">First module</span>
-                    </button>
                     <% } %>
 
-                    <% if (it.nextModule) { %>
-                    <a href="/course/<%= it.course.slug %>/<%= it.nextModule.slug %>"
-                       class="btn btn-sm d-flex align-items-center gap-2"
-                       style="background-color: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+                    <% if (it.lessons && it.lessons.length > 0) { %>
+                    <a href="<%= it.lessons[0].link %>"
+                       class="btn btn-sm d-flex align-items-center gap-2 module-nav-btn">
                         <span>Next</span>
                         <i class="bi bi-chevron-right"></i>
                     </a>
-                    <% } else { %>
-                    <button class="btn btn-sm disabled d-flex align-items-center gap-2"
-                            style="background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.3);">
-                        <span class="d-none d-sm-inline">Last module</span>
+                    <% } else if (it.nextModule) { %>
+                    <a href="/course/<%= it.course.slug %>/<%= it.nextModule.slug %>"
+                       class="btn btn-sm d-flex align-items-center gap-2 module-nav-btn">
+                        <span>Next Module</span>
                         <i class="bi bi-chevron-right"></i>
-                    </button>
+                    </a>
                     <% } %>
                 </div>
 
@@ -94,13 +85,13 @@
             <% if (it.module.content) { %>
             <div class="mt-4 markdown-content"><%~ it.module.content %></div>
             <% } %>
-            <% if (it.lessons && it.lessons.length > 0 && !it.isAuthenticated) { %>
+            <% if (it.lessons && it.lessons.length > 0) { %>
             <div class="mt-4">
                 <a
                     href="<%= it.lessons[0].link %>"
                     class="btn btn-primary btn-lg"
                 >
-                    Start Module
+                    Start Module<i class="bi bi-chevron-right ms-2"></i>
                 </a>
             </div>
             <% } %>
@@ -143,7 +134,7 @@
                         style="width: 40px; height: 27px"
                     >
                         <img
-                            src="/img/lesson.svg"
+                            src="/img/<%= lesson.typeLabel === 'TEXT' ? 'text' : 'lesson' %>.svg"
                             class="w-100 h-100 object-fit-cover rounded"
                             alt="<%= lesson.title %>"
                         />

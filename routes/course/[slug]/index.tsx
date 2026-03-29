@@ -192,23 +192,8 @@ export const handler: Handlers = {
         );
       }
 
-      // Check for business case banner
-      let hasBusinessCaseBanner = false;
-      if (courseRaw.business_case?.slug) {
-        try {
-          await Deno.stat(
-            join(
-              Deno.cwd(),
-              "static",
-              "banner",
-              `${courseRaw.business_case.slug}.jpg`,
-            ),
-          );
-          hasBusinessCaseBanner = true;
-        } catch {
-          // Banner not found
-        }
-      }
+      // Assume action image always exists at /media/case/{slug}/action.jpg
+      const hasBusinessCaseBanner = !!courseRaw.business_case?.slug;
 
       // Process FAQs
       let faqs: any[] = [];

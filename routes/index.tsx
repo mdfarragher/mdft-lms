@@ -64,13 +64,29 @@ export const handler: Handlers = {
           })
         );
 
-        const [coursesResult, modulesTitleResult, videoLessonsResult, certificationsResult, textLessonsResult] =
+        const technologiesPromise = client.request(
+          readItems("technologies" as any, {
+            filter: { title: { _icontains: query } } as any,
+            fields: ["id", "title", "slug"],
+          })
+        );
+
+        const datasetsPromise = client.request(
+          readItems("datasets" as any, {
+            filter: { title: { _icontains: query } } as any,
+            fields: ["id", "title", "slug"],
+          })
+        );
+
+        const [coursesResult, modulesTitleResult, videoLessonsResult, certificationsResult, textLessonsResult, technologiesResult, datasetsResult] =
           await Promise.allSettled([
             coursesPromise,
             modulesTitlePromise,
             videoLessonsPromise,
             certificationsPromise,
             textLessonsPromise,
+            technologiesPromise,
+            datasetsPromise,
           ]);
 
         // Process Certifications
@@ -387,10 +403,37 @@ export const handler: Handlers = {
           });
         }
 
+        // Process Technologies
+        if (technologiesResult.status === "fulfilled" && Array.isArray(technologiesResult.value)) {
+          technologiesResult.value.forEach((t: any) => {
+            results.push({
+              type: "technology",
+              title: t.title,
+              slug: t.slug,
+              link: `/tech/${t.slug || t.id}`,
+            });
+          });
+        }
+
+        // Process Datasets
+        if (datasetsResult.status === "fulfilled" && Array.isArray(datasetsResult.value)) {
+          datasetsResult.value.forEach((d: any) => {
+            results.push({
+              type: "dataset",
+              title: d.title,
+              slug: d.slug,
+              link: `/dataset/${d.slug || d.id}`,
+            });
+          });
+        }
+
         // Deduplicate
         results = Array.from(
           new Map(results.map((item) => [item.link, item])).values()
         );
+
+        // Sort alphabetically by title
+        results.sort((a, b) => a.title.localeCompare(b.title));
       }
 
       const html = eta.render("index.eta", {

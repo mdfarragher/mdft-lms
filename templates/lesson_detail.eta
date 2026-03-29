@@ -13,7 +13,7 @@
             <li class="breadcrumb-item active" aria-current="page"><a href="#" class="breadcrumb-link"><%= it.currentLesson.title %></a></li>
         </ol>
     </nav>
-    <div class="card border-0 mb-3" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+    <div class="card border-0 mb-3 module-nav">
         <div class="card-body px-4 py-3">
             <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
 
@@ -23,13 +23,13 @@
                         <span class="text-white-50 small">
                             This is lesson <span class="text-white fw-bold"><%= it.currentIndex %></span> of <span class="text-white fw-bold"><%= it.totalLessons %></span> in this module
                         </span>
-                        <span class="fw-bold small" style="color: #fa6915"><%= it.progress %>%</span>
+                        <span class="text-white-50 small" style="font-size:0.7rem!important;align-self:flex-end">Course <span class="module-nav-pct"><%= it.progress %>%</span> complete</span>
                     </div>
-                    <div class="progress" style="height: 6px; background-color: rgba(255,255,255,0.15);">
+                    <div class="progress module-nav-track">
                         <div
                             class="progress-bar progress-bar-striped progress-bar-animated"
                             role="progressbar"
-                            style="width: <%= it.progress %>%; background-color: #fa6915;"
+                            style="width: <%= it.progress %>%;"
                             aria-valuenow="<%= it.progress %>"
                             aria-valuemin="0"
                             aria-valuemax="100"
@@ -41,29 +41,20 @@
                 <div class="flex-shrink-0 d-flex gap-2 align-self-end align-self-md-center">
                     <% if (it.prevLesson) { %>
                     <a href="<%= it.prevLesson.link %>"
-                       class="btn btn-sm d-flex align-items-center gap-2"
-                       style="background-color: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
-                        <i class="bi bi-chevron-left"></i>
-                        <span>Prev</span>
+                       class="btn btn-sm d-flex align-items-center gap-2 module-nav-btn">
+                        <i class="bi <%= it.prevLesson.type === 'PREV_MODULE' ? 'bi-chevron-double-up' : 'bi-chevron-left' %>"></i>
+                        <span><%= it.prevLesson.type === 'PREV_MODULE' ? 'Overview' : 'Prev' %></span>
                     </a>
-                    <% } else { %>
-                    <button class="btn btn-sm disabled d-flex align-items-center gap-2"
-                            style="background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.3);">
-                        <i class="bi bi-chevron-left"></i>
-                        <span class="d-none d-sm-inline">First lesson</span>
-                    </button>
                     <% } %>
 
                     <% if (it.nextLesson) { %>
                     <a href="<%= it.nextLesson.link %>"
-                       class="btn btn-sm d-flex align-items-center gap-2"
-                       style="background-color: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
-                        <span>Next</span>
+                       class="btn btn-sm d-flex align-items-center gap-2 module-nav-btn">
+                        <span><%= it.nextLesson.type === 'NEXT_MODULE' ? 'Next Module' : 'Next' %></span>
                         <i class="bi bi-chevron-right"></i>
                     </a>
                     <% } else { %>
-                    <button class="btn btn-sm disabled d-flex align-items-center gap-2"
-                            style="background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.3);">
+                    <button class="btn btn-sm disabled d-flex align-items-center gap-2 module-nav-btn-disabled">
                         <span class="d-none d-sm-inline">Last lesson</span>
                         <i class="bi bi-chevron-right"></i>
                     </button>
@@ -119,7 +110,7 @@
                             access lesson content.
                         </p>
                          <div class="d-flex justify-content-center gap-3">
-                             <a href="/login" class="btn btn-primary btn-lg px-4"
+                             <a id="lesson-signin-btn" href="/login" class="btn btn-primary btn-lg px-4"
                                  >Sign In</a
                              >
                              <a
@@ -136,14 +127,8 @@
                     <div
                         class="d-flex flex-wrap justify-content-between align-items-center gap-3"
                     >
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-outline-primary btn-sm">
-                                <i class="bi bi-clock me-1"></i>Watch Later
-                            </button>
-                        </div>
-
                         <div class="btn-group" role="group">
-                            <% if (it.prevLesson) { %>
+                            <% if (it.prevLesson && it.prevLesson.type !== 'PREV_MODULE') { %>
                             <a
                                 href="<%= it.prevLesson.link %>"
                                 class="btn btn-outline-primary btn-sm"
@@ -155,9 +140,9 @@
                             <% if (it.nextLesson.type === 'NEXT_MODULE') { %>
                             <a
                                 href="<%= it.nextLesson.link %>"
-                                class="btn btn-success btn-sm text-white"
+                                class="btn btn-primary btn-sm"
                             >
-                                Next Module<i class="bi bi-skip-forward-fill ms-1"></i>
+                                Next Module<i class="bi bi-chevron-right ms-1"></i>
                             </a>
                             <% } else { %>
                             <a
@@ -201,7 +186,7 @@
                     >
                     <a
                         href="<%= it.courseSlug ? `/course/${it.courseSlug}/${it.module.slug || it.module.id}` : '#' %>"
-                        class="text-decoration-none text-dark fw-bold text-truncate d-block <%= it.prevModuleLink ? 'p-3' : '' %>"
+                        class="text-decoration-none text-dark fw-bold text-truncate d-block"
                     >
                         <%= it.module.title %>
                     </a>

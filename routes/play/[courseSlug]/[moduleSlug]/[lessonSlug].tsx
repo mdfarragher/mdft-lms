@@ -87,6 +87,7 @@ export const handler: Handlers = {
             "modules.modules_id.slug",
             "modules.modules_id.title",
             "modules.modules_id.type",
+            "modules.modules_id.lessons.item.id",
           ],
         })
       );
@@ -153,13 +154,30 @@ export const handler: Handlers = {
       });
 
       const currentIndex = sidebarLessons.findIndex((l) => l.isActive);
-      
-      // Calculate progress percentage based on current lesson index (1-based for display logic)
-      const progress = sidebarLessons.length > 0 
-        ? Math.round(((currentIndex + 1) / sidebarLessons.length) * 100) 
-        : 0;
 
-      const prevLesson = currentIndex > 0 ? sidebarLessons[currentIndex - 1] : null;
+      // Calculate progress as position within the entire course (not just this module)
+      let progress = 0;
+      if (courses && courses.length > 0) {
+        const courseModulesList = (courses[0].modules || [])
+          .map((m: any) => m.modules_id)
+          .filter((m: any) => m);
+        const currentModuleIdx = courseModulesList.findIndex(
+          (m: any) => m.slug === moduleSlug || m.id === module.id
+        );
+        const totalCourseLessons = courseModulesList.reduce(
+          (sum: number, m: any) => sum + (m.lessons?.length ?? 0), 0
+        );
+        const lessonsBeforeThisModule = currentModuleIdx > 0
+          ? courseModulesList.slice(0, currentModuleIdx).reduce(
+              (sum: number, m: any) => sum + (m.lessons?.length ?? 0), 0
+            )
+          : 0;
+        progress = totalCourseLessons > 0
+          ? Math.round(((lessonsBeforeThisModule + currentIndex + 1) / totalCourseLessons) * 100)
+          : 0;
+      }
+
+      let prevLesson = currentIndex > 0 ? sidebarLessons[currentIndex - 1] : null;
       let nextLesson = currentIndex < sidebarLessons.length - 1 ? sidebarLessons[currentIndex + 1] : null;
 
       // Determine prev/next module links for sidebar and next button
@@ -198,31 +216,31 @@ export const handler: Handlers = {
                        })
                    )) as unknown as Module[];
 
-                   if (nextModules && nextModules.length > 0) {
-                       const nm = nextModules[0];
-                       const nmSortedJunctions = (nm.lessons || [])
-                           .filter((j) => j.item && typeof j.item === "object")
-                           .sort((a, b) => (a.sort || 0) - (b.sort || 0));
-                       
-                       if (nmSortedJunctions.length > 0) {
-                           const firstLesson = nmSortedJunctions[0].item as { id: string; slug?: string; title: string };
-                           nextModuleLink = {
-                               title: nextModuleRef.title,
-                               link: `/play/${courseSlug}/${nm.slug}/${firstLesson.slug || firstLesson.id}`,
-                           };
-                           
-                           // If we are at the last lesson, this becomes the primary "Next" action
-                           if (!nextLesson) {
-                               nextLesson = {
-                                   id: firstLesson.id,
-                                   title: `Next Module: ${firstLesson.title}`,
-                                   link: nextModuleLink.link,
-                                   type: 'NEXT_MODULE', 
-                                   isActive: false
-                               };
-                           }
-                       }
-                   }
+                    if (nextModules && nextModules.length > 0) {
+                        const nm = nextModules[0];
+                        const nmSortedJunctions = (nm.lessons || [])
+                            .filter((j) => j.item && typeof j.item === "object")
+                            .sort((a, b) => (a.sort || 0) - (b.sort || 0));
+                        
+                        if (nmSortedJunctions.length > 0) {
+                            const firstLesson = nmSortedJunctions[0].item as { id: string; slug?: string; title: string };
+                            nextModuleLink = {
+                                title: nextModuleRef.title,
+                                link: `/play/${courseSlug}/${nm.slug}/${firstLesson.slug || firstLesson.id}`,
+                            };
+                        }
+
+                        // If we are at the last lesson, go to the next module detail page
+                        if (!nextLesson) {
+                            nextLesson = {
+                                id: nextModuleRef.id,
+                                title: `Next Module: ${nextModuleRef.title}`,
+                                link: `/course/${courseSlug}/${nm.slug}`,
+                                type: 'NEXT_MODULE',
+                                isActive: false
+                            };
+                        }
+                    }
                }
 
                // Previous Module Logic
@@ -247,20 +265,31 @@ export const handler: Handlers = {
                        })
                    )) as unknown as Module[];
 
-                   if (prevModules && prevModules.length > 0) {
-                       const pm = prevModules[0];
-                       const pmSortedJunctions = (pm.lessons || [])
-                           .filter((j) => j.item && typeof j.item === "object")
-                           .sort((a, b) => (a.sort || 0) - (b.sort || 0));
-                       
-                       if (pmSortedJunctions.length > 0) {
-                           const firstLesson = pmSortedJunctions[0].item as { id: string; slug?: string; title: string };
-                           prevModuleLink = {
-                               title: prevModuleRef.title,
-                               link: `/play/${courseSlug}/${pm.slug}/${firstLesson.slug || firstLesson.id}`,
-                           };
-                       }
-                   }
+                    if (prevModules && prevModules.length > 0) {
+                        const pm = prevModules[0];
+                        const pmSortedJunctions = (pm.lessons || [])
+                            .filter((j) => j.item && typeof j.item === "object")
+                            .sort((a, b) => (a.sort || 0) - (b.sort || 0));
+                        
+                        if (pmSortedJunctions.length > 0) {
+                            const firstLesson = pmSortedJunctions[0].item as { id: string; slug?: string; title: string };
+                            prevModuleLink = {
+                                title: prevModuleRef.title,
+                                link: `/play/${courseSlug}/${pm.slug}/${firstLesson.slug || firstLesson.id}`,
+                            };
+                        }
+                    }
+               }
+
+               // If at the first lesson of any module, always show the Overview button
+               if (!prevLesson) {
+                   prevLesson = {
+                       id: module.id,
+                       title: module.title,
+                       link: `/course/${courseSlug}/${moduleSlug}`,
+                       type: 'PREV_MODULE',
+                       isActive: false
+                   };
                }
            }
         }

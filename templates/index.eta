@@ -51,10 +51,15 @@
                             class="flex-shrink-0"
                             style="width: 40px; height: 27px"
                         >
-                            <% if (result.type === 'course' || result.type ===
-                            'certification') { %>
+                            <% if (result.type === 'course') { %>
                             <img
                                 src="/img/course.svg"
+                                class="w-100 h-100 object-fit-cover rounded"
+                                alt="<%= result.title %>"
+                            />
+                            <% } else if (result.type === 'certification') { %>
+                            <img
+                                src="/img/certification.svg"
                                 class="w-100 h-100 object-fit-cover rounded"
                                 alt="<%= result.title %>"
                             />
@@ -67,6 +72,18 @@
                             <% } else if (result.type === 'lesson') { %>
                             <img
                                 src="/img/lesson.svg"
+                                class="w-100 h-100 object-fit-cover rounded"
+                                alt="<%= result.title %>"
+                            />
+                            <% } else if (result.type === 'technology') { %>
+                            <img
+                                src="/img/technology.svg"
+                                class="w-100 h-100 object-fit-cover rounded"
+                                alt="<%= result.title %>"
+                            />
+                            <% } else if (result.type === 'dataset') { %>
+                            <img
+                                src="/img/dataset.svg"
                                 class="w-100 h-100 object-fit-cover rounded"
                                 alt="<%= result.title %>"
                             />
@@ -87,6 +104,10 @@
                                 let badgeText = result.type;
                                 if (result.type === 'certification') {
                                     badgeText = 'Cert';
+                                } else if (result.type === 'technology') {
+                                    badgeText = 'Tech';
+                                } else if (result.type === 'dataset') {
+                                    badgeText = 'Dataset';
                                 } else if (result.type === 'module') {
                                     if (result.subtype === 'course') {
                                         badgeText = 'Module';
@@ -95,8 +116,15 @@
                                     }
                                 }
                             %>
+                            <h6 class="mb-0 fw-normal text-dark text-truncate">
+                                <%= result.title %>
+                            </h6>
+                        </div>
+
+                        <!-- Badge + Arrow -->
+                        <div class="flex-shrink-0 d-flex align-items-center gap-2">
                             <span
-                                class="badge rounded-pill border fw-normal text-capitalize fs-xs me-3 flex-shrink-0 d-flex align-items-center justify-content-center"
+                                class="badge rounded-pill border fw-normal text-capitalize fs-xs d-flex align-items-center justify-content-center"
                                 style="
                                     width: 70px;
                                     height: 24px;
@@ -107,14 +135,7 @@
                             >
                                 <%= badgeText %>
                             </span>
-                            <h6 class="mb-0 fw-normal text-dark text-truncate">
-                                <%= result.title %>
-                            </h6>
-                        </div>
-
-                        <!-- Arrow -->
-                        <div class="flex-shrink-0 text-muted">
-                            <i class="bi bi-chevron-right"></i>
+                            <i class="bi bi-chevron-right text-muted"></i>
                         </div>
                     </a>
                     <% }) %>

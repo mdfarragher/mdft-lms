@@ -14,6 +14,7 @@ services:
       # Data directories
       - ./nginx/cache:/var/cache/nginx:Z
       - ./nginx/videos:/var/videos:ro,Z  # Video files (read-only)
+      - ./nginx/media:/var/media:ro,Z   # Media files (read-only)
 
       # Logs (optional: persist or use journald)
       - ./nginx/logs:/var/log/nginx:Z

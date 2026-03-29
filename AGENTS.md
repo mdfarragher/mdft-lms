@@ -327,3 +327,33 @@ const filename = lesson.video_url.split("/").pop();
 - `components/Layout.tsx` is a legacy Preact component that mirrors `layout.eta` — it is not used anywhere and can be ignored
 - `islands/` is empty — no client-side interactivity has been added yet
 - Apollo client is set up but unused — all data fetching currently uses the Directus REST SDK
+
+---
+
+## Verification
+
+The nginx container runs on **port 8080 on localhost** and is accessible without authentication. Use it to verify rendered HTML and served static assets after making changes.
+
+**Check a rendered page for CSS classes:**
+```bash
+curl -s http://localhost:8080/course/{courseSlug}/{moduleSlug} | grep -o 'some-class[^"]*'
+```
+
+**Check a CSS file is being served correctly:**
+```bash
+curl -s http://localhost:8080/css/style.css | grep -A3 '\.some-class'
+```
+
+**Find real course/module slugs to test with:**
+```bash
+# List courses
+curl -s http://localhost:8080/courses | grep -o 'href="/course/[^"]*"'
+
+# List modules for a course
+curl -s http://localhost:8080/course/{courseSlug} | grep -o 'href="/course/{courseSlug}/[^"]*"'
+```
+
+**Clear the nginx static asset cache** (required after every CSS change — nginx caches CSS/JS for 1 hour):
+```bash
+podman exec mdft-lms-nginx find /var/cache/nginx/static -type f -delete && podman exec mdft-lms-nginx nginx -s reload
+```

@@ -7,11 +7,14 @@ import { join } from "$std/path/mod.ts";
 const eta = new Eta({ views: join(Deno.cwd(), "templates") });
 
 export const handler: Handlers = {
-  GET(_req, ctx) {
+  GET(req, _ctx) {
+    const url = new URL(req.url);
+    const next = url.searchParams.get("next") || "";
     const html = eta.render("login.eta", {
         title: "Login - MDFT LMS",
-        isAuthenticated: false, // Login page is for unauthenticated users
-        error: null
+        isAuthenticated: false,
+        error: null,
+        next,
     });
     return new Response(html, {
         headers: { "Content-Type": "text/html; charset=utf-8" },
@@ -21,12 +24,14 @@ export const handler: Handlers = {
     const form = await req.formData();
     const email = form.get("email")?.toString();
     const password = form.get("password")?.toString();
+    const next = form.get("next")?.toString() || "/";
 
     if (!email || !password) {
         const html = eta.render("login.eta", {
             title: "Login - MDFT LMS",
             isAuthenticated: false,
-            error: "Email and password required"
+            error: "Email and password required",
+            next,
         });
         return new Response(html, {
             headers: { "Content-Type": "text/html; charset=utf-8" },
@@ -54,7 +59,7 @@ export const handler: Handlers = {
         maxAge: 3600, // 1 hour
       });
       
-      headers.set("Location", "/");
+      headers.set("Location", next);
       return new Response(null, {
         status: 303,
         headers,
@@ -75,7 +80,8 @@ export const handler: Handlers = {
       const html = eta.render("login.eta", {
         title: "Login - MDFT LMS",
         isAuthenticated: false,
-        error: errorMessage
+        error: errorMessage,
+        next,
       });
 
       return new Response(html, {

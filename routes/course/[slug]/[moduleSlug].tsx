@@ -80,6 +80,7 @@ export const handler: Handlers = {
             "modules.modules_id.slug",
             "modules.modules_id.title",
             "modules.modules_id.type",
+            "modules.modules_id.lessons.item.id",
           ],
         }),
       );
@@ -118,18 +119,28 @@ export const handler: Handlers = {
         }
       }
 
-      const moduleIndex = (() => {
-        if (!course || !course.modules) return null;
-        const courseModules = course.modules
-          .map((m: any) => m.modules_id)
-          .filter((m: any) => m);
-        const idx = courseModules.findIndex((m: any) => m.slug === moduleSlug);
-        return idx !== -1 ? idx + 1 : null;
-      })();
+      const courseModulesList = course?.modules
+        ? course.modules.map((m: any) => m.modules_id).filter((m: any) => m)
+        : [];
 
-      const totalModules = course?.modules
-        ? course.modules.map((m: any) => m.modules_id).filter((m: any) => m).length
-        : null;
+      const currentModuleIdx = courseModulesList.findIndex((m: any) => m.slug === moduleSlug);
+
+      const totalLessons = courseModulesList.reduce(
+        (sum: number, m: any) => sum + (m.lessons?.length ?? 0), 0
+      );
+
+      const completedLessons = currentModuleIdx > 0
+        ? courseModulesList.slice(0, currentModuleIdx).reduce(
+            (sum: number, m: any) => sum + (m.lessons?.length ?? 0), 0
+          )
+        : 0;
+
+      const moduleProgress = totalLessons > 0
+        ? Math.round((completedLessons / totalLessons) * 100)
+        : 0;
+
+      const moduleIndex = currentModuleIdx !== -1 ? currentModuleIdx + 1 : null;
+      const totalModules = courseModulesList.length || null;
 
       if (module.content) {
         module.content = await marked.parse(module.content);
@@ -178,6 +189,7 @@ export const handler: Handlers = {
         nextModule,
         moduleIndex,
         totalModules,
+        moduleProgress,
       });
 
       return new Response(html, {

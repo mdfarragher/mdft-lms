@@ -90,7 +90,7 @@
                         </li>
                         <% } else { %>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/login"
+                            <a id="nav-login-link" class="nav-link text-dark" href="/login"
                                 >Login</a
                             >
                         </li>
@@ -178,5 +178,6 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"
         ></script>
+        <script src="/js/script.js"></script>
     </body>
 </html>
