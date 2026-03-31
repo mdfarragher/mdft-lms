@@ -3,7 +3,10 @@ import { getDirectusClient } from "../../utils/directus.ts";
 import { readItems } from "@directus/sdk";
 import { Eta } from "eta";
 import { join } from "$std/path/mod.ts";
-import { marked } from "marked";
+import { marked } from "../../utils/marked.ts";
+import { log } from "../../utils/logger.ts";
+
+const logger = log.getLogger("routes/tech");
 
 const eta = new Eta({ views: join(Deno.cwd(), "templates") });
 
@@ -64,7 +67,7 @@ export const handler: Handlers = {
         headers: { "Content-Type": "text/html; charset=utf-8" },
       });
     } catch (e: any) {
-      console.error("Fetch Technology Error:", e);
+      logger.error(`Fetch Technology Error: ${e}`);
       return new Response(`Error fetching technology: ${e.message}`, {
         status: 500,
       });

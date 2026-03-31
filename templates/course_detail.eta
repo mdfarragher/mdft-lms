@@ -124,7 +124,7 @@
                 <!-- Icon / Thumbnail -->
                 <div class="flex-shrink-0" style="width: 40px; height: 27px">
                     <img
-                        src="/img/<%= module.type %>.svg"
+                        src="/img/<%= module.type === 'course' ? 'module' : module.type %>.svg"
                         class="w-100 h-100 object-fit-cover rounded"
                         alt="<%= module.title %>"
                     />

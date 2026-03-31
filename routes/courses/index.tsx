@@ -3,6 +3,9 @@ import { getDirectusClient } from "../../utils/directus.ts";
 import { readItems } from "@directus/sdk";
 import { Eta } from "eta";
 import { join } from "$std/path/mod.ts";
+import { log } from "../../utils/logger.ts";
+
+const logger = log.getLogger("routes/courses");
 
 const eta = new Eta({ views: join(Deno.cwd(), "templates") });
 
@@ -35,7 +38,7 @@ export const handler: Handlers = {
         headers: { "Content-Type": "text/html; charset=utf-8" },
       });
     } catch (e: any) {
-      console.error("Fetch Courses Error:", e);
+      logger.error(`Fetch Courses Error: ${e}`);
       return new Response(`Error fetching courses: ${e.message}`, {
         status: 500,
       });

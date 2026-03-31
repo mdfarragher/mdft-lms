@@ -196,6 +196,16 @@ main {
     max-width: 100%;
     height: auto;
 }
+
+/* Lab lesson image hover + lightbox */
+.lab-content img {
+    cursor: zoom-in;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.lab-content img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+}
 .markdown-content a {
     color: #fa6915 !important; /* Orange */
     text-decoration: none !important;

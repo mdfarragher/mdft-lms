@@ -3,6 +3,9 @@ import { getDirectusClient } from "../utils/directus.ts";
 import { readMe, readItems } from "@directus/sdk";
 import { Eta } from "eta";
 import { join } from "$std/path/mod.ts";
+import { log } from "../utils/logger.ts";
+
+const logger = log.getLogger("routes/index");
 
 const eta = new Eta({ views: join(Deno.cwd(), "templates") });
 
@@ -18,8 +21,8 @@ export const handler: Handlers = {
       if (token) {
         try {
             user = await client.request(readMe());
-        } catch (e) {
-            console.error("Error fetching user:", e);
+            } catch (e) {
+                logger.error(`Error fetching user: ${e}`);
         }
       }
       
@@ -155,7 +158,7 @@ export const handler: Handlers = {
                 });
               }
             } catch (error) {
-              console.error("Error fetching course relations for modules:", error);
+              logger.error(`Error fetching course relations for modules: ${error}`);
             }
           }
 
@@ -263,7 +266,7 @@ export const handler: Handlers = {
               }
 
             } catch (error) {
-              console.error("Error fetching module relations for video lessons:", error);
+              logger.error(`Error fetching module relations for video lessons: ${error}`);
             }
 
 
@@ -377,7 +380,7 @@ export const handler: Handlers = {
             }
 
           } catch (error) {
-            console.error("Error fetching module relations for text lessons:", error);
+            logger.error(`Error fetching module relations for text lessons: ${error}`);
           }
 
           textLessons.forEach((l: any) => {
@@ -449,7 +452,7 @@ export const handler: Handlers = {
         headers: { "Content-Type": "text/html; charset=utf-8" },
       });
     } catch (e: any) {
-      console.error("Home Page Error:", e);
+      logger.error(`Home Page Error: ${e}`);
       return new Response(`Error: ${e.message}`, { status: 500 });
     }
   },

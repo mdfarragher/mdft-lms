@@ -16,6 +16,9 @@ services:
       - ./nginx/videos:/var/videos:ro,Z  # Video files (read-only)
       - ./nginx/media:/var/media:ro,Z   # Media files (read-only)
 
+      # Error pages
+      - ./nginx/html:/etc/nginx/html:ro,z
+
       # Logs (optional: persist or use journald)
       - ./nginx/logs:/var/log/nginx:Z
 

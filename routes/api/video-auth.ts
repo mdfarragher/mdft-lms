@@ -2,6 +2,9 @@ import { Handlers } from "$fresh/server.ts";
 import { getCookies } from "$std/http/cookie.ts";
 import { getDirectusClient } from "../../utils/directus.ts";
 import { readMe, readItem } from "@directus/sdk";
+import { log } from "../../utils/logger.ts";
+
+const logger = log.getLogger("routes/api/video-auth");
 
 // UUID validation helper
 function isValidUUID(str: string): boolean {
@@ -58,7 +61,8 @@ export const handler: Handlers = {
           "Cache-Control": "no-store",
         },
       });
-    } catch {
+    } catch (error) {
+      logger.error(`Video auth error: ${error}`);
       return new Response(null, { status: 401 });
     }
   },

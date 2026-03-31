@@ -3,6 +3,9 @@ import { setCookie } from "$std/http/cookie.ts";
 import { getDirectusClient } from "../utils/directus.ts";
 import { Eta } from "eta";
 import { join } from "$std/path/mod.ts";
+import { log } from "../utils/logger.ts";
+
+const logger = log.getLogger("routes/login");
 
 const eta = new Eta({ views: join(Deno.cwd(), "templates") });
 
@@ -67,7 +70,7 @@ export const handler: Handlers = {
     } catch (e: any) {
       // Directus SDK usually returns errors with structured info, but often a basic Error object
       // Let's capture the message
-      console.error("Login Error:", e);
+      logger.error(`Login Error: ${e}`);
       let errorMessage = "Login failed";
       
       // Try to parse Directus error

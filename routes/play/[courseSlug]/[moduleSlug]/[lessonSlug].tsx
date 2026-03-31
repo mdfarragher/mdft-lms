@@ -3,7 +3,10 @@ import { getDirectusClient } from "../../../../utils/directus.ts";
 import { readItems, readItem } from "@directus/sdk";
 import { Eta } from "eta";
 import { join } from "$std/path/mod.ts";
-import { marked } from "marked";
+import { marked } from "../../../../utils/marked.ts";
+import { log } from "../../../../utils/logger.ts";
+
+const logger = log.getLogger("routes/play");
 
 const eta = new Eta({ views: join(Deno.cwd(), "templates") });
 
@@ -324,7 +327,7 @@ export const handler: Handlers = {
         headers: { "Content-Type": "text/html; charset=utf-8" },
       });
     } catch (e: any) {
-      console.error("Fetch Lesson Error:", e);
+      logger.error(`Fetch Lesson Error: ${e}`);
       return new Response(`Error fetching lesson: ${e.message}`, {
         status: 500,
       });

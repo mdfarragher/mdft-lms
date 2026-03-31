@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
+  <!-- Shadow under the robot -->
+  <ellipse cx="100" cy="228" rx="52" ry="8" fill="#e0e0e0"/>
+
+  <!-- Legs (folded / slumped) -->
+  <rect x="68" y="188" width="22" height="30" rx="8" fill="#4a4a5a"/>
+  <rect x="110" y="188" width="22" height="30" rx="8" fill="#4a4a5a"/>
+  <!-- Feet -->
+  <rect x="60" y="212" width="32" height="12" rx="6" fill="#2a2a3a"/>
+  <rect x="108" y="212" width="32" height="12" rx="6" fill="#2a2a3a"/>
+
+  <!-- Body -->
+  <rect x="58" y="118" width="84" height="76" rx="14" fill="#5a5a6e"/>
+  <!-- Body panel / chest detail -->
+  <rect x="72" y="132" width="56" height="36" rx="6" fill="#4a4a5a"/>
+  <!-- Indicator lights on chest -->
+  <circle cx="86" cy="144" r="5" fill="#fa6915" opacity="0.5"/>
+  <circle cx="100" cy="144" r="5" fill="#afeb2b" opacity="0.4"/>
+  <circle cx="114" cy="144" r="5" fill="#4a90d9" opacity="0.4"/>
+  <!-- Power button (off) -->
+  <circle cx="100" cy="158" r="6" fill="#3a3a4a"/>
+  <path d="M100 153 v5" stroke="#888" stroke-width="2" stroke-linecap="round"/>
+  <path d="M96.5 154.5 a5 5 0 1 0 7 0" stroke="#888" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- Arms (drooping down) -->
+  <!-- Left arm -->
+  <rect x="34" y="122" width="26" height="14" rx="7" fill="#5a5a6e"/>
+  <!-- Left hand -->
+  <circle cx="28" cy="140" r="10" fill="#4a4a5a"/>
+  <line x1="34" y1="129" x2="34" y2="140" stroke="#5a5a6e" stroke-width="8"/>
+
+  <!-- Right arm -->
+  <rect x="140" y="122" width="26" height="14" rx="7" fill="#5a5a6e"/>
+  <!-- Right hand -->
+  <circle cx="172" cy="140" r="10" fill="#4a4a5a"/>
+  <line x1="166" y1="129" x2="166" y2="140" stroke="#5a5a6e" stroke-width="8"/>
+
+  <!-- Neck -->
+  <rect x="86" y="108" width="28" height="14" rx="4" fill="#4a4a5a"/>
+
+  <!-- Head -->
+  <rect x="50" y="48" width="100" height="66" rx="18" fill="#5a5a6e"/>
+  <!-- Head highlight -->
+  <rect x="56" y="54" width="88" height="54" rx="14" fill="#6a6a7e"/>
+
+  <!-- Antenna -->
+  <rect x="97" y="30" width="6" height="22" rx="3" fill="#4a4a5a"/>
+  <circle cx="100" cy="26" r="7" fill="#fa6915" opacity="0.6"/>
+  <circle cx="100" cy="26" r="4" fill="#fa6915" opacity="0.8"/>
+
+  <!-- Eyes — crossed out (X eyes = unconscious) -->
+  <!-- Left eye socket -->
+  <rect x="62" y="62" width="30" height="22" rx="8" fill="#3a3a4a"/>
+  <!-- Left X -->
+  <line x1="68" y1="68" x2="86" y2="80" stroke="#fa6915" stroke-width="3" stroke-linecap="round"/>
+  <line x1="86" y1="68" x2="68" y2="80" stroke="#fa6915" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Right eye socket -->
+  <rect x="108" y="62" width="30" height="22" rx="8" fill="#3a3a4a"/>
+  <!-- Right X -->
+  <line x1="114" y1="68" x2="132" y2="80" stroke="#fa6915" stroke-width="3" stroke-linecap="round"/>
+  <line x1="132" y1="68" x2="114" y2="80" stroke="#fa6915" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Mouth — wavy / dizzy -->
+  <path d="M74 96 q6 -6 13 0 q6 6 13 0 q6 -6 13 0" stroke="#3a3a4a" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+  <!-- Small stars / dizzy marks around head -->
+  <!-- Star 1 -->
+  <text x="28" y="58" font-size="16" fill="#fa6915" opacity="0.8" transform="rotate(-20,36,52)">★</text>
+  <!-- Star 2 -->
+  <text x="154" y="52" font-size="12" fill="#afeb2b" opacity="0.8" transform="rotate(15,158,46)">★</text>
+  <!-- Star 3 -->
+  <text x="42" y="40" font-size="10" fill="#4a90d9" opacity="0.7" transform="rotate(-10,46,35)">★</text>
+</svg>

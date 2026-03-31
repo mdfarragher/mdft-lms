@@ -3,7 +3,10 @@ import { Eta } from "eta";
 import { join } from "$std/path/mod.ts";
 import { getDirectusClient } from "../utils/directus.ts";
 import { readMe, readItems } from "@directus/sdk";
-import { marked } from "marked";
+import { marked } from "../utils/marked.ts";
+import { log } from "../utils/logger.ts";
+
+const logger = log.getLogger("routes/profile");
 
 const eta = new Eta({ views: join(Deno.cwd(), "templates") });
 
@@ -160,11 +163,11 @@ export const handler: Handlers = {
                 };
             }
         } catch (courseError) {
-            console.error("Error fetching course for certification goal:", courseError);
+            logger.error(`Error fetching course for certification goal: ${courseError}`);
         }
       }
     } catch (error) {
-      console.error("Error fetching user profile:", error);
+      logger.error(`Error fetching user profile: ${error}`);
     }
 
     let learningGoal: any[] = [];
@@ -192,7 +195,7 @@ export const handler: Handlers = {
             });
         }
     } catch (error) {
-        console.error("Error fetching courses for learning goal:", error);
+        logger.error(`Error fetching courses for learning goal: ${error}`);
     }
 
     const html = eta.render("profile.eta", {

@@ -65,7 +65,7 @@
                             />
                             <% } else if (result.type === 'module') { %>
                             <img
-                                src="/img/<%= result.subtype || 'module' %>.svg"
+                                src="/img/<%= result.subtype === 'course' ? 'module' : (result.subtype || 'module') %>.svg"
                                 class="w-100 h-100 object-fit-cover rounded"
                                 alt="<%= result.title %>"
                             />

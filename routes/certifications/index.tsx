@@ -3,6 +3,9 @@ import { getDirectusClient } from "../../utils/directus.ts";
 import { readItems } from "@directus/sdk";
 import { Eta } from "eta";
 import { join } from "$std/path/mod.ts";
+import { log } from "../../utils/logger.ts";
+
+const logger = log.getLogger("routes/certifications");
 
 const eta = new Eta({ views: join(Deno.cwd(), "templates") });
 
@@ -37,7 +40,7 @@ export const handler: Handlers = {
         headers: { "Content-Type": "text/html; charset=utf-8" },
       });
     } catch (e: any) {
-      console.error("Fetch Certifications Error:", e);
+      logger.error(`Fetch Certifications Error: ${e}`);
       return new Response(`Error fetching certifications: ${e.message}`, {
         status: 500,
       });

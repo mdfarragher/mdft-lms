@@ -3,35 +3,10 @@ import { getDirectusClient } from "../../../utils/directus.ts";
 import { readItems } from "@directus/sdk";
 import { Eta } from "eta";
 import { join } from "$std/path/mod.ts";
-import { marked } from "marked";
+import { marked } from "../../../utils/marked.ts";
+import { log } from "../../../utils/logger.ts";
 
-// Define custom extension for images with classes
-const imageWithClassExtension = {
-  name: "imageWithClass",
-  level: "inline" as const,
-  start(src: string) {
-    return src.match(/!\[/)?.index;
-  },
-  tokenizer(src: string, _tokens: any) {
-    const rule = /^!\[(.*?)\]\((.*?)\)\s*\{\s*\.([a-zA-Z0-9_-]+)\s*\}/;
-    const match = rule.exec(src);
-    if (match) {
-      return {
-        type: "imageWithClass",
-        raw: match[0],
-        text: match[1],
-        href: match[2],
-        className: match[3],
-        tokens: [],
-      };
-    }
-  },
-  renderer(token: any) {
-    return `<img src="${token.href}" alt="${token.text}" class="${token.className}">`;
-  },
-};
-
-marked.use({ extensions: [imageWithClassExtension] });
+const logger = log.getLogger("routes/course");
 
 const eta = new Eta({ views: join(Deno.cwd(), "templates") });
 
@@ -262,7 +237,7 @@ export const handler: Handlers = {
             .slice(0, 2);
         }
       } catch (e) {
-        console.error("Error fetching testimonials:", e);
+        logger.error(`Error fetching testimonials: ${e}`);
         // Continue without testimonials
       }
 
@@ -280,7 +255,7 @@ export const handler: Handlers = {
         headers: { "Content-Type": "text/html; charset=utf-8" },
       });
     } catch (e: any) {
-      console.error("Fetch Course Error:", e);
+      logger.error(`Fetch Course Error: ${e}`);
       return new Response(`Error fetching course: ${e.message}`, {
         status: 500,
       });

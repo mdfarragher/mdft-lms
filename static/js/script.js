@@ -6,3 +6,18 @@
         if (el) el.href = "/login?next=" + next;
     });
 })();
+
+// Lab lesson image lightbox
+document.addEventListener('DOMContentLoaded', function () {
+    var modalEl = document.getElementById('labImageModal');
+    if (!modalEl) return;
+    var modal = new bootstrap.Modal(modalEl);
+    var modalImg = document.getElementById('labImageModalImg');
+    document.querySelectorAll('.lab-content img').forEach(function (img) {
+        img.addEventListener('click', function () {
+            modalImg.src = img.src;
+            modalImg.alt = img.alt;
+            modal.show();
+        });
+    });
+});
