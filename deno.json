@@ -18,7 +18,12 @@
     "react": "npm:react@18.2.0",
     "react-dom": "npm:react-dom@18.2.0",
     "eta": "npm:eta@^3.4.0",
-    "marked": "npm:marked@^15.0.0"
+    "marked": "npm:marked@^15.0.0",
+    "highlight.js": "npm:highlight.js@^11.11.1",
+    "highlight.js/lib/core": "npm:highlight.js@^11.11.1/lib/core",
+    "highlight.js/lib/languages/bash": "npm:highlight.js@^11.11.1/lib/languages/bash",
+    "highlight.js/lib/languages/csharp": "npm:highlight.js@^11.11.1/lib/languages/csharp",
+    "highlight.js/lib/languages/fsharp": "npm:highlight.js@^11.11.1/lib/languages/fsharp"
   },
   "compilerOptions": {
     "lib": ["deno.window", "dom", "dom.iterable", "dom.asynciterable"],

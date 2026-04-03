@@ -11,6 +11,7 @@
     "npm:@directus/sdk@15": "15.1.0",
     "npm:eta@^3.4.0": "3.5.0",
     "npm:graphql@^16.8.1": "16.13.0",
+    "npm:highlight.js@^11.11.1": "11.11.1",
     "npm:marked@15": "15.0.12",
     "npm:react-dom@18.2.0": "18.2.0_react@18.2.0",
     "npm:react@18.2.0": "18.2.0"
@@ -117,6 +118,9 @@
     },
     "graphql@16.13.0": {
       "integrity": "sha512-uSisMYERbaB9bkA9M4/4dnqyktaEkf1kMHNKq/7DHyxVeWqHQ2mBmVqm5u6/FVHwF3iCNalKcg82Zfl+tffWoA=="
+    },
+    "highlight.js@11.11.1": {
+      "integrity": "sha512-Xwwo44whKBVCYoliBQwaPvtd/2tYFkRQtXDWj1nackaV2JPXx3L0+Jvd8/qCJ2p+ML0/XVkJ2q+Mr+UVdpJK5w=="
     },
     "hoist-non-react-statics@3.3.2": {
       "integrity": "sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==",
@@ -679,6 +683,7 @@
       "npm:@directus/sdk@15",
       "npm:eta@^3.4.0",
       "npm:graphql@^16.8.1",
+      "npm:highlight.js@^11.11.1",
       "npm:marked@15",
       "npm:react-dom@18.2.0",
       "npm:react@18.2.0"

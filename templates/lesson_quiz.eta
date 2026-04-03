@@ -1,13 +1,56 @@
 <div class="p-4">
-    <div class="mb-0">
-        <% if (it.currentLesson.content) { %>
-        <div class="markdown-content">
-             <%~ it.currentLesson.content %>
-        </div>
-        <% } else { %>
-        <p class="text-muted fst-italic">
-            <i class="bi bi-question-circle me-2"></i>Quiz content will be displayed here.
-        </p>
-        <% } %>
+
+    <% if (it.currentLesson.content) { %>
+    <div class="markdown-content mb-4">
+        <%~ it.currentLesson.content %>
     </div>
+    <% } else { %>
+    <p class="text-muted fst-italic mb-4">
+        <i class="bi bi-question-circle me-2"></i>Quiz content will be displayed here.
+    </p>
+    <% } %>
+
+    <% if (it.currentLesson.question_type === 'single' && it.currentLesson.answers && it.currentLesson.answers.length > 0) { %>
+
+    <input type="checkbox" id="quiz-submitted-<%= it.currentLesson.id %>" class="quiz-submitted-toggle" autocomplete="off">
+
+    <div class="quiz-answers-list">
+        <% it.currentLesson.answers.forEach(function(answer, i) { %>
+        <div class="quiz-answer-wrap <%= answer.is_correct ? 'is-correct' : 'is-incorrect' %>">
+            <input
+                type="radio"
+                id="<%= answer.id %>"
+                name="<%= it.currentLesson.id %>"
+                class="quiz-radio"
+                autocomplete="off"
+            >
+            <label for="<%= answer.id %>" class="quiz-option-label">
+                <span class="quiz-radio-circle"></span>
+                <span class="quiz-answer-content">
+                    <span class="markdown-content"><%~ answer.content %></span>
+                    <% if (answer.explanation) { %>
+                    <span class="quiz-explanation">
+                        <% if (answer.is_correct) { %><strong class="text-success">Correct.</strong><% } else { %><strong class="text-danger">Incorrect.</strong><% } %>
+                        <%~ answer.explanation %>
+                    </span>
+                    <% } %>
+                </span>
+                <span class="quiz-result-icon">
+                    <% if (answer.is_correct) { %>
+                    <i class="bi bi-check-circle-fill"></i>
+                    <% } else { %>
+                    <i class="bi bi-x-circle-fill"></i>
+                    <% } %>
+                </span>
+            </label>
+        </div>
+        <% }); %>
+    </div>
+
+    <label for="quiz-submitted-<%= it.currentLesson.id %>" class="quiz-submit-btn mt-3">
+        <i class="bi bi-send me-1"></i> Submit Answer
+    </label>
+
+    <% } %>
+
 </div>

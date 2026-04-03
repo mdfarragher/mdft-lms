@@ -19,10 +19,10 @@
 
                 <!-- Lesson position label + progress bar -->
                 <div class="flex-grow-1">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="text-white-50 small">
-                            This is lesson <span class="text-white fw-bold"><%= it.currentIndex %></span> of <span class="text-white fw-bold"><%= it.totalLessons %></span> in this module
-                        </span>
+                     <div class="d-flex justify-content-between align-items-center mb-2">
+                         <span class="text-white-50 small">
+                             <% var navText = it.module.type === 'lab' ? 'This is lab X of Y in this lab module' : it.module.type === 'quiz' ? 'This is question X of Y in this quiz' : it.module.type === 'exam' ? 'This is question X of Y in this exam' : 'This is lesson X of Y in this module'; navText = navText.replace('X', '<span class="text-white fw-bold">' + it.currentIndex + '</span>').replace('Y', '<span class="text-white fw-bold">' + it.totalLessons + '</span>'); %><%~ navText %>
+                         </span>
                         <span class="text-white-50 small" style="font-size:0.7rem!important;align-self:flex-end">Course <span class="module-nav-pct"><%= it.progress %>%</span> complete</span>
                     </div>
                     <div class="progress module-nav-track">
@@ -61,276 +61,216 @@
                      <% } %>
                 </div>
 
+            </div>
         </div>
     </div>
-</div>
-
-<div class="container-fluid py-4 pt-3">
-    <div class="row g-4">
-        <!-- Main Content Area (Video/Lesson) -->
-        <div class="col-lg-8 order-lg-1">
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-header bg-white py-3 border-bottom">
-                    <div class="d-flex align-items-center gap-2">
-                        <h1 class="h4 mb-0 fw-bold text-dark">
-                            <%= it.currentLesson.title %>
-                        </h1>
-                    </div>
-                </div>
-
-                <div class="card-body p-0">
-                    <% if (it.isAuthenticated) { %>
-                    <% if (it.lessonType === 'VIDEO') { %>
-                    <%~ include("./lesson_video.eta", it) %>
-                    <% } else if (it.lessonType === 'TEXT') { %>
-                    <%~ include("./lesson_text.eta", it) %>
-                    <% } else if (it.lessonType === 'LAB') { %>
-                    <%~ include("./lesson_lab.eta", it) %>
-                    <% } else if (it.lessonType === 'QUIZ' || it.lessonType === 'QUIZ_QUESTIONS') { %>
-                    <%~ include("./lesson_quiz.eta", it) %>
-                    <% } else { %>
-                    <div class="p-4">
-                        <div class="mb-0">
-                            <!-- Content for other lesson types would go here -->
-                            <p class="text-muted fst-italic">
-                                <i class="bi bi-info-circle me-2"></i>Content
-                                for this lesson type is displayed here.
-                            </p>
+    <div class="container-fluid py-4 pt-3">
+        <div class="row g-4">
+            <!-- Main Content Area (Video/Lesson) -->
+            <div class="col-lg-8 order-lg-1">
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-white py-3 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <h1 class="h4 mb-0 fw-bold text-dark">
+                                <%= it.currentLesson.title %>
+                            </h1>
                         </div>
                     </div>
-                    <% } %> <% } else { %>
-                    <div class="text-center p-5 bg-light m-3 rounded">
-                        <i
-                            class="bi bi-lock-fill fs-1 mb-3 d-block"
-                            style="color: #fa6915"
-                        ></i>
-                        <h2 class="h4 fw-bold mb-3">Premium Content</h2>
-                        <p class="lead mb-4 mx-auto" style="max-width: 600px">
-                            Sign in with your student account or subscribe to
-                            access lesson content.
-                        </p>
-                         <div class="d-flex justify-content-center gap-3">
-                             <a id="lesson-signin-btn" href="/login" class="btn btn-primary btn-lg px-4"
-                                 >Sign In</a
-                             >
-                             <a
-                                 href="/subscribe"
-                                 class="btn btn-outline-secondary btn-lg px-4"
-                                 >Learn More</a
-                             >
-                         </div>
+
+                    <div class="card-body p-0">
+                        <% if (it.isAuthenticated) { %>
+                        <% if (it.lessonType === 'VIDEO') { %>
+                        <%~ include("./lesson_video.eta", it) %>
+                        <% } else if (it.lessonType === 'TEXT') { %>
+                        <%~ include("./lesson_text.eta", it) %>
+                        <% } else if (it.lessonType === 'LAB') { %>
+                        <%~ include("./lesson_lab.eta", it) %>
+                        <% } else if (it.lessonType === 'QUIZ' || it.lessonType === 'QUIZ_QUESTIONS') { %>
+                        <%~ include("./lesson_quiz.eta", it) %>
+                        <% } else { %>
+                        <div class="p-4">
+                            <div class="mb-0">
+                                <!-- Content for other lesson types would go here -->
+                                <p class="text-muted fst-italic">
+                                    <i class="bi bi-info-circle me-2"></i>Content
+                                    for this lesson type is displayed here.
+                                </p>
+                            </div>
+                        </div>
+                        <% } %> <% } else { %>
+                        <div class="text-center p-5 bg-light m-3 rounded">
+                            <i
+                                class="bi bi-lock-fill fs-1 mb-3 d-block"
+                                style="color: #fa6915"
+                            ></i>
+                            <h2 class="h4 fw-bold mb-3">Premium Content</h2>
+                            <p class="lead mb-4 mx-auto" style="max-width: 600px">
+                                Sign in with your student account or subscribe to
+                                access lesson content.
+                            </p>
+                            <div class="d-flex justify-content-center gap-3">
+                                <a id="lesson-signin-btn" href="/login" class="btn btn-primary btn-lg px-4"
+                                    >Sign In</a
+                                >
+                                <a
+                                    href="/subscribe"
+                                    class="btn btn-outline-secondary btn-lg px-4"
+                                    >Learn More</a
+                                >
+                            </div>
+                        </div>
+                        <% } %>
+                    </div>
+
+                                         <div class="card-footer bg-white p-3 border-top">
+                        <div
+                            class="d-flex flex-wrap justify-content-end align-items-center gap-3"
+                        >
+                            <div class="btn-group" role="group">
+                                <% if (it.prevLesson && it.prevLesson.type !== 'PREV_MODULE') { %>
+                                <a
+                                    href="<%= it.prevLesson.link %>"
+                                    class="btn btn-outline-primary btn-sm"
+                                >
+                                    <i class="bi bi-chevron-left me-1"></i>Previous
+                                </a>
+                                <% } %>
+                                <% if (it.nextLesson) { %>
+                                <% if (it.nextLesson.type === 'NEXT_MODULE') { %>
+                                <a
+                                    href="<%= it.nextLesson.link %>"
+                                    class="btn btn-primary btn-sm"
+                                >
+                                    Next Module<i class="bi bi-chevron-right ms-1"></i>
+                                </a>
+                                <% } else { %>
+                                <a
+                                    href="<%= it.nextLesson.link %>"
+                                    class="btn btn-outline-primary btn-sm"
+                                >
+                                    Next<i class="bi bi-chevron-right ms-1"></i>
+                                </a>
+                                <% } %>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar (Lesson List) -->
+            <div class="col-lg-4 order-lg-2">
+                <div
+                    class="card shadow-sm border-0 sticky-lg-top sticky-top-custom"
+                >
+                    <% if (it.prevModule) { %>
+                    <div class="card-header bg-white py-3 border-bottom" style="opacity: 0.4">
+                        <small
+                            class="text-muted text-uppercase fw-bold d-block mb-1 fs-xxs"
+                            >Previous Module</small
+                        >
+                        <a
+                            href="/course/<%= it.course.slug %>/<%= it.prevModule.slug %>"
+                            class="text-decoration-none text-dark fw-bold text-truncate d-block"
+                            title="<%= it.prevModule.title %>"
+                        >
+                            <%= it.prevModule.title %>
+                        </a>
                     </div>
                     <% } %>
-                </div>
-
-                <div class="card-footer bg-white p-3 border-top">
-                    <div
-                        class="d-flex flex-wrap justify-content-end align-items-center gap-3"
-                    >
-                        <div class="btn-group" role="group">
-                            <% if (it.prevLesson && it.prevLesson.type !== 'PREV_MODULE') { %>
-                            <a
-                                href="<%= it.prevLesson.link %>"
-                                class="btn btn-outline-primary btn-sm"
-                            >
-                                <i class="bi bi-chevron-left me-1"></i>Previous
-                            </a>
-                            <% } %>
-                            <% if (it.nextLesson) { %>
-                            <% if (it.nextLesson.type === 'NEXT_MODULE') { %>
-                            <a
-                                href="<%= it.nextLesson.link %>"
-                                class="btn btn-primary btn-sm"
-                            >
-                                Next Module<i class="bi bi-chevron-right ms-1"></i>
-                            </a>
-                            <% } else { %>
-                            <a
-                                href="<%= it.nextLesson.link %>"
-                                class="btn btn-outline-primary btn-sm"
-                            >
-                                Next<i class="bi bi-chevron-right ms-1"></i>
-                            </a>
-                            <% } %>
-                            <% } %>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sidebar (Lesson List) -->
-        <div class="col-lg-4 order-lg-2">
-            <div
-                class="card shadow-sm border-0 sticky-lg-top sticky-top-custom"
-            >
-                <% if (it.prevModule) { %>
-                <div class="card-header bg-white py-3 border-bottom" style="opacity: 0.4">
-                    <small
-                        class="text-muted text-uppercase fw-bold d-block mb-1 fs-xxs"
-                        >Previous Module</small
-                    >
-                    <a
-                        href="/course/<%= it.course.slug %>/<%= it.prevModule.slug %>"
-                        class="text-decoration-none text-dark fw-bold text-truncate d-block"
-                        title="<%= it.prevModule.title %>"
-                    >
-                        <%= it.prevModule.title %>
-                    </a>
-                </div>
-                <% } %>
-                <div class="card-header bg-light py-3 border-bottom">
-                    <small
-                        class="text-muted text-uppercase fw-bold d-block mb-1 fs-xxs"
-                        >This Module</small
-                    >
-                    <a
-                        href="<%= it.courseSlug ? `/course/${it.courseSlug}/${it.module.slug || it.module.id}` : '#' %>"
-                        class="text-decoration-none text-dark fw-bold text-truncate d-block"
-                    >
-                        <%= it.module.title %>
-                    </a>
-                </div>
-
-                <div
-                    class="list-group list-group-flush overflow-y-auto overflow-x-hidden lesson-list-scroll"
-                >
-                    <% it.lessons.forEach(function(lesson) { %>
-                    <a
-                        href="<%= lesson.link %>"
-                        class="list-group-item list-group-item-action py-2 d-flex align-items-center gap-3 transition-bg search-result-item"
-                        style="<%= lesson.isActive ? 'border: 2px solid #FA6915 !important;' : '' %>"
-                        aria-current="<%= lesson.isActive ? 'true' : 'false' %>"
-                    >
-                        <!-- Icon / Thumbnail -->
-                        <div
-                            class="flex-shrink-0"
-                            style="width: 40px; height: 27px"
+                    <div class="card-header bg-light py-3 border-bottom">
+                        <small
+                            class="text-muted text-uppercase fw-bold d-block mb-1 fs-xxs"
+                            >This Module</small
                         >
-                            <img
-                                src="/img/lesson.svg"
-                                class="w-100 h-100 object-fit-cover rounded"
-                                alt="<%= lesson.title %>"
-                            />
-                        </div>
+                        <a
+                            href="<%= it.courseSlug ? `/course/${it.courseSlug}/${it.module.slug || it.module.id}` : '#' %>"
+                            class="text-decoration-none text-dark fw-bold text-truncate d-block"
+                        >
+                            <%= it.module.title %>
+                        </a>
+                    </div>
 
-                        <!-- Content -->
-                        <div class="flex-grow-1" style="min-width: 0">
-                            <h6
-                                class="mb-0 fw-normal text-dark text-truncate small <%= lesson.isActive ? 'fw-bold' : '' %>"
+                    <div
+                        class="list-group list-group-flush overflow-y-auto overflow-x-hidden lesson-list-scroll"
+                    >
+                        <% it.lessons.forEach(function(lesson) { %>
+                        <a
+                            href="<%= lesson.link %>"
+                            class="list-group-item list-group-item-action py-2 d-flex align-items-center gap-3 transition-bg search-result-item"
+                            style="<%= lesson.isActive ? 'border: 2px solid #FA6915 !important;' : '' %>"
+                            aria-current="<%= lesson.isActive ? 'true' : 'false' %>"
+                        >
+                            <!-- Icon / Thumbnail -->
+                            <div
+                                class="flex-shrink-0"
+                                style="width: 40px; height: 27px"
                             >
-                                <%= lesson.title %>
-                            </h6>
-                        </div>
-                    </a>
-                    <% }) %>
-                </div>
-                <% if (it.nextModule) { %>
-                <div class="card-footer bg-white py-3 border-top" style="opacity: 0.4">
-                    <small
-                        class="text-muted text-uppercase fw-bold d-block mb-1 fs-xxs"
-                        >Next Module</small
-                    >
-                    <a
-                        href="/course/<%= it.course.slug %>/<%= it.nextModule.slug %>"
-                        class="text-decoration-none text-dark fw-bold text-truncate d-block"
-                        title="<%= it.nextModule.title %>"
-                    >
-                        <%= it.nextModule.title %>
-                    </a>
-                </div>
-                <% } %>
+                                <img
+                                    src="/img/lesson.svg"
+                                    class="w-100 h-100 object-fit-cover rounded"
+                                    alt="<%= lesson.title %>"
+                                />
+                            </div>
+
+                            <!-- Content -->
+                            <div class="flex-grow-1" style="min-width: 0">
+                                <h6
+                                    class="mb-0 fw-normal text-dark text-truncate small <%= lesson.isActive ? 'fw-bold' : '' %>"
+                                >
+                                    <%= lesson.title %>
+                                </h6>
+                            </div>
+                        </a>
+                        <% }) %>
+                    </div>
+                    <% if (it.nextModule) { %>
+                    <div class="card-footer bg-white py-3 border-top" style="opacity: 0.4">
+                        <small
+                            class="text-muted text-uppercase fw-bold d-block mb-1 fs-xxs"
+                            >Next Module</small
+                        >
+                        <a
+                            href="/course/<%= it.course.slug %>/<%= it.nextModule.slug %>"
+                            class="text-decoration-none text-dark fw-bold text-truncate d-block"
+                            title="<%= it.nextModule.title %>"
+                        >
+                            <%= it.nextModule.title %>
+                        </a>
+                    </div>
+                    <% } %>
+            </div>
         </div>
     </div>
 </div>
-    <% if (!it.nextLesson) { %>
-    <div class="mt-5 mb-5">
-        <h2 class="h3 fw-bold mb-4 border-bottom pb-2">Next Up</h2>
-        <div class="mb-5 text-muted">
-            <p>Congratulations, you've watched the final lesson in this module!</p>
-            <p>Please follow the learning path below  below to continue with the next module in the
-            <a class="branded-link" href="/course/<%= it.course.slug %>"><%= it.course.title %></a> course.</p>
-        </div>
-        <div
-            class="d-flex flex-column flex-md-row align-items-center justify-content-center gap-3 gap-md-4"
-        >
-            <!-- This Module -->
-            <div
-                class="d-flex flex-column align-items-center w-100"
-                style="flex: 1; max-width: 250px"
-            >
-                <span class="text-muted small text-uppercase fw-bold mb-2"
-                    >Completed</span
-                >
-                <img
-                    src="/banner/<%= it.course.category.slug %>-category.png"
-                    class="card-img-top"
-                    style="opacity:0.4"
-                    alt="Completed"
-                />
-                <div class="card-body p-3" style="opacity:0.4">
-                    <div
-                        class="text-uppercase text-muted fw-bold mb-1"
-                        style="font-size: 0.65rem"
-                    >
-                        <% if (it.module.type === 'lab') { %> Lab Module
-                        <% } else if (it.module.type === 'quiz') { %>
-                        Practice Quiz <% } else if (it.module.type === 'exam') {
-                        %> Practice Exam <% } else { %> Course Module <% }
-                        %>
-                    </div>
-                    <h6
-                        class="card-title text-dark small mb-0 text-truncate fw-bold"
-                        style="text-decoration: line-through;"
-                    >
-                        <%= it.module.title %>
-                    </h6>
-                </div>
-            </div>
 
-            <!-- Arrow -->
-            <div class="text-muted">
-                <i class="bi bi-arrow-right fs-3 d-none d-md-block"></i>
-                <i class="bi bi-arrow-down fs-3 d-md-none"></i>
+<!-- Lightbox modal (shared across all lesson types) -->
+<div class="modal fade" id="labImageModal" tabindex="-1" aria-label="Image preview" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content bg-transparent border-0 shadow-none">
+            <div class="modal-header border-0 pb-0 pt-2 pe-2">
+                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
-            <!-- Next Module -->
-            <div
-                class="d-flex flex-column align-items-center w-100"
-                style="flex: 1.2; max-width: 350px"
-            >
-                <span class="small text-uppercase fw-bold mb-2"
-                    >Next Module</span
-                >
-                <div class="card shadow border-0 w-100 h-100">
-                    <a
-                        href="/course/<%= it.course.slug %>/<%= it.nextModule.slug %>"
-                        class="text-decoration-none w-100 transition-hover h-100"
-                    >
-                        <img
-                            src="/banner/<%= it.course.category.slug %>-category.png"
-                            class="card-img-top"
-                            alt="Current"
-                        />
-                        <div class="card-body p-3 bg-light">
-                            <div
-                                class="text-uppercase text-muted fw-bold mb-1"
-                                style="font-size: 0.65rem"
-                            >
-                                <% if (it.nextModule.type === 'lab') { %> Lab Module <%
-                                } else if (it.nextModule.type === 'quiz') { %> Practice Quiz <% }
-                                else if (it.nextModule.type === 'exam') { %> Practice
-                                Exam <% } else { %> Course Module <% } %>
-                            </div>
-                            <h6 class="card-title small mb-0 fw-bold text-dark text-truncate">
-                                <%= it.nextModule.title %>
-                            </h6>
-                        </div>
-                    </a>
-                </div>
+            <div class="modal-body p-0 text-center">
+                <img id="labImageModalImg" src="" alt="" class="img-fluid rounded" style="max-height:85vh;object-fit:contain;">
             </div>
-
         </div>
     </div>
-    <% } %>
+</div>
+
+<!-- Code block zoom modal -->
+<div class="modal fade" id="codeZoomModal" tabindex="-1" aria-label="Code preview" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content border-0 shadow-lg position-relative" style="background:#0d1117;">
+            <div class="modal-header border-0 pb-0 pt-2 pe-2 justify-content-end">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <button type="button" id="codeZoomCopyBtn" class="copy-btn" aria-label="Copy to clipboard" style="top:0.5rem;right:2.5rem;">
+                <i class="bi bi-clipboard"></i> Copy
+            </button>
+            <div class="modal-body p-0">
+                <pre id="codeZoomPre" class="m-0" style="border-radius:0 0 0.375rem 0.375rem;max-height:82vh;overflow:auto;"><code id="codeZoomCode" class="hljs"></code></pre>
+            </div>
+        </div>
+    </div>
 </div>

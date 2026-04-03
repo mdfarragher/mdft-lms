@@ -11,17 +11,3 @@
         <% } %>
     </div>
 </div>
-
-<!-- Lightbox modal -->
-<div class="modal fade" id="labImageModal" tabindex="-1" aria-label="Image preview" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content bg-transparent border-0 shadow-none">
-            <div class="modal-header border-0 pb-0 pt-2 pe-2">
-                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-0 text-center">
-                <img id="labImageModalImg" src="" alt="" class="img-fluid rounded" style="max-height:85vh;object-fit:contain;">
-            </div>
-        </div>
-    </div>
-</div>

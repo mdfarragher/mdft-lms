@@ -123,7 +123,9 @@ export const handler: Handlers = {
       const lessonId = lessonJunction.item.id;
 
       // 3. Fetch the specific lesson details
-      const fields = ["*"];
+      const fields = collection === "quiz_questions"
+        ? ["*", "answers.id", "answers.content", "answers.explanation", "answers.is_correct"]
+        : ["*"];
 
       // @ts-ignore: Directus SDK typing issue
       const lesson = (await client.request(
@@ -135,6 +137,23 @@ export const handler: Handlers = {
 
       if (lesson.content) {
         lesson.content = await marked.parse(lesson.content);
+      }
+
+      if (collection === "quiz_questions" && Array.isArray((lesson as any).answers)) {
+        for (const answer of (lesson as any).answers) {
+          if (answer.content) {
+            answer.content = await marked.parse(answer.content);
+          }
+          if (answer.explanation) {
+            answer.explanation = await marked.parseInline(answer.explanation);
+          }
+        }
+        // Shuffle answers (Fisher-Yates)
+        const answers = (lesson as any).answers;
+        for (let i = answers.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [answers[i], answers[j]] = [answers[j], answers[i]];
+        }
       }
 
       // 4. Prepare data for template

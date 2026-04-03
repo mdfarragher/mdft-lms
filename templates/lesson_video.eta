@@ -29,3 +29,8 @@
     </p>
 </div>
 <% } %>
+<% if (it.currentLesson.content) { %>
+<div class="p-4 markdown-content lab-content">
+    <%~ it.currentLesson.content %>
+</div>
+<% } %>
