@@ -51,6 +51,213 @@ export const handler: Handlers = {
     const client = getDirectusClient(token);
 
     try {
+      // 0. "Your Results" virtual page — no Directus lesson record needed
+      if (lessonSlug === "results") {
+        // Still need the module (for sidebar + nav) and course (for breadcrumb + progress)
+        // @ts-ignore: Directus SDK typing issue
+        const [modules, courses] = (await Promise.all([
+          client.request(
+            // @ts-ignore: Directus SDK typing issue
+            readItems("modules", {
+              filter: { slug: { _eq: moduleSlug } },
+              limit: 1,
+              fields: [
+                "id", "title", "slug", "type", "passing_score",
+                "courses.courses_id.slug",
+                "lessons.id", "lessons.collection", "lessons.sort",
+                "lessons.item.id", "lessons.item.title", "lessons.item.slug",
+              ],
+            }),
+          ),
+          client.request(
+            // @ts-ignore: Directus SDK typing issue
+            readItems("courses", {
+              filter: { slug: { _eq: courseSlug } },
+              limit: 1,
+              fields: [
+                "id", "title", "slug",
+                "modules.modules_id.id", "modules.modules_id.slug",
+                "modules.modules_id.title", "modules.modules_id.type",
+                "modules.modules_id.lessons.item.id",
+              ],
+            }),
+          ),
+        ])) as unknown as [Module[], any[]];
+
+        if (!modules || modules.length === 0) {
+          return ctx.renderNotFound();
+        }
+
+        const module = modules[0];
+        const course = courses && courses.length > 0 ? courses[0] : null;
+
+        // Build sidebar — real lessons first, then the "Your Results" entry appended
+        const sortedJunctions = (module.lessons || [])
+          .filter((j) => j.item && typeof j.item === "object")
+          .sort((a, b) => (a.sort || 0) - (b.sort || 0));
+
+        const sidebarLessons = [
+          ...sortedJunctions.map((j) => {
+            const item = j.item as { id: string; title: string; slug?: string };
+            const type = j.collection.replace("_lessons", "").toUpperCase();
+            return {
+              id: item.id,
+              title: item.title,
+              link: `/play/${courseSlug}/${moduleSlug}/${item.slug || item.id}`,
+              type,
+              isActive: false,
+            };
+          }),
+          {
+            id: "results",
+            title: "Your Results",
+            link: `/play/${courseSlug}/${moduleSlug}/results`,
+            type: "RESULTS",
+            isActive: true,
+          },
+        ];
+
+        const totalLessons = sidebarLessons.length - 1; // exclude the virtual results entry
+        const currentIndex = totalLessons; // results is always last
+
+        // Progress: treat results page as 100% of this module
+        let progress = 0;
+        if (course?.modules) {
+          const courseModulesList = (course.modules || [])
+            .map((m: any) => m.modules_id)
+            .filter((m: any) => m);
+          const currentModuleIdx = courseModulesList.findIndex(
+            (m: any) => m.slug === moduleSlug || m.id === module.id,
+          );
+          const totalCourseLessons = courseModulesList.reduce(
+            (sum: number, m: any) => sum + (m.lessons?.length ?? 0),
+            0,
+          );
+          const lessonsBeforeThisModule = currentModuleIdx > 0
+            ? courseModulesList
+                .slice(0, currentModuleIdx)
+                .reduce((sum: number, m: any) => sum + (m.lessons?.length ?? 0), 0)
+            : 0;
+          progress = totalCourseLessons > 0
+            ? Math.round(
+                ((lessonsBeforeThisModule + sortedJunctions.length) / totalCourseLessons) * 100,
+              )
+            : 0;
+        }
+
+        // Prev = last real lesson in the module
+        const lastRealLesson = sidebarLessons[sidebarLessons.length - 2] ?? null;
+        const prevLesson = lastRealLesson
+          ? { ...lastRealLesson, isActive: false }
+          : null;
+
+        // Next = first lesson of the next module (same logic as main handler)
+        let nextLesson = null;
+        let nextModuleRef = null;
+        let nextModuleLink = null;
+        let prevModuleRef = null;
+        let prevModuleLink = null;
+
+        if (course?.modules) {
+          const courseModules = course.modules
+            .map((m: any) => m.modules_id)
+            .filter((m: any) => m);
+          const currentModuleIndex = courseModules.findIndex(
+            (m: any) => m.slug === moduleSlug || m.id === module.id,
+          );
+          if (currentModuleIndex !== -1 && currentModuleIndex < courseModules.length - 1) {
+            nextModuleRef = courseModules[currentModuleIndex + 1];
+            // @ts-ignore: Directus SDK typing issue
+            const nextModules = (await client.request(
+              // @ts-ignore: Directus SDK typing issue
+              readItems("modules", {
+                filter: { id: { _eq: nextModuleRef.id } },
+                limit: 1,
+                fields: [
+                  "slug",
+                  "lessons.collection", "lessons.sort",
+                  "lessons.item.id", "lessons.item.slug", "lessons.item.title",
+                ],
+              }),
+            )) as unknown as Module[];
+            if (nextModules && nextModules.length > 0) {
+              const nm = nextModules[0];
+              const nmSorted = (nm.lessons || [])
+                .filter((j) => j.item && typeof j.item === "object")
+                .sort((a, b) => (a.sort || 0) - (b.sort || 0));
+              if (nmSorted.length > 0) {
+                const firstLesson = nmSorted[0].item as { id: string; slug?: string; title: string };
+                nextModuleLink = {
+                  title: nextModuleRef.title,
+                  link: `/play/${courseSlug}/${nm.slug}/${firstLesson.slug || firstLesson.id}`,
+                };
+                nextLesson = {
+                  id: nextModuleRef.id,
+                  title: `Next Module: ${nextModuleRef.title}`,
+                  link: `/course/${courseSlug}/${nm.slug}`,
+                  type: "NEXT_MODULE",
+                  isActive: false,
+                };
+              }
+            }
+          }
+          if (currentModuleIndex > 0) {
+            prevModuleRef = courseModules[currentModuleIndex - 1];
+            // @ts-ignore: Directus SDK typing issue
+            const prevModules = (await client.request(
+              // @ts-ignore: Directus SDK typing issue
+              readItems("modules", {
+                filter: { id: { _eq: prevModuleRef.id } },
+                limit: 1,
+                fields: [
+                  "slug",
+                  "lessons.collection", "lessons.sort",
+                  "lessons.item.id", "lessons.item.slug", "lessons.item.title",
+                ],
+              }),
+            )) as unknown as Module[];
+            if (prevModules && prevModules.length > 0) {
+              const pm = prevModules[0];
+              const pmSorted = (pm.lessons || [])
+                .filter((j) => j.item && typeof j.item === "object")
+                .sort((a, b) => (a.sort || 0) - (b.sort || 0));
+              if (pmSorted.length > 0) {
+                const firstLesson = pmSorted[0].item as { id: string; slug?: string; title: string };
+                prevModuleLink = {
+                  title: prevModuleRef.title,
+                  link: `/play/${courseSlug}/${pm.slug}/${firstLesson.slug || firstLesson.id}`,
+                };
+              }
+            }
+          }
+        }
+
+        const html = eta.render("lesson_detail.eta", {
+          isAuthenticated,
+          module: { id: module.id, title: module.title, slug: module.slug, type: module.type },
+          courseSlug,
+          currentLesson: { id: "results", title: "Your Results" },
+          lessonType: "RESULTS",
+          lessons: sidebarLessons,
+          prevLesson,
+          nextLesson,
+          course,
+          prevModule: prevModuleRef,
+          nextModule: nextModuleRef,
+          prevModuleLink,
+          nextModuleLink,
+          title: `Your Results - ${module.title}`,
+          progress,
+          currentIndex,
+          totalLessons,
+          passingScore: (module as any).passing_score ?? 70,
+        });
+
+        return new Response(html, {
+          headers: { "Content-Type": "text/html; charset=utf-8" },
+        });
+      }
+
       // 1. Fetch Module to get the list of lessons (for sidebar)
       // @ts-ignore: Directus SDK typing issue
       const modulePromise = client.request(
@@ -174,6 +381,17 @@ export const handler: Handlers = {
           isActive
         };
       });
+
+      // Append the virtual "Your Results" entry for quiz/exam modules
+      if (module.type === "quiz" || module.type === "exam") {
+        sidebarLessons.push({
+          id: "results",
+          title: "Your Results",
+          link: `/play/${courseSlug}/${moduleSlug}/results`,
+          type: "RESULTS",
+          isActive: false,
+        });
+      }
 
       const currentIndex = sidebarLessons.findIndex((l) => l.isActive);
 
@@ -339,7 +557,7 @@ export const handler: Handlers = {
         title: `${lesson.title} - ${module.title}`,
         progress, // Added for Lesson Detail Progress Bar
         currentIndex: currentIndex + 1, // Added for Lesson Detail Progress Bar (1-based)
-        totalLessons: sidebarLessons.length, // Added for Lesson Detail Progress Bar
+        totalLessons: sidebarLessons.filter((l) => l.type !== "RESULTS").length, // Added for Lesson Detail Progress Bar
       });
 
       return new Response(html, {

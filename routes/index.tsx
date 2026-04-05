@@ -1,6 +1,6 @@
 import { Handlers } from "$fresh/server.ts";
 import { getDirectusClient } from "../utils/directus.ts";
-import { readMe, readItems } from "@directus/sdk";
+import { readItems } from "@directus/sdk";
 import { Eta } from "eta";
 import { join } from "$std/path/mod.ts";
 import { log } from "../utils/logger.ts";
@@ -17,17 +17,10 @@ export const handler: Handlers = {
     const query = url.searchParams.get("q");
 
     try {
-      let user = null;
-      if (token) {
-        try {
-            user = await client.request(readMe());
-            } catch (e) {
-                logger.error(`Error fetching user: ${e}`);
-        }
-      }
-      
+      const SEARCH_LIMIT = 20;
       let results: any[] = [];
       let hasSearched = false;
+      let hasMore = false;
 
       if (query && query.trim().length > 0) {
         hasSearched = true;
@@ -36,6 +29,7 @@ export const handler: Handlers = {
           readItems("courses" as any, {
             filter: { title: { _icontains: query } } as any,
             fields: ["id", "title", "slug"],
+            limit: SEARCH_LIMIT,
           })
         );
 
@@ -43,6 +37,7 @@ export const handler: Handlers = {
           readItems("modules" as any, {
             filter: { title: { _icontains: query } } as any,
             fields: ["id", "title", "slug", "type"],
+            limit: SEARCH_LIMIT,
           })
         );
 
@@ -50,6 +45,7 @@ export const handler: Handlers = {
           readItems("video_lessons" as any, {
             filter: { title: { _icontains: query } } as any,
             fields: ["id", "title", "slug"],
+            limit: SEARCH_LIMIT,
           })
         );
 
@@ -57,6 +53,7 @@ export const handler: Handlers = {
           readItems("certifications" as any, {
             filter: { title: { _icontains: query } } as any,
             fields: ["id", "title", "slug"],
+            limit: SEARCH_LIMIT,
           })
         );
 
@@ -64,6 +61,7 @@ export const handler: Handlers = {
           readItems("text_lessons" as any, {
             filter: { title: { _icontains: query } } as any,
             fields: ["id", "title", "slug"],
+            limit: SEARCH_LIMIT,
           })
         );
 
@@ -71,6 +69,7 @@ export const handler: Handlers = {
           readItems("technologies" as any, {
             filter: { title: { _icontains: query } } as any,
             fields: ["id", "title", "slug"],
+            limit: SEARCH_LIMIT,
           })
         );
 
@@ -78,6 +77,7 @@ export const handler: Handlers = {
           readItems("datasets" as any, {
             filter: { title: { _icontains: query } } as any,
             fields: ["id", "title", "slug"],
+            limit: SEARCH_LIMIT,
           })
         );
 
@@ -435,16 +435,35 @@ export const handler: Handlers = {
           new Map(results.map((item) => [item.link, item])).values()
         );
 
-        // Sort alphabetically by title
-        results.sort((a, b) => a.title.localeCompare(b.title));
+        // Sort by type order, then alphabetically by title within each type
+        const typeOrder: Record<string, number> = {
+          certification: 0,
+          course: 1,
+          module: 2,
+          lesson: 3,
+          technology: 4,
+          dataset: 5,
+        };
+        results.sort((a, b) => {
+          const typeA = typeOrder[a.type] ?? 99;
+          const typeB = typeOrder[b.type] ?? 99;
+          if (typeA !== typeB) return typeA - typeB;
+          return a.title.localeCompare(b.title);
+        });
+
+        // Cap at SEARCH_LIMIT results and flag if more exist
+        if (results.length > SEARCH_LIMIT) {
+          hasMore = true;
+          results = results.slice(0, SEARCH_LIMIT);
+        }
       }
 
       const html = eta.render("index.eta", {
-        user,
         isAuthenticated: !!token,
         query,
         hasSearched,
         results,
+        hasMore,
         title: "Search - MDFT LMS",
       });
 

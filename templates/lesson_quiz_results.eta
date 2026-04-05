@@ -1,0 +1,71 @@
+<div class="p-4">
+
+    <%
+        var totalQuestions = it.totalLessons;
+        var correctAnswers = 6;
+        var incorrectAnswers = 4;
+        var passingScore = it.passingScore;
+        var scorePct = Math.round((correctAnswers / totalQuestions) * 100);
+        var passed = scorePct >= passingScore;
+    %>
+
+    <!-- Score summary -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold mb-1"><%= scorePct %>%</h2>
+        <p class="text-muted mb-3"><%= correctAnswers %> of <%= totalQuestions %> questions correct</p>
+        <% if (passed) { %>
+        <span class="badge rounded-pill px-3 py-2 fs-6" style="background:#fa6915;">
+            <i class="bi bi-check-circle me-1"></i>Quiz Passed
+        </span>
+        <% } else { %>
+        <span class="badge rounded-pill px-3 py-2 fs-6" style="background:#fa6915;">
+            <i class="bi bi-x-circle me-1"></i>Not Passed
+        </span>
+        <% } %>
+    </div>
+
+    <!-- Stats row -->
+    <div class="row g-3 mb-4 text-center">
+        <div class="col-4">
+            <div class="border rounded p-3">
+                <div class="fw-bold fs-4"><%= totalQuestions %></div>
+                <div class="text-muted small">Questions</div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="border rounded p-3">
+                <div class="fw-bold fs-4"><%= correctAnswers %></div>
+                <div class="text-muted small">Correct</div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="border rounded p-3">
+                <div class="fw-bold fs-4" style="color:#fa6915;"><%= incorrectAnswers %></div>
+                <div class="text-muted small">Incorrect</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="mb-4">
+        <div class="d-flex justify-content-between small text-muted mb-1">
+            <span>Your score</span>
+            <span><%= scorePct %>%</span>
+        </div>
+        <div class="progress position-relative" style="height:12px;">
+            <div
+                class="progress-bar progress-bar-striped progress-bar-animated"
+                role="progressbar"
+                style="width:<%= scorePct %>%;background-color:#afeb2b;"
+                aria-valuenow="<%= scorePct %>"
+                aria-valuemin="0"
+                aria-valuemax="100"
+            ></div>
+            <div class="position-absolute top-0 bottom-0" style="left:<%= passingScore %>%;width:2px;background:#000;opacity:0.8;"></div>
+        </div>
+        <div class="position-relative mt-1" style="height:1.2rem;">
+            <span class="position-absolute small text-muted" style="left:<%= passingScore %>%;transform:translateX(-50%);white-space:nowrap;">Pass mark: <%= passingScore %>%</span>
+        </div>
+    </div>
+
+</div>

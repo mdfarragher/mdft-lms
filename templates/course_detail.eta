@@ -64,14 +64,69 @@
         </div>
     </div>
 
-    <% if (it.course.content) { %>
     <div class="container px-0 mb-5">
         <h2 class="h3 fw-bold mb-4 border-bottom pb-2">Details</h2>
-        <div class="markdown-content text-muted">
+        <% if (it.course.content) { %>
+        <div class="markdown-content text-muted mb-4">
             <%~ it.course.content %>
         </div>
+        <% } %>
+        <%
+            let videoLessonCount = 0;
+            let textLessonCount = 0;
+            let labLessonCount = 0;
+            let quizQuestionCount = 0;
+            (it.modules || []).forEach(function(module) {
+                (module.lessons || []).forEach(function(lesson) {
+                    if (lesson.collection === 'video_lessons') videoLessonCount++;
+                    else if (lesson.collection === 'text_lessons') textLessonCount++;
+                    else if (lesson.collection === 'lab_lessons') labLessonCount++;
+                    else if (lesson.collection === 'quiz_questions') quizQuestionCount++;
+                });
+            });
+        %>
+        <div class="row row-cols-2 row-cols-md-4 g-3">
+            <% if (videoLessonCount + textLessonCount > 0) { %>
+            <div class="col">
+                <div class="card stat-card stat-card-green h-100">
+                    <div class="stat-card-body">
+                        <div class="stat-card-icon"><i class="bi bi-play-circle-fill"></i></div>
+                        <div>
+                            <div class="stat-card-count"><%= videoLessonCount + textLessonCount %></div>
+                            <div class="stat-card-label">Lessons</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+            <% if (labLessonCount > 0) { %>
+            <div class="col">
+                <div class="card stat-card stat-card-orange h-100">
+                    <div class="stat-card-body">
+                        <div class="stat-card-icon"><i class="bi bi-eyedropper"></i></div>
+                        <div>
+                            <div class="stat-card-count"><%= labLessonCount %></div>
+                            <div class="stat-card-label">Lab Lessons</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+            <% if (quizQuestionCount > 0) { %>
+            <div class="col">
+                <div class="card stat-card stat-card-black h-100">
+                    <div class="stat-card-body">
+                        <div class="stat-card-icon"><i class="bi bi-patch-question-fill"></i></div>
+                        <div>
+                            <div class="stat-card-count"><%= quizQuestionCount %></div>
+                            <div class="stat-card-label">Quiz Questions</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
     </div>
-    <% } %>
 
     <div class="container px-0 mb-5">
         <h2 class="h3 fw-bold mb-4 border-bottom pb-2">Modules</h2>

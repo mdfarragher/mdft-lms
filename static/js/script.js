@@ -104,16 +104,61 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Quiz: disable the submit button until an answer is selected
+// Quiz: disable the submit button until an answer is selected (single-answer)
 (function () {
     var toggle = document.querySelector('.quiz-submitted-toggle');
     if (!toggle) return;
     var submitBtn = document.querySelector('.quiz-submit-btn');
     if (!submitBtn) return;
+    var radios = document.querySelectorAll('.quiz-radio[type="radio"]');
+    if (radios.length === 0) return;
     submitBtn.classList.add('disabled');
-    document.querySelectorAll('.quiz-radio[type="radio"]').forEach(function (radio) {
+    radios.forEach(function (radio) {
         radio.addEventListener('change', function () {
             submitBtn.classList.remove('disabled');
         });
+    });
+})();
+
+// Quiz: disable the submit button until at least one answer is selected (multiple-answer)
+// Also handle submission feedback in JS, since CSS :has() cannot count correct answers.
+(function () {
+    var container = document.querySelector('.quiz-multiple-container');
+    if (!container) return;
+    var submitBtn = container.querySelector('.quiz-submit-btn');
+    if (!submitBtn) return;
+    var checkboxes = container.querySelectorAll('.quiz-checkbox[type="checkbox"]');
+    if (checkboxes.length === 0) return;
+    var toggle = container.querySelector('.quiz-submitted-toggle');
+    var feedbackCorrect = container.querySelector('.quiz-feedback-correct');
+    var feedbackIncorrect = container.querySelector('.quiz-feedback-incorrect');
+
+    // Start disabled
+    submitBtn.classList.add('disabled');
+
+    // Enable/disable submit as selections change
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            var anyChecked = Array.prototype.some.call(checkboxes, function (cb) {
+                return cb.checked;
+            });
+            submitBtn.classList.toggle('disabled', !anyChecked);
+        });
+    });
+
+    // On submission: evaluate correctness and show the right feedback panel
+    submitBtn.addEventListener('click', function () {
+        // Wait a tick for the toggle checkbox state to update
+        setTimeout(function () {
+            if (!toggle.checked) return;
+
+            var totalCorrect = container.querySelectorAll('.quiz-answer-wrap.is-correct').length;
+            var checkedCorrect = container.querySelectorAll('.quiz-answer-wrap.is-correct .quiz-checkbox:checked').length;
+            var checkedIncorrect = container.querySelectorAll('.quiz-answer-wrap.is-incorrect .quiz-checkbox:checked').length;
+            var allCorrectSelected = checkedCorrect === totalCorrect && checkedIncorrect === 0;
+
+            if (feedbackCorrect)  feedbackCorrect.style.display  = allCorrectSelected ? 'block' : 'none';
+            if (feedbackIncorrect) feedbackIncorrect.style.display = allCorrectSelected ? 'none'  : 'block';
+        }, 0);
     });
 })();

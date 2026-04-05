@@ -140,6 +140,13 @@
                     </a>
                     <% }) %>
                 </div>
+                <% if (it.hasMore) { %>
+                <div class="card-footer bg-white border-top-0 pt-3">
+                    <p class="small mb-0 text-center" style="color: #fa6915;">
+                        <i class="bi bi-info-circle me-1"></i>There are more results, please refine your search query.
+                    </p>
+                </div>
+                <% } %>
             </div>
             <% } else { %>
             <div class="alert alert-warning text-center" role="alert">
@@ -152,22 +159,4 @@
 </div>
 <% } %>
 
-<div class="container mt-5 text-center">
-    <h2 class="h4 mb-3">Quick Links</h2>
-    <div class="d-flex justify-content-center gap-3">
-        <a href="/courses" class="btn btn-outline-primary">
-            <i class="bi bi-journal-text me-1"></i>View All Courses
-        </a>
-        <a href="/certifications" class="btn btn-outline-primary">
-            <i class="bi bi-award me-1"></i>View All Certifications
-        </a>
-    </div>
-</div>
 
-<% if (it.user) { %>
-<div class="container mt-5 text-center">
-    <small class="text-muted">
-        Logged in as: <strong><%= it.user.email %></strong>
-    </small>
-</div>
-<% } %>

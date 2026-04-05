@@ -334,6 +334,8 @@ const filename = lesson.video_url.split("/").pop();
 
 The nginx container runs on **port 8080 on localhost** and is accessible without authentication. Use it to verify rendered HTML and served static assets after making changes.
 
+**Important:** Lesson detail pages (`/play/...`) render a "Premium Content / Sign In" lock screen for anonymous visitors — the actual lesson content, quiz questions, and answer lists are **not present in the HTML** when fetched without an `auth_token` cookie. Do not attempt to verify lesson content changes via `curl`; leave that testing to the user.
+
 **Check a rendered page for CSS classes:**
 ```bash
 curl -s http://localhost:8080/course/{courseSlug}/{moduleSlug} | grep -o 'some-class[^"]*'

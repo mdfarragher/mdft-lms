@@ -36,6 +36,7 @@ export const handler: Handlers = {
             "modules.modules_id.type",
             "modules.modules_id.content",
             "modules.modules_id.lessons.id",
+            "modules.modules_id.lessons.collection",
             "modules.modules_id.dataset.title",
             "modules.modules_id.dataset.slug",
             "modules.modules_id.dataset.description",

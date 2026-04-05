@@ -21,7 +21,7 @@
                 <div class="flex-grow-1">
                      <div class="d-flex justify-content-between align-items-center mb-2">
                          <span class="text-white-50 small">
-                             <% var navText = it.module.type === 'lab' ? 'This is lab X of Y in this lab module' : it.module.type === 'quiz' ? 'This is question X of Y in this quiz' : it.module.type === 'exam' ? 'This is question X of Y in this exam' : 'This is lesson X of Y in this module'; navText = navText.replace('X', '<span class="text-white fw-bold">' + it.currentIndex + '</span>').replace('Y', '<span class="text-white fw-bold">' + it.totalLessons + '</span>'); %><%~ navText %>
+                             <% var navText = it.lessonType === 'RESULTS' ? 'These are your results' : it.module.type === 'lab' ? 'This is lab X of Y in this lab module' : it.module.type === 'quiz' ? 'This is question X of Y in this quiz' : it.module.type === 'exam' ? 'This is question X of Y in this exam' : 'This is lesson X of Y in this module'; navText = navText.replace('X', '<span class="text-white fw-bold">' + it.currentIndex + '</span>').replace('Y', '<span class="text-white fw-bold">' + it.totalLessons + '</span>'); %><%~ navText %>
                          </span>
                         <span class="text-white-50 small" style="font-size:0.7rem!important;align-self:flex-end">Course <span class="module-nav-pct"><%= it.progress %>%</span> complete</span>
                     </div>
@@ -86,7 +86,13 @@
                         <% } else if (it.lessonType === 'LAB') { %>
                         <%~ include("./lesson_lab.eta", it) %>
                         <% } else if (it.lessonType === 'QUIZ' || it.lessonType === 'QUIZ_QUESTIONS') { %>
-                        <%~ include("./lesson_quiz.eta", it) %>
+                        <% if (it.currentLesson.question_type === 'multiple') { %>
+                        <%~ include("./lesson_quiz_multiple.eta", it) %>
+                        <% } else { %>
+                        <%~ include("./lesson_quiz_single.eta", it) %>
+                        <% } %>
+                        <% } else if (it.lessonType === 'RESULTS') { %>
+                        <%~ include("./lesson_quiz_results.eta", it) %>
                         <% } else { %>
                         <div class="p-4">
                             <div class="mb-0">
@@ -207,7 +213,7 @@
                                 style="width: 40px; height: 27px"
                             >
                                 <img
-                                    src="/img/lesson.svg"
+                                    src="/img/<%= lesson.type === 'RESULTS' ? 'results' : 'lesson' %>.svg"
                                     class="w-100 h-100 object-fit-cover rounded"
                                     alt="<%= lesson.title %>"
                                 />

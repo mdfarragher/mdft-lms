@@ -1,0 +1,14 @@
+<svg width="298" height="298" viewBox="0 0 298 298" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 2nd place block (left, medium height) -->
+  <rect x="44" y="158" width="64" height="90" rx="4" fill="white" stroke="black" stroke-width="6"/>
+  <!-- 1st place block (centre, tallest) -->
+  <rect x="117" y="118" width="64" height="130" rx="4" fill="white" stroke="black" stroke-width="6"/>
+  <!-- 3rd place block (right, shortest) -->
+  <rect x="190" y="188" width="64" height="60" rx="4" fill="white" stroke="black" stroke-width="6"/>
+  <!-- Labels -->
+  <text x="76" y="218" text-anchor="middle" font-family="Inter,sans-serif" font-size="48" font-weight="700" fill="black">2</text>
+  <text x="149" y="188" text-anchor="middle" font-family="Inter,sans-serif" font-size="48" font-weight="700" fill="black">1</text>
+  <text x="222" y="238" text-anchor="middle" font-family="Inter,sans-serif" font-size="48" font-weight="700" fill="black">3</text>
+  <!-- Base platform -->
+  <rect x="34" y="248" width="230" height="8" rx="4" fill="black"/>
+</svg>

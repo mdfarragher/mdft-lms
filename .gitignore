@@ -2,6 +2,8 @@
 /nginx/media/*
 /nginx/logs
 /backups/*
+/tools/quiz_questions/*
+/tools/*.csv
 
 # Fresh build directory
 _fresh/

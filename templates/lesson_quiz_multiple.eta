@@ -10,31 +10,31 @@
     </p>
     <% } %>
 
-    <% if (it.currentLesson.question_type === 'single' && it.currentLesson.answers && it.currentLesson.answers.length > 0) { %>
+    <% if (it.currentLesson.question_type === 'multiple' && it.currentLesson.answers && it.currentLesson.answers.length > 0) { %>
 
-    <div class="quiz-container">
+    <div class="quiz-container quiz-multiple-container">
 
     <input type="checkbox" id="quiz-submitted-<%= it.currentLesson.id %>" class="quiz-submitted-toggle" autocomplete="off">
 
     <div class="quiz-feedback-correct">
-        <i class="bi bi-check-circle-fill me-2"></i>Congratulations, that is the correct answer!
+        <i class="bi bi-check-circle-fill me-2"></i>Congratulations, all correct answers selected!
     </div>
     <div class="quiz-feedback-incorrect">
-        <i class="bi bi-x-circle-fill me-2"></i>I'm sorry, but your answer is incorrect.
+        <i class="bi bi-x-circle-fill me-2"></i>I'm sorry, but you did not answer the question correctly.
     </div>
 
     <div class="quiz-answers-list">
         <% it.currentLesson.answers.forEach(function(answer, i) { %>
         <div class="quiz-answer-wrap <%= answer.is_correct ? 'is-correct' : 'is-incorrect' %>">
             <input
-                type="radio"
+                type="checkbox"
                 id="<%= answer.id %>"
                 name="<%= it.currentLesson.id %>"
-                class="quiz-radio"
+                class="quiz-checkbox"
                 autocomplete="off"
             >
             <label for="<%= answer.id %>" class="quiz-option-label">
-                <span class="quiz-radio-circle"></span>
+                <span class="quiz-checkbox-square"></span>
                 <span class="quiz-answer-content">
                     <span class="markdown-content"><%~ answer.content %></span>
                     <% if (answer.explanation) { %>

@@ -763,3 +763,220 @@ button:focus-visible,
     display: block;
 }
 
+/* ── Feedback panels (correct / incorrect) ───────────────────────────────── */
+
+.quiz-feedback-correct,
+.quiz-feedback-incorrect {
+    display: none;
+    margin-bottom: 1rem;
+    color: #000;
+}
+
+.quiz-feedback-correct .bi {
+    color: #afeb2b;
+}
+
+.quiz-feedback-incorrect .bi {
+    color: #fa6915;
+}
+
+/* Show correct panel when submitted and a correct answer was selected */
+.quiz-container:has(.quiz-submitted-toggle:checked):has(.is-correct .quiz-radio:checked) .quiz-feedback-correct {
+    display: block;
+}
+
+/* Show incorrect panel when submitted and an incorrect answer was selected */
+.quiz-container:has(.quiz-submitted-toggle:checked):has(.is-incorrect .quiz-radio:checked) .quiz-feedback-incorrect {
+    display: block;
+}
+
+/* ── Multiple-answer (checkbox) quiz widget ──────────────────────────────── */
+
+/* Hide the actual checkbox input */
+.quiz-checkbox {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+/* Custom square indicator (mirrors .quiz-radio-circle but square) */
+.quiz-checkbox-square {
+    flex-shrink: 0;
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.25rem;
+    border: 2px solid #adb5bd;
+    border-radius: 0.25rem;
+    background: #fff;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+    position: relative;
+}
+
+.quiz-checkbox-square::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 0.1rem;
+    background: #fa6915;
+    transition: transform 0.15s ease;
+}
+
+/* When a checkbox is checked — thick orange border, filled orange square centre */
+.quiz-checkbox:checked + .quiz-option-label .quiz-checkbox-square {
+    border-color: #fa6915;
+    border-width: 2px;
+}
+
+.quiz-checkbox:checked + .quiz-option-label .quiz-checkbox-square::after {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.quiz-checkbox:checked + .quiz-option-label {
+    border-color: #fa6915;
+    background-color: rgba(250, 105, 21, 0.05);
+}
+
+/* ── After submission — multiple variant ─────────────────────────────────── */
+
+/* Lock all labels */
+.quiz-submitted-toggle:checked ~ .quiz-answers-list .quiz-checkbox:checked + .quiz-option-label {
+    pointer-events: none;
+    cursor: default;
+}
+
+/* Show result icon on all checked answers after submit */
+.quiz-submitted-toggle:checked ~ .quiz-answers-list .quiz-checkbox:checked + .quiz-option-label .quiz-result-icon {
+    display: block;
+}
+
+/* Always highlight correct answers with dashed green after submit */
+.quiz-multiple-container .quiz-submitted-toggle:checked ~ .quiz-answers-list .quiz-answer-wrap.is-correct .quiz-option-label {
+    border-color: #afeb2b;
+    border-style: dashed;
+    border-width: 3px;
+    background-color: rgba(175, 235, 43, 0.08);
+}
+
+/* Correct answer checked → solid green */
+.quiz-multiple-container .quiz-submitted-toggle:checked ~ .quiz-answers-list .quiz-answer-wrap.is-correct .quiz-checkbox:checked + .quiz-option-label {
+    border-color: #afeb2b;
+    border-style: solid;
+    background-color: rgba(175, 235, 43, 0.12);
+}
+
+.quiz-multiple-container .quiz-submitted-toggle:checked ~ .quiz-answers-list .quiz-answer-wrap.is-correct .quiz-checkbox:checked + .quiz-option-label .quiz-checkbox-square {
+    border-color: #8bc220;
+    background-color: #afeb2b;
+}
+
+.quiz-multiple-container .quiz-submitted-toggle:checked ~ .quiz-answers-list .quiz-answer-wrap.is-correct .quiz-checkbox:checked + .quiz-option-label .quiz-checkbox-square::after {
+    background: #000;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Incorrect answer checked → orange */
+.quiz-multiple-container .quiz-submitted-toggle:checked ~ .quiz-answers-list .quiz-answer-wrap.is-incorrect .quiz-checkbox:checked + .quiz-option-label {
+    border-color: #fa6915;
+    border-style: solid;
+    background-color: rgba(250, 105, 21, 0.08);
+}
+
+.quiz-multiple-container .quiz-submitted-toggle:checked ~ .quiz-answers-list .quiz-answer-wrap.is-incorrect .quiz-checkbox:checked + .quiz-option-label .quiz-checkbox-square {
+    border-color: #fa6915;
+    background-color: #fa6915;
+}
+
+.quiz-multiple-container .quiz-submitted-toggle:checked ~ .quiz-answers-list .quiz-answer-wrap.is-incorrect .quiz-checkbox:checked + .quiz-option-label .quiz-checkbox-square::after {
+    background: #fff;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Feedback panels for multiple-answer are handled in script.js */
+
+/* ── "In This Course" stat cards ─────────────────────────────────────────── */
+.stat-card {
+    border: 0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.stat-card-body {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+}
+
+.stat-card-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+}
+
+.stat-card-count {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.stat-card-label {
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+}
+
+/* Green card */
+.stat-card-green {
+    background: linear-gradient(135deg, #afeb2b 0%, #8bc220 100%);
+}
+.stat-card-green .stat-card-icon {
+    background: rgba(0, 0, 0, 0.12);
+    color: #000;
+}
+.stat-card-green .stat-card-count { color: #000; }
+.stat-card-green .stat-card-label  { color: rgba(0, 0, 0, 0.5); }
+
+/* Black card */
+.stat-card-black {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2e2e2e 100%);
+}
+.stat-card-black .stat-card-icon {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+.stat-card-black .stat-card-count { color: #fff; }
+.stat-card-black .stat-card-label  { color: rgba(255, 255, 255, 0.5); }
+
+/* Orange card */
+.stat-card-orange {
+    background: linear-gradient(135deg, #fa6915 0%, #f5933d 100%);
+}
+.stat-card-orange .stat-card-icon {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+.stat-card-orange .stat-card-count { color: #fff; }
+.stat-card-orange .stat-card-label  { color: rgba(255, 255, 255, 0.65); }
+
+/* White card */
+.stat-card-white {
+    background: #fff;
+    border: 1.5px solid #000 !important;
+}
+.stat-card-white .stat-card-icon {
+    background: rgba(0, 0, 0, 0.06);
+    color: #000;
+}
+.stat-card-white .stat-card-count { color: #000; }
+.stat-card-white .stat-card-label  { color: rgba(0, 0, 0, 0.45); }
+
