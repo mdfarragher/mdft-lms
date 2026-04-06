@@ -126,6 +126,19 @@
                 </div>
             </div>
             <% } %>
+            <% if (it.course.datasets && it.course.datasets.length > 0) { %>
+            <div class="col">
+                <div class="card stat-card stat-card-light h-100">
+                    <div class="stat-card-body">
+                        <div class="stat-card-icon"><i class="bi bi-database"></i></div>
+                        <div>
+                            <div class="stat-card-count"><%= it.course.datasets.length %></div>
+                            <div class="stat-card-label">AI Datasets</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
         </div>
     </div>
     <% } %>

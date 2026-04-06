@@ -991,5 +991,17 @@ button:focus-visible,
     color: #000;
 }
 .stat-card-white .stat-card-count { color: #000; }
-.stat-card-white .stat-card-label  { color: rgba(0, 0, 0, 0.45); }
+.stat-card-white .stat-card-label  { color: rgba(0, 0, 0, 0.5); }
+
+/* Light card (white-to-grey gradient) */
+.stat-card-light {
+    background: linear-gradient(135deg, #ffffff 0%, #e9ecef 100%);
+    border: 1px solid #dee2e6 !important;
+}
+.stat-card-light .stat-card-icon {
+    background: rgba(0, 0, 0, 0.06);
+    color: #000;
+}
+.stat-card-light .stat-card-count { color: #000; }
+.stat-card-light .stat-card-label  { color: rgba(0, 0, 0, 0.5); }
 
