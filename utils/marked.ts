@@ -27,6 +27,20 @@ marked.use({
       const langClass = lang ? ` language-${lang.replace(/"/g, "&quot;")}` : "";
       return `<pre><code class="hljs${langClass}">${highlighted}</code></pre>`;
     },
+    table(token: any) {
+      const header = token.header.map((cell: any) => {
+        const align = cell.align ? ` style="text-align:${cell.align}"` : "";
+        return `<th${align}>${cell.text}</th>`;
+      }).join("");
+      const body = token.rows.map((row: any) => {
+        const cells = row.map((cell: any) => {
+          const align = cell.align ? ` style="text-align:${cell.align}"` : "";
+          return `<td${align}>${cell.text}</td>`;
+        }).join("");
+        return `<tr>${cells}</tr>`;
+      }).join("");
+      return `<div class="table-responsive my-3"><table class="table table-bordered table-sm align-middle"><thead class="table-light"><tr>${header}</tr></thead><tbody>${body}</tbody></table></div>\n`;
+    },
   },
 });
 

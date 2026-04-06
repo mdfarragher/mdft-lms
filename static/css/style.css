@@ -206,6 +206,12 @@ main {
     transform: scale(1.02);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
 }
+.markdown-content table {
+    font-size: 0.9rem;
+}
+.markdown-content table thead th {
+    font-weight: 600;
+}
 .markdown-content a {
     color: #fa6915 !important; /* Orange */
     text-decoration: none !important;
@@ -231,7 +237,7 @@ main {
 }
 
 .lesson-list-scroll {
-    max-height: calc(100vh - 200px);
+    overflow: visible;
 }
 
 /* Narrower container for main layout */
@@ -898,6 +904,13 @@ button:focus-visible,
 }
 
 /* Feedback panels for multiple-answer are handled in script.js */
+
+/* ── "In This Course" stat cards ─────────────────────────────────────────── */
+
+/* ── Dataset cards ───────────────────────────────────────────────────────── */
+.dataset-card {
+    border: 1px solid #dee2e6 !important;
+}
 
 /* ── "In This Course" stat cards ─────────────────────────────────────────── */
 .stat-card {

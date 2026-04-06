@@ -64,6 +64,7 @@
         </div>
     </div>
 
+    <% if (!it.isAuthenticated) { %>
     <div class="container px-0 mb-5">
         <h2 class="h3 fw-bold mb-4 border-bottom pb-2">Details</h2>
         <% if (it.course.content) { %>
@@ -90,10 +91,10 @@
             <div class="col">
                 <div class="card stat-card stat-card-green h-100">
                     <div class="stat-card-body">
-                        <div class="stat-card-icon"><i class="bi bi-play-circle-fill"></i></div>
+                        <div class="stat-card-icon"><i class="bi bi-file-text"></i></div>
                         <div>
                             <div class="stat-card-count"><%= videoLessonCount + textLessonCount %></div>
-                            <div class="stat-card-label">Lessons</div>
+                            <div class="stat-card-label">Course Lessons</div>
                         </div>
                     </div>
                 </div>
@@ -103,7 +104,7 @@
             <div class="col">
                 <div class="card stat-card stat-card-orange h-100">
                     <div class="stat-card-body">
-                        <div class="stat-card-icon"><i class="bi bi-eyedropper"></i></div>
+                        <div class="stat-card-icon"><i class="bi bi-flask"></i></div>
                         <div>
                             <div class="stat-card-count"><%= labLessonCount %></div>
                             <div class="stat-card-label">Lab Lessons</div>
@@ -116,7 +117,7 @@
             <div class="col">
                 <div class="card stat-card stat-card-black h-100">
                     <div class="stat-card-body">
-                        <div class="stat-card-icon"><i class="bi bi-patch-question-fill"></i></div>
+                        <div class="stat-card-icon"><i class="bi bi-pencil-square"></i></div>
                         <div>
                             <div class="stat-card-count"><%= quizQuestionCount %></div>
                             <div class="stat-card-label">Quiz Questions</div>
@@ -127,6 +128,7 @@
             <% } %>
         </div>
     </div>
+    <% } %>
 
     <div class="container px-0 mb-5">
         <h2 class="h3 fw-bold mb-4 border-bottom pb-2">Modules</h2>
@@ -275,7 +277,7 @@
                     href="/dataset/<%= dataset.slug %>"
                     class="text-decoration-none"
                 >
-                    <div class="card h-100 shadow-sm border-0 transition-hover">
+                    <div class="card h-100 shadow-sm transition-hover dataset-card">
                         <div class="ratio ratio-16x9">
                             <img
                                 src="/thumb/<%= dataset.slug %>.jpg"

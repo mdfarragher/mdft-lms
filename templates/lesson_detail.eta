@@ -197,8 +197,7 @@
                         </a>
                     </div>
 
-                    <div
-                        class="list-group list-group-flush overflow-y-auto overflow-x-hidden lesson-list-scroll"
+                    <div class="list-group list-group-flush lesson-list-scroll"
                     >
                         <% it.lessons.forEach(function(lesson) { %>
                         <a

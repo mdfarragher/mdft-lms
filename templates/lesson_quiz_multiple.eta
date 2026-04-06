@@ -4,10 +4,6 @@
     <div class="markdown-content mb-4">
         <%~ it.currentLesson.content %>
     </div>
-    <% } else { %>
-    <p class="text-muted fst-italic mb-4">
-        <i class="bi bi-question-circle me-2"></i>Quiz content will be displayed here.
-    </p>
     <% } %>
 
     <% if (it.currentLesson.question_type === 'multiple' && it.currentLesson.answers && it.currentLesson.answers.length > 0) { %>
