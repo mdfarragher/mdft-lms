@@ -68,6 +68,31 @@
                                 >Certifications</a
                             >
                         </li>
+                        <li class="nav-item dropdown">
+                            <a
+                                class="nav-link d-flex align-items-center"
+                                href="#"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="/technologies">Technologies</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/datasets">Datasets</a>
+                                </li>
+                                <% if (!it.isAuthenticated && !it.user) { %>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li>
+                                    <a id="nav-login-link" class="dropdown-item" href="/login">Login</a>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </li>
                         <% if (it.isAuthenticated || it.user) { %>
                         <li class="nav-item dropdown">
                             <a
@@ -81,23 +106,19 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
-                                    <a class="dropdown-item" href="/profile"
-                                        >My Profile</a
-                                    >
+                                    <a class="dropdown-item" href="/profile">My Profile</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/my-certifications">My Certifications</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/my-tracks">My Tracks</a>
                                 </li>
                                 <li><hr class="dropdown-divider" /></li>
                                 <li>
-                                    <a class="dropdown-item" href="/logout"
-                                        >Logout</a
-                                    >
+                                    <a class="dropdown-item" href="/logout">Logout</a>
                                 </li>
                             </ul>
-                        </li>
-                        <% } else { %>
-                        <li class="nav-item">
-                            <a id="nav-login-link" class="nav-link text-dark" href="/login"
-                                >Login</a
-                            >
                         </li>
                         <% } %>
                     </ul>

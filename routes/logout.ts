@@ -5,7 +5,7 @@ export const handler: Handlers = {
   GET(req) {
     const headers = new Headers();
     deleteCookie(headers, "auth_token", { path: "/" });
-    headers.set("Location", "/login");
+    headers.set("Location", "/");
     return new Response(null, {
       status: 303,
       headers,

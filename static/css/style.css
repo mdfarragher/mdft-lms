@@ -90,7 +90,8 @@ h6,
     text-decoration: none !important;
 }
 
-.navbar a.nav-link:hover {
+.navbar a.nav-link:hover,
+.navbar .dropdown-item:hover {
     color: #fa6915 !important;
     text-decoration: underline !important;
 }

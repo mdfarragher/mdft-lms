@@ -11,12 +11,16 @@ import * as $course_slug_moduleSlug_ from "./routes/course/[slug]/[moduleSlug].t
 import * as $course_slug_index from "./routes/course/[slug]/index.tsx";
 import * as $courses_index from "./routes/courses/index.tsx";
 import * as $dataset_slug_ from "./routes/dataset/[slug].tsx";
+import * as $datasets_index from "./routes/datasets/index.tsx";
 import * as $index from "./routes/index.tsx";
 import * as $login from "./routes/login.tsx";
 import * as $logout from "./routes/logout.ts";
+import * as $my_certifications from "./routes/my-certifications.tsx";
+import * as $my_tracks from "./routes/my-tracks.tsx";
 import * as $play_courseSlug_moduleSlug_lessonSlug_ from "./routes/play/[courseSlug]/[moduleSlug]/[lessonSlug].tsx";
 import * as $profile from "./routes/profile.tsx";
 import * as $tech_slug_ from "./routes/tech/[slug].tsx";
+import * as $technologies_index from "./routes/technologies/index.tsx";
 
 import type { Manifest } from "$fresh/server.ts";
 
@@ -31,13 +35,17 @@ const manifest = {
     "./routes/course/[slug]/index.tsx": $course_slug_index,
     "./routes/courses/index.tsx": $courses_index,
     "./routes/dataset/[slug].tsx": $dataset_slug_,
+    "./routes/datasets/index.tsx": $datasets_index,
     "./routes/index.tsx": $index,
     "./routes/login.tsx": $login,
     "./routes/logout.ts": $logout,
+    "./routes/my-certifications.tsx": $my_certifications,
+    "./routes/my-tracks.tsx": $my_tracks,
     "./routes/play/[courseSlug]/[moduleSlug]/[lessonSlug].tsx":
       $play_courseSlug_moduleSlug_lessonSlug_,
     "./routes/profile.tsx": $profile,
     "./routes/tech/[slug].tsx": $tech_slug_,
+    "./routes/technologies/index.tsx": $technologies_index,
   },
   islands: {},
   baseUrl: import.meta.url,

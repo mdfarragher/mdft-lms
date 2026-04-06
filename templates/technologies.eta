@@ -1,0 +1,38 @@
+<% layout("./layout.eta") %>
+
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 mb-0 text-dark border-bottom pb-2 border-primary d-inline-block">Technologies</h1>
+  </div>
+
+  <% if (it.technologies && it.technologies.length > 0) { %>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <% it.technologies.forEach(function(technology) { %>
+        <div class="col">
+          <a href="/tech/<%= technology.slug %>" class="text-decoration-none">
+            <div class="card h-100 shadow-sm border-0 transition-hover">
+              <div class="ratio ratio-16x9 bg-light d-flex align-items-center justify-content-center">
+                <img
+                  src="/img/<%= technology.slug %>-badge.png"
+                  class="object-fit-contain p-4"
+                  alt="<%= technology.title %>"
+                  loading="lazy"
+                  onerror="this.onerror=null; this.src='/img/<%= technology.slug %>-badge.svg';"
+                />
+              </div>
+              <div class="card-body text-center p-3">
+                <h5 class="card-title text-dark fw-bold mb-0 fs-6"><%= technology.title %></h5>
+              </div>
+            </div>
+          </a>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="text-center py-5">
+      <div class="alert alert-info d-inline-block">
+        <i class="bi bi-info-circle me-2"></i>No technologies found at the moment.
+      </div>
+    </div>
+  <% } %>
+</div>
